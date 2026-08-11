@@ -1,0 +1,194 @@
+:root {
+  --ys-global-header-height: 100px;
+  --ys-global-footer-height: 0px;
+  --ys-admin-font: "Noto Sans KR", Arial, sans-serif;
+}
+
+html {
+  scroll-padding-top: calc(var(--ys-global-header-height) + 18px);
+}
+
+body.has-site-layout {
+  margin: 0;
+  padding-top: var(--ys-global-header-height) !important;
+  padding-bottom: 0 !important;
+  min-height: 100vh;
+  font-family: var(--ys-admin-font) !important;
+}
+
+/* 관리자 화면과 동일한 글꼴을 사용자 전체 화면에 적용한다.
+   아이콘 폰트(Font Awesome, Themify, Flaticon)는 제외한다. */
+body.has-site-layout *:not(i):not(.fa):not(.fas):not(.far):not(.fab):not(.fal):not(.fad):not([class^="ti-"]):not([class*=" ti-"]):not([class^="flaticon-"]):not([class*=" flaticon-"]) {
+  font-family: inherit !important;
+}
+
+body.has-site-layout button,
+body.has-site-layout input,
+body.has-site-layout select,
+body.has-site-layout textarea {
+  font-family: var(--ys-admin-font) !important;
+}
+
+/* 원래 index.jsp 헤더 모양은 유지하고 위치만 화면 위에 고정한다. */
+.ys-global-header,
+.ys-global-header * {
+  box-sizing: border-box;
+}
+
+.ys-global-header {
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  z-index: 1200;
+  width: 100%;
+  background: #fff;
+  border-bottom: 1px solid #efefef;
+}
+
+.ys-global-header .header-area,
+.ys-global-header .main-header,
+.ys-global-header .header-bottom {
+  width: 100%;
+  background: #fff;
+}
+
+.ys-global-header .form-box input[readonly] {
+  cursor: pointer;
+}
+
+.ys-global-header .search-icon[role="button"] {
+  cursor: pointer;
+}
+
+.ys-global-header .search-icon[role="button"]:focus-visible {
+  outline: 2px solid #111;
+  outline-offset: 3px;
+}
+
+/* 템플릿의 스크롤 감지 기능이 별도 헤더를 또 띄우지 않게 한다. */
+.ys-global-header .header-sticky,
+.ys-global-header .header-sticky.sticky-bar,
+.ys-global-header .header-sticky.sticky,
+.ys-global-header .main_menu.menu_fixed {
+  position: static !important;
+  inset: auto !important;
+  width: auto !important;
+  transform: none !important;
+  animation: none !important;
+}
+
+/* 원래 index.jsp 푸터 UI */
+.custom-footer{width:100%!important;margin-top:80px!important;border-top:1px solid #dedede!important;background:#fff!important;color:#555!important;font-family:var(--ys-admin-font)!important;font-size:13px!important;height:auto!important}
+.custom-footer *{box-sizing:border-box}
+.custom-footer .container{width:calc(100% - 48px)!important;max-width:1200px!important;margin:0 auto!important;padding:0!important}
+.custom-footer .footer-top-line{width:100%!important;padding:0!important;border-bottom:1px solid #dedede!important;background:#f5f5f5!important}
+.custom-footer .footer-top-inner{min-height:54px!important;display:grid!important;grid-template-columns:minmax(0,1.55fr) minmax(310px,.95fr)!important;align-items:center!important;column-gap:28px!important}
+.custom-footer .footer-top-left,.custom-footer .footer-top-right{min-width:0!important;display:flex!important;align-items:center!important;flex-direction:row!important;flex-wrap:nowrap!important;gap:11px!important;margin:0!important;padding:0!important;white-space:nowrap!important}
+.custom-footer .footer-top-right{justify-content:flex-end!important;overflow:hidden!important}
+.custom-footer .cs-title,.custom-footer .footer-notice,.custom-footer .family-site{flex:0 0 auto!important;color:#171717!important;font-size:12px!important;font-weight:700!important;line-height:1!important}
+.custom-footer .cs-phone,.custom-footer .cs-time,.custom-footer .footer-notice-link{color:#666!important;font-size:12px!important;line-height:1.3!important}
+.custom-footer .cs-time,.custom-footer .footer-notice-link{min-width:0!important;overflow:hidden!important;text-overflow:ellipsis!important;white-space:nowrap!important}
+.custom-footer .chat-btn{flex:0 0 auto!important;display:inline-flex!important;align-items:center!important;justify-content:center!important;min-width:78px!important;height:31px!important;padding:0 12px!important;border:1px solid #cfcfcf!important;border-radius:0!important;background:#fff!important;box-shadow:none!important;color:#555!important;font-size:11px!important;font-weight:500!important;line-height:1!important;cursor:pointer!important}
+.custom-footer .chat-btn:hover,.custom-footer .chat-btn:focus{border-color:#999!important;background:#fafafa!important;color:#111!important;outline:none!important}
+.custom-footer .footer-divider{flex:0 0 1px!important;display:block!important;width:1px!important;height:14px!important;margin:0 2px!important;background:#d5d5d5!important}
+.custom-footer .footer-plus{flex:0 0 auto!important;color:#333!important;font-size:18px!important;font-weight:300!important;line-height:1!important}
+.custom-footer .footer-main{padding:34px 0 24px!important;background:#fff!important}
+.custom-footer .footer-main-row{display:grid!important;grid-template-columns:minmax(0,1.56fr) minmax(330px,.94fr)!important;align-items:start!important;column-gap:52px!important;width:100%!important;margin:0!important;padding:0!important}
+.custom-footer .footer-main-row>[class*="col-"],.custom-footer .footer-company-column,.custom-footer .footer-links-column{position:static!important;display:block!important;width:auto!important;max-width:none!important;min-width:0!important;flex:none!important;margin:0!important;padding:0!important}
+.custom-footer .footer-brand{margin:0 0 14px!important;line-height:1!important}
+.custom-footer .footer-brand a{display:inline-flex!important;align-items:center!important;text-decoration:none!important}
+.custom-footer .footer-brand img{display:block!important;width:144px!important;max-width:100%!important;height:auto!important}
+.custom-footer .footer-company-info p{margin:0 0 5px!important;color:#888!important;font-family:var(--ys-admin-font)!important;font-size:12px!important;line-height:1.65!important}
+.custom-footer .footer-company-info a{color:inherit!important;text-decoration:none!important}
+.custom-footer .info-bar{margin:0 6px!important;color:#d0d0d0!important}
+.custom-footer .footer-policy{margin-top:17px!important;color:#555!important;font-family:var(--ys-admin-font)!important;font-size:11.5px!important;line-height:1.85!important;white-space:normal!important}
+.custom-footer .footer-policy span{display:inline!important;margin:0!important}
+.custom-footer .footer-side-wrap{display:grid!important;grid-template-columns:minmax(78px,.85fr) minmax(96px,1fr) minmax(136px,1.25fr)!important;align-items:start!important;gap:22px!important;width:100%!important;margin:0!important;padding:0!important}
+.custom-footer .footer-menu-box{display:block!important;min-width:0!important;width:auto!important;margin:0!important;padding:0!important}
+.custom-footer .footer-menu-box h4{display:block!important;margin:0 0 13px!important;color:#111!important;font-family:var(--ys-admin-font)!important;font-size:14px!important;font-weight:700!important;line-height:1.2!important;letter-spacing:-.2px!important}
+.custom-footer .footer-menu-box ul{display:block!important;margin:0!important;padding:0!important;list-style:none!important}
+.custom-footer .footer-menu-box ul li{display:block!important;margin:0 0 7px!important;padding:0!important;color:#555!important;font-family:var(--ys-admin-font)!important;font-size:12px!important;line-height:1.35!important;white-space:nowrap!important}
+.custom-footer .footer-menu-box ul li a{display:inline-block!important;color:#555!important;text-decoration:none!important}
+.custom-footer .footer-menu-box ul li a:hover,.custom-footer .footer-menu-box ul li a:focus{color:#111!important;text-decoration:underline!important;text-underline-offset:3px!important}
+.custom-footer .social-box .social-icons{display:flex!important;flex-direction:row!important;flex-wrap:nowrap!important;align-items:center!important;gap:7px!important;margin:0!important;padding:0!important}
+.custom-footer .social-icon{flex:0 0 auto!important;display:inline-flex!important;align-items:center!important;justify-content:center!important;width:34px!important;height:34px!important;border:2px solid #c8c8c8!important;border-radius:8px!important;background:#fff!important;color:#aaa!important;font-size:15px!important;line-height:1!important}
+.custom-footer .social-blog{font-size:9px!important;font-weight:700!important;text-transform:lowercase!important}
+.custom-footer .footer-bottom{margin-top:28px!important;padding-top:17px!important;border-top:1px solid #e7e7e7!important}
+.custom-footer .footer-bottom p{margin:0!important;color:#aaa!important;font-family:var(--ys-admin-font)!important;font-size:11px!important;line-height:1.4!important}
+
+
+/* 푸터는 화면에 고정하지 않고 모든 페이지 내용의 마지막에 자연스럽게 배치한다. */
+.custom-footer {
+  position: relative !important;
+  inset: auto !important;
+  z-index: auto !important;
+}
+
+/* 페이지별 sticky 요소는 고정 헤더 아래에서 시작한다. */
+body.has-site-layout .product-gallery,
+body.has-site-layout .ys-filter-area,
+body.has-site-layout .search-filter,
+body.has-site-layout .my-sidebar,
+body.has-site-layout .order-panel,
+body.has-site-layout .abc-cs-sidebar {
+  top: calc(var(--ys-global-header-height) + 18px) !important;
+}
+
+body.has-site-layout .sticky-trade {
+  top: var(--ys-global-header-height) !important;
+  z-index: 1150 !important;
+}
+
+body.has-site-layout .mobile-my-nav {
+  top: var(--ys-global-header-height) !important;
+}
+
+/* 공통 헤더보다 모달을 위에 올리되, 모달 내부 배경이 대화상자를 덮지 않게 계층을 분리한다. */
+body.has-site-layout .modal {
+  z-index: 2000 !important;
+  isolation: isolate;
+}
+
+/* Bootstrap처럼 body 바로 아래 생성되는 배경 */
+body.has-site-layout > .modal-backdrop {
+  z-index: 1990 !important;
+}
+
+/* 마이페이지처럼 modal 안에 들어 있는 배경과 대화상자 */
+body.has-site-layout .modal > .modal-backdrop {
+  z-index: 0 !important;
+}
+
+body.has-site-layout .modal > .modal-dialog,
+body.has-site-layout .modal > .modal-card {
+  position: relative;
+  z-index: 2 !important;
+  pointer-events: auto;
+}
+
+body.has-site-layout .toast,
+body.has-site-layout .ys-cart-toast,
+body.has-site-layout .abc-cs-toast {
+  bottom: 22px !important;
+}
+
+@media(max-width:760px){
+  .custom-footer .footer-top-inner,.custom-footer .footer-main-row{grid-template-columns:1fr!important;row-gap:18px!important}
+  .custom-footer .footer-top-inner{padding:12px 0!important}
+  .custom-footer .footer-top-left,.custom-footer .footer-top-right{justify-content:flex-start!important;flex-wrap:wrap!important;white-space:normal!important}
+  .custom-footer .footer-side-wrap{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:12px!important}
+}
+
+@media (max-width: 900px) {
+  body.has-site-layout .my-sidebar {
+    top: calc(var(--ys-global-header-height) + 52px) !important;
+    max-height: calc(100vh - var(--ys-global-header-height) - 72px) !important;
+  }
+}
+
+/* 브라우저/템플릿의 text-fill 상속 때문에 버튼 글자가 투명해지는 현상 방지 */
+body.has-site-layout button,
+body.has-site-layout a {
+  -webkit-text-fill-color: currentColor;
+}

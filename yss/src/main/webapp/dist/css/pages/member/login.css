@@ -1,0 +1,331 @@
+/* 로그인 페이지 전용 스타일: 공통 템플릿 클래스와 충돌하지 않도록 ys-login 범위에서만 적용 */
+body.ys-login-body {
+  background: #f6f7f9;
+}
+
+body.ys-login-body .ys-login-page,
+body.ys-login-body .ys-login-page * {
+  box-sizing: border-box;
+}
+
+body.ys-login-body .ys-login-page {
+  min-height: calc(100vh - var(--ys-global-header-height));
+  padding: 0 0 88px;
+  background: #f6f7f9;
+  color: #111827;
+}
+
+body.ys-login-body .ys-login-title {
+  padding: 58px 20px 42px;
+  border-bottom: 1px solid #e5e7eb;
+  background: #fff;
+  text-align: center;
+}
+
+body.ys-login-body .ys-login-title h2 {
+  margin: 0 0 10px;
+  color: #111827;
+  font-size: 34px;
+  font-weight: 800;
+  line-height: 1.2;
+  letter-spacing: -1.1px;
+}
+
+body.ys-login-body .ys-login-title p {
+  margin: 0;
+  color: #8a919d;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+body.ys-login-body .ys-login-section {
+  padding: 56px 24px 0;
+}
+
+body.ys-login-body .ys-login-container {
+  width: 100%;
+  max-width: 1040px;
+  margin: 0 auto;
+}
+
+body.ys-login-body .ys-login-wrap {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 28px;
+  align-items: stretch;
+}
+
+body.ys-login-body .ys-login-box,
+body.ys-login-body .ys-guest-box {
+  min-width: 0;
+  padding: 42px 40px;
+  border: 1px solid #e1e4e8;
+  border-radius: 4px;
+  background: #fff;
+  box-shadow: 0 10px 34px rgba(17, 24, 39, 0.045);
+}
+
+body.ys-login-body .ys-login-heading {
+  margin: 0 0 30px;
+}
+
+body.ys-login-body .ys-login-heading .ys-login-eyebrow {
+  display: block;
+  margin-bottom: 9px;
+  color: #2577fd;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+}
+
+body.ys-login-body .ys-login-heading h3 {
+  margin: 0 0 10px;
+  color: #111827;
+  font-size: 23px;
+  font-weight: 800;
+  line-height: 1.35;
+  letter-spacing: -0.65px;
+}
+
+body.ys-login-body .ys-login-heading p {
+  margin: 0;
+  color: #7b8491;
+  font-size: 13px;
+  line-height: 1.65;
+}
+
+body.ys-login-body .ys-form-group {
+  margin: 0 0 18px;
+}
+
+body.ys-login-body .ys-form-group label {
+  display: block;
+  margin: 0 0 8px;
+  color: #343b46;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+body.ys-login-body .ys-form-group input {
+  display: block;
+  width: 100%;
+  height: 52px;
+  margin: 0;
+  padding: 0 15px;
+  border: 1px solid #d8dde4;
+  border-radius: 2px;
+  background: #fff;
+  color: #111827;
+  font-size: 14px;
+  line-height: 50px;
+  outline: none;
+  transition: border-color 0.18s ease, box-shadow 0.18s ease;
+}
+
+body.ys-login-body .ys-form-group input::placeholder {
+  color: #a6adb7;
+}
+
+body.ys-login-body .ys-form-group input:focus {
+  border-color: #111827;
+  box-shadow: 0 0 0 3px rgba(17, 24, 39, 0.07);
+}
+
+body.ys-login-body .ys-login-option {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  margin: 2px 0 24px;
+}
+
+body.ys-login-body .ys-check {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  margin: 0;
+  color: #666f7b;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+body.ys-login-body .ys-check input {
+  width: 16px;
+  height: 16px;
+  margin: 0;
+  accent-color: #2577fd;
+}
+
+body.ys-login-body .ys-find-links {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  white-space: nowrap;
+}
+
+body.ys-login-body .ys-find-links a {
+  color: #68717d;
+  font-size: 12px;
+  text-decoration: none;
+}
+
+body.ys-login-body .ys-find-links a:hover,
+body.ys-login-body .ys-find-links a:focus {
+  color: #111827;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+body.ys-login-body .ys-find-links span {
+  width: 1px;
+  height: 12px;
+  background: #d8dde4;
+}
+
+body.ys-login-body .ys-login-btn,
+body.ys-login-body .ys-guest-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 54px;
+  padding: 0 18px;
+  border: 1px solid #151515;
+  border-radius: 2px;
+  background: #151515;
+  color: #fff;
+  font-size: 15px;
+  font-weight: 800;
+  line-height: 1;
+  cursor: pointer;
+  transition: background-color 0.18s ease, border-color 0.18s ease, transform 0.18s ease;
+}
+
+body.ys-login-body .ys-login-btn:hover,
+body.ys-login-body .ys-login-btn:focus,
+body.ys-login-body .ys-guest-btn:hover,
+body.ys-login-body .ys-guest-btn:focus {
+  border-color: #2d2d2d;
+  background: #2d2d2d;
+  color: #fff;
+  outline: none;
+}
+
+body.ys-login-body .ys-login-btn:active,
+body.ys-login-body .ys-guest-btn:active {
+  transform: translateY(1px);
+}
+
+body.ys-login-body .ys-join-area {
+  margin-top: 28px;
+  padding-top: 24px;
+  border-top: 1px solid #eceff2;
+  text-align: center;
+}
+
+body.ys-login-body .ys-join-area p {
+  margin: 0 0 13px;
+  color: #737c88;
+  font-size: 13px;
+}
+
+body.ys-login-body .ys-join-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 52px;
+  border: 1px solid #bfc5cd;
+  border-radius: 2px;
+  background: #fff;
+  color: #222a35;
+  font-size: 14px;
+  font-weight: 700;
+  text-decoration: none;
+  transition: border-color 0.18s ease, color 0.18s ease, background-color 0.18s ease;
+}
+
+body.ys-login-body .ys-join-btn:hover,
+body.ys-login-body .ys-join-btn:focus {
+  border-color: #111827;
+  background: #fafafa;
+  color: #111827;
+  text-decoration: none;
+  outline: none;
+}
+
+body.ys-login-body .ys-guest-guide {
+  margin-top: 23px;
+  padding: 17px 18px;
+  border-radius: 2px;
+  background: #f6f7f9;
+}
+
+body.ys-login-body .ys-guest-guide p {
+  margin: 0 0 7px;
+  color: #747e8a;
+  font-size: 12px;
+  line-height: 1.55;
+}
+
+body.ys-login-body .ys-guest-guide p:last-child {
+  margin-bottom: 0;
+}
+
+body.ys-login-body .ys-guest-guide i {
+  width: 14px;
+  margin-right: 4px;
+  color: #596270;
+  text-align: center;
+}
+
+body.ys-login-body .ys-login-status {
+  min-height: 20px;
+  margin: 12px 0 0;
+  color: #2577fd;
+  font-size: 12px;
+  line-height: 1.5;
+  text-align: center;
+}
+
+body.ys-login-body .ys-login-status.is-error {
+  color: #d32f2f;
+}
+
+@media (max-width: 900px) {
+  body.ys-login-body .ys-login-wrap {
+    grid-template-columns: 1fr;
+    max-width: 620px;
+    margin: 0 auto;
+  }
+}
+
+@media (max-width: 575px) {
+  body.ys-login-body .ys-login-page {
+    padding-bottom: 58px;
+  }
+
+  body.ys-login-body .ys-login-title {
+    padding: 42px 18px 32px;
+  }
+
+  body.ys-login-body .ys-login-title h2 {
+    font-size: 28px;
+  }
+
+  body.ys-login-body .ys-login-section {
+    padding: 34px 16px 0;
+  }
+
+  body.ys-login-body .ys-login-box,
+  body.ys-login-body .ys-guest-box {
+    padding: 32px 22px;
+  }
+
+  body.ys-login-body .ys-login-option {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 11px;
+  }
+}

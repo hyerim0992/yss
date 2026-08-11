@@ -1,0 +1,206 @@
+body.admin-modal-open { overflow: hidden; }
+.modal-backdrop,
+.confirm-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.42);
+  z-index: 50;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+.modal-backdrop[hidden],
+.confirm-backdrop[hidden] { display: none !important; }
+.modal-backdrop.show,
+.confirm-backdrop.show { display: flex !important; }
+
+.admin-modal {
+  width: min(760px, 100%);
+  max-height: 88vh;
+  overflow: auto;
+  background: #fff;
+  border-radius: 14px;
+  padding: 25px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.22);
+}
+.modal-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 17px;
+  margin-bottom: 20px;
+}
+.modal-head p {
+  margin: 0 0 5px;
+  color: #999;
+  font-size: 12px;
+}
+.modal-head h2 { margin: 0; }
+.modal-close {
+  border: 0;
+  background: none;
+  font-size: 27px;
+  color: #777;
+}
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 15px;
+}
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+.form-field label {
+  font-size: 12px;
+  font-weight: 700;
+}
+.form-field input,
+.form-field select {
+  width: 100%;
+  height: 42px;
+  border: 1px solid #ddd;
+  border-radius: 7px;
+  padding: 0 11px;
+  background: #fff;
+  color: #222;
+  font: inherit;
+}
+.form-field select { cursor: pointer; }
+.form-field input:focus,
+.form-field select:focus {
+  border-color: #151515;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(21, 21, 21, 0.08);
+}
+.form-field select.fixed-field,
+.form-field input.fixed-field {
+  cursor: not-allowed;
+  background: #f3f3f4;
+  color: #555;
+  font-weight: 700;
+  opacity: 1;
+}
+.field-help {
+  min-height: 16px;
+  color: #999;
+  font-size: 11px;
+  line-height: 1.45;
+}
+.field-help.fixed-help { color: #3158df; }
+.modal-actions {
+  text-align: right;
+  border-top: 1px solid #eee;
+  margin-top: 22px;
+  padding-top: 17px;
+}
+.answer-modal { width: min(680px, 100%); }
+.inquiry-box {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  background: #f7f7f8;
+  border: 1px solid #e6e6e8;
+  border-radius: 10px;
+  padding: 18px;
+  margin-bottom: 20px;
+}
+.inquiry-box div {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.inquiry-box .wide { grid-column: 1 / -1; }
+.inquiry-box span {
+  font-size: 11px;
+  color: #888;
+  font-weight: 700;
+}
+.inquiry-box strong { font-size: 14px; }
+.inquiry-box p {
+  margin: 0;
+  line-height: 1.65;
+  white-space: normal;
+  color: #555;
+}
+.answer-label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 13px;
+  font-weight: 800;
+}
+.answer-label b { color: #e23a3a; }
+.answer-modal textarea {
+  width: 100%;
+  min-height: 180px;
+  resize: vertical;
+  border: 1px solid #d8d8da;
+  border-radius: 8px;
+  padding: 14px;
+  font: inherit;
+  line-height: 1.6;
+  outline: none;
+}
+.answer-modal textarea:focus {
+  border-color: #151515;
+  box-shadow: 0 0 0 3px rgba(21, 21, 21, 0.08);
+}
+.answer-count {
+  text-align: right;
+  color: #999;
+  font-size: 11px;
+  margin-top: 6px;
+}
+.answer-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.answer-actions > div {
+  display: flex;
+  gap: 6px;
+}
+.answer-actions button { margin: 0; }
+.confirm-box {
+  width: min(390px, 100%);
+  background: #fff;
+  border-radius: 13px;
+  padding: 25px;
+  text-align: center;
+}
+.confirm-box h3 { margin: 0 0 9px; }
+.confirm-box p {
+  color: #777;
+  margin: 0 0 22px;
+}
+.confirm-box > div {
+  display: flex;
+  justify-content: center;
+  gap: 7px;
+}
+.confirm-box button { margin: 0; }
+.danger-solid { background: #d53838; }
+.toast {
+  position: fixed;
+  right: 25px;
+  bottom: 25px;
+  z-index: 60;
+  background: #111;
+  color: #fff;
+  padding: 14px 20px;
+  border-radius: 8px;
+  opacity: 0;
+  transform: translateY(15px);
+  transition: 0.25s;
+  pointer-events: none;
+}
+.toast.show {
+  opacity: 1;
+  transform: none;
+}
+@media (max-width: 760px) {
+  .form-grid { grid-template-columns: 1fr; }
+}

@@ -1,0 +1,224 @@
+/* 결제 입력 화면의 필수 표시와 회원/비회원 선택 영역 */
+.required-mark {
+  color: var(--danger);
+  font-weight: 900;
+}
+.field-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  width: max-content;
+}
+.optional-mark {
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 500;
+}
+.field-guide {
+  display: block;
+  margin: 9px 0 16px;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+
+/* 배송지는 자동 입력하지 않고, 회원이 기본배송지를 선택할 때만 불러온다. */
+.address-section-title {
+  align-items: center;
+}
+.default-address-link {
+  margin: 0;
+  padding: 3px 0;
+  border: 0;
+  border-bottom: 1px solid transparent;
+  border-radius: 0;
+  background: transparent;
+  color: #555b69;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.2;
+  cursor: pointer;
+  transition: color 0.15s ease, border-color 0.15s ease;
+}
+.default-address-link:hover {
+  color: #111827;
+  border-bottom-color: #111827;
+}
+.default-address-link:focus-visible {
+  outline: 2px solid rgba(49, 88, 223, 0.28);
+  outline-offset: 4px;
+}
+.default-address-message {
+  min-height: 18px;
+  margin: -8px 0 12px;
+  color: #3158df;
+  font-size: 12px;
+  line-height: 1.5;
+  text-align: right;
+}
+.default-address-message:empty {
+  min-height: 0;
+  margin: 0;
+}
+.default-address-message.is-error {
+  color: #e64242;
+}
+.order-type-badge {
+  display: inline-block;
+  padding: 8px 13px;
+  border-radius: 20px;
+  background: #eef2ff;
+  color: #3158df;
+  font-size: 13px;
+  font-weight: 800;
+}
+.guest-only {
+  display: none;
+}
+.guest-order-notice {
+  margin: 16px 0;
+  padding: 16px;
+  border: 1px solid #cfd9ff;
+  border-radius: 12px;
+  background: #f4f7ff;
+}
+.guest-order-notice b,
+.guest-order-notice a {
+  color: #3158df;
+  font-weight: 800;
+}
+.guest-order-notice p {
+  margin: 7px 0 10px;
+  color: #555;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+/* 결제수단을 선택했을 때 펼쳐지는 상세 영역 */
+.payment-detail {
+  margin-top: 14px;
+  padding: 20px;
+  border: 1px solid #dfe3ec;
+  border-radius: 14px;
+  background: #f8f9fc;
+}
+.payment-detail[hidden] {
+  display: none !important;
+}
+.payment-detail-title {
+  margin: 0 0 14px;
+  color: #202431;
+  font-size: 14px;
+  font-weight: 800;
+}
+.bank-options,
+.saved-card-options {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+.bank-options label,
+.saved-card-options label {
+  position: relative;
+  margin: 0;
+  cursor: pointer;
+}
+.bank-options input,
+.saved-card-options input {
+  position: absolute;
+  opacity: 0;
+}
+.bank-options span,
+.saved-card-options span {
+  display: flex;
+  min-height: 66px;
+  padding: 13px 14px;
+  border: 1px solid #d8dce5;
+  border-radius: 11px;
+  background: #fff;
+  flex-direction: column;
+  justify-content: center;
+  color: #202431;
+  font-size: 14px;
+  font-weight: 750;
+  transition: 0.15s ease;
+}
+.bank-options small,
+.saved-card-options small {
+  display: block;
+  margin-top: 4px;
+  color: #7a7f8c;
+  font-size: 11px;
+  font-weight: 500;
+}
+.bank-options input:checked + span,
+.saved-card-options input:checked + span {
+  border-color: #3158df;
+  box-shadow: 0 0 0 1px #3158df;
+  background: #f2f5ff;
+  color: #2448c7;
+}
+.bank-options input:focus + span,
+.saved-card-options input:focus + span {
+  outline: 3px solid rgba(49, 88, 223, 0.16);
+}
+.payment-tip {
+  margin: 13px 0 0;
+  color: #686d79;
+  font-size: 12px;
+  line-height: 1.55;
+}
+.manage-card-link {
+  display: inline-block;
+  margin-top: 13px;
+  color: #3158df;
+  font-size: 12px;
+  font-weight: 750;
+}
+.guest-easy-pay {
+  display: none;
+  padding: 4px;
+  color: #313542;
+}
+.guest-easy-pay b {
+  font-size: 14px;
+}
+.guest-easy-pay p {
+  margin: 7px 0 0;
+  color: #707582;
+  font-size: 12px;
+  line-height: 1.55;
+}
+body[data-logged-in="false"] .member-easy-pay {
+  display: none;
+}
+body[data-logged-in="false"] .guest-easy-pay {
+  display: block;
+}
+@media (max-width: 640px) {
+  .bank-options,
+  .saved-card-options {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* 회원/비회원 전용 영역 */
+.guest-only-card {
+  display: none;
+}
+body[data-logged-in="false"] .member-only {
+  display: none !important;
+}
+body[data-logged-in="false"] .guest-only-card {
+  display: block;
+}
+body[data-logged-in="true"] .guest-only,
+body[data-logged-in="true"] .guest-only-card {
+  display: none !important;
+}
+body[data-logged-in="true"] .order-type-badge {
+  background: #f0f1f3;
+  color: #222;
+}
