@@ -110,16 +110,55 @@
         typeTitle = "전체";
     }
 
+    String audience = request.getParameter("audience");
+    String sort = request.getParameter("sort");
+
+    if (sort == null || sort.trim().equals("")) sort = "best";
+
+    boolean isNewCategory = "new".equals(sort)
+            && (audience == null || audience.trim().equals(""));
+
+    String audienceTitle;
+    String collectionTitle;
+    String audienceMenuLabel;
+    String categoryContextQuery;
+    String categoryRootHref;
+
+    if (isNewCategory) {
+        audienceTitle = "New";
+        collectionTitle = "NEW COLLECTION";
+        audienceMenuLabel = "NEW";
+        categoryContextQuery = "&sort=new";
+        categoryRootHref = ctx + "/product/category?sort=new";
+    } else if ("woman".equals(audience)) {
+        audienceTitle = "Woman";
+        collectionTitle = "WOMEN'S COLLECTION";
+        audienceMenuLabel = "WOMAN";
+        categoryContextQuery = "&audience=woman";
+        categoryRootHref = ctx + "/product/category?audience=woman";
+    } else if ("kids".equals(audience)) {
+        audienceTitle = "Kids";
+        collectionTitle = "KIDS' COLLECTION";
+        audienceMenuLabel = "KIDS";
+        categoryContextQuery = "&audience=kids";
+        categoryRootHref = ctx + "/product/category?audience=kids";
+    } else {
+        audience = "man";
+        audienceTitle = "Man";
+        collectionTitle = "MEN'S COLLECTION";
+        audienceMenuLabel = "MAN";
+        categoryContextQuery = "&audience=man";
+        categoryRootHref = ctx + "/product/category?audience=man";
+    }
+
     String[] brandParams = request.getParameterValues("brand");
     String[] sizeParams = request.getParameterValues("size");
     String[] colorParams = request.getParameterValues("color");
 
     String priceParam = request.getParameter("price");
     String keywordParam = request.getParameter("keyword");
-    String sort = request.getParameter("sort");
 
     if (keywordParam == null) keywordParam = "";
-    if (sort == null || sort.trim().equals("")) sort = "best";
 
     ArrayList<Product> allProducts = new ArrayList<Product>();
 
@@ -354,8 +393,8 @@
                 <div class="row">
                     <div class="col-12">
                         <div class="hero-cap text-center">
-                            <p>MEN'S COLLECTION</p>
-                            <h2>Man</h2>
+                            <p><%= collectionTitle %></p>
+                            <h2><%= audienceTitle %></h2>
                         </div>
                     </div>
                 </div>
@@ -370,7 +409,7 @@
             <nav class="ys-breadcrumb" aria-label="현재 위치">
                 <a href="<%= ctx %>/index.jsp"><i class="fas fa-home" aria-hidden="true"></i><span>HOME</span></a>
                 <span class="ys-breadcrumb-separator" aria-hidden="true">›</span>
-                <a href="<%= ctx %>/product/category?type=all">MEN</a>
+                <a href="<%= categoryRootHref %>"><%= audienceMenuLabel %></a>
                 <span class="ys-breadcrumb-separator" aria-hidden="true">›</span>
                 <span>신발</span>
                 <span class="ys-breadcrumb-separator" aria-hidden="true">›</span>
@@ -390,6 +429,9 @@
                 <aside class="ys-filter-area">
                     <form action="${pageContext.request.contextPath}/product/category" method="get" id="filterForm">
                         <input type="hidden" name="type" value="<%= esc(type) %>">
+                        <% if (!isNewCategory) { %>
+                        <input type="hidden" name="audience" value="<%= esc(audience) %>">
+                        <% } %>
 
                         <div class="ys-filter-top">
                             <i class="fas fa-filter ys-filter-main-icon" aria-hidden="true"></i>
@@ -478,7 +520,7 @@
                         </div>
 
                         <div class="ys-filter-btns">
-                            <a href="<%= ctx %>/product/category?type=<%= esc(type) %>" class="ys-filter-reset">초기화</a>
+                            <a href="<%= ctx %>/product/category?type=<%= esc(type) %><%= categoryContextQuery %>" class="ys-filter-reset">초기화</a>
                             <button type="submit" class="ys-filter-submit">검색</button>
                         </div>
                         </div>
@@ -501,13 +543,13 @@
                         <div class="properties__button">
                             <nav>
                                 <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                                    <a class="nav-item nav-link <%= type.equals("all") ? "active" : "" %>" href="<%= ctx %>/product/category?type=all">모두</a>
-                                    <a class="nav-item nav-link <%= type.equals("sneakers") ? "active" : "" %>" href="<%= ctx %>/product/category?type=sneakers">스니커즈</a>
-                                    <a class="nav-item nav-link <%= type.equals("sports") ? "active" : "" %>" href="<%= ctx %>/product/category?type=sports">스포츠</a>
-                                    <a class="nav-item nav-link <%= type.equals("dress") ? "active" : "" %>" href="<%= ctx %>/product/category?type=dress">구두</a>
-                                    <a class="nav-item nav-link <%= type.equals("casual") ? "active" : "" %>" href="<%= ctx %>/product/category?type=casual">캐주얼</a>
-                                    <a class="nav-item nav-link <%= type.equals("sandals") ? "active" : "" %>" href="<%= ctx %>/product/category?type=sandals">샌들</a>
-                                    <a class="nav-item nav-link <%= type.equals("boots") ? "active" : "" %>" href="<%= ctx %>/product/category?type=boots">부츠</a>
+                                    <a class="nav-item nav-link <%= type.equals("all") ? "active" : "" %>" href="<%= ctx %>/product/category?type=all<%= categoryContextQuery %>">모두</a>
+                                    <a class="nav-item nav-link <%= type.equals("sneakers") ? "active" : "" %>" href="<%= ctx %>/product/category?type=sneakers<%= categoryContextQuery %>">스니커즈</a>
+                                    <a class="nav-item nav-link <%= type.equals("sports") ? "active" : "" %>" href="<%= ctx %>/product/category?type=sports<%= categoryContextQuery %>">스포츠</a>
+                                    <a class="nav-item nav-link <%= type.equals("dress") ? "active" : "" %>" href="<%= ctx %>/product/category?type=dress<%= categoryContextQuery %>">구두</a>
+                                    <a class="nav-item nav-link <%= type.equals("casual") ? "active" : "" %>" href="<%= ctx %>/product/category?type=casual<%= categoryContextQuery %>">캐주얼</a>
+                                    <a class="nav-item nav-link <%= type.equals("sandals") ? "active" : "" %>" href="<%= ctx %>/product/category?type=sandals<%= categoryContextQuery %>">샌들</a>
+                                    <a class="nav-item nav-link <%= type.equals("boots") ? "active" : "" %>" href="<%= ctx %>/product/category?type=boots<%= categoryContextQuery %>">부츠</a>
                                 </div>
                             </nav>
                         </div>
