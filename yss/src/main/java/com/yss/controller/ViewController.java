@@ -29,12 +29,6 @@ public class ViewController {
         return new ModelAndView("product/category");
     }
 
-    @GetMapping("/product/detail")
-    public ModelAndView detail(HttpServletRequest req, HttpServletResponse resp)
-            throws ServletException, IOException {
-        return new ModelAndView("product/detail");
-    }
-
     @GetMapping("/product/search")
     public ModelAndView search(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
