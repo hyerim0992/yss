@@ -12,7 +12,7 @@
 </script>
 <link rel="preload" as="image" href="${pageContext.request.contextPath}/dist/images/logo/logo.png" />
 <link rel="stylesheet" href="${pageContext.request.contextPath}/dist/css/common/page-loader.css?v=20260806-1205" />
-<link rel="stylesheet" href="${pageContext.request.contextPath}/dist/css/vendor/bootstrap.min.css" />
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous" />
 <link rel="stylesheet" href="${pageContext.request.contextPath}/dist/css/vendor/owl.carousel.min.css" />
 <link rel="stylesheet" href="${pageContext.request.contextPath}/dist/css/vendor/animate.min.css" />
 <link rel="stylesheet" href="${pageContext.request.contextPath}/dist/css/vendor/magnific-popup.css" />

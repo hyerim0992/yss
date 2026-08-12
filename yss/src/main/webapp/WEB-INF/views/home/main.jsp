@@ -143,10 +143,10 @@
                             <!-- 화면 구성 설명 -->
                             <nav>                                                                                                
                                 <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                                    <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true">All</a>
-                                    <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab" aria-controls="nav-profile" aria-selected="false">New</a>
-                                    <a class="nav-item nav-link" id="nav-contact-tab" data-toggle="tab" href="#nav-contact" role="tab" aria-controls="nav-contact" aria-selected="false">Featured</a>
-                                    <a class="nav-item nav-link" id="nav-last-tab" data-toggle="tab" href="#nav-last" role="tab" aria-controls="nav-contact" aria-selected="false">Offer</a>
+                                    <a class="nav-item nav-link active" id="nav-home-tab" data-bs-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true">All</a>
+                                    <a class="nav-item nav-link" id="nav-profile-tab" data-bs-toggle="tab" href="#nav-profile" role="tab" aria-controls="nav-profile" aria-selected="false">New</a>
+                                    <a class="nav-item nav-link" id="nav-contact-tab" data-bs-toggle="tab" href="#nav-contact" role="tab" aria-controls="nav-contact" aria-selected="false">Featured</a>
+                                    <a class="nav-item nav-link" id="nav-last-tab" data-bs-toggle="tab" href="#nav-last" role="tab" aria-controls="nav-contact" aria-selected="false">Offer</a>
                                 </div>
                             </nav>
                             <!-- 화면 구성 설명 -->
@@ -946,9 +946,8 @@
 		<!-- 공통 플러그인 스크립트 -->
         <script src="${ctx}/dist/js/vendor/modernizr-3.5.0.min.js"></script>
 		<!-- 제이쿼리, 팝퍼, 부트스트랩 -->
-		<script src="${ctx}/dist/js/vendor/jquery-1.12.4.min.js"></script>
-        <script src="${ctx}/dist/js/vendor/popper.min.js"></script>
-        <script src="${ctx}/dist/js/vendor/bootstrap.min.js"></script>
+		<script src="https://code.jquery.com/jquery-4.0.0.min.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
 	    <!-- 모바일 메뉴 스크립트 -->
 
 		<!-- 슬라이드 및 캐러셀 플러그인 -->

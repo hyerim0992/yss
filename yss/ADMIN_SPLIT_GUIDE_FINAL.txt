@@ -1,0 +1,329 @@
+YSS 관리자 UI / Eclipse 경로 최종 안내
+======================================
+기준 파일: yss(4).zip 실제 프로젝트 구조 확인본
+목적: Git 배포 후 관리자 담당자가 Eclipse에서 수정할 파일을 정확히 찾기 위한 안내
+
+
+[0] 관리자 경로 핵심
+--------------------
+Context Root : yss
+기본 주소    : http://localhost:8080/yss
+
+관리자 Controller
+src/main/java/com/yss/controller/admin/HomeManageController.java
+
+관리자 JSP 루트
+src/main/webapp/WEB-INF/views/admin/
+
+관리자 CSS 루트
+src/main/webapp/dist/css/admin/
+
+관리자 JS 루트
+src/main/webapp/dist/js/admin/
+
+※ build/classes/com/yss/controller/admin/... 은 컴파일 결과물이므로 직접 수정하지 않습니다.
+
+
+[1] 관리자 URL -> Controller -> JSP 정확한 연결
+------------------------------------------------
+※ 아래 Mapping은 모두 HomeManageController.java에 현재 실제로 존재합니다.
+
+1) 관리자 대시보드
+URL     : /yss/admin
+Mapping : @GetMapping("/admin")
+JSP     : src/main/webapp/WEB-INF/views/admin/dashboard/main.jsp
+CSS     : src/main/webapp/dist/css/admin/dashboard.css
+JS      : src/main/webapp/dist/js/admin/dashboard.js
+
+2) 회원관리
+URL     : /yss/admin/member
+Mapping : @GetMapping("/admin/member")
+JSP     : src/main/webapp/WEB-INF/views/admin/member/main.jsp
+데이터JS: src/main/webapp/dist/js/admin/data/member.js
+공통CSS : src/main/webapp/dist/css/admin/list.css
+          src/main/webapp/dist/css/admin/modal.css
+공통JS  : src/main/webapp/dist/js/admin/list.js
+
+3) 상품관리
+URL     : /yss/admin/product
+Mapping : @GetMapping("/admin/product")
+JSP     : src/main/webapp/WEB-INF/views/admin/product/main.jsp
+데이터JS: src/main/webapp/dist/js/admin/data/product.js
+공통CSS : src/main/webapp/dist/css/admin/list.css
+          src/main/webapp/dist/css/admin/modal.css
+공통JS  : src/main/webapp/dist/js/admin/list.js
+
+4) 물류관리
+URL     : /yss/admin/logistics
+Mapping : @GetMapping("/admin/logistics")
+JSP     : src/main/webapp/WEB-INF/views/admin/logistics/main.jsp
+데이터JS: src/main/webapp/dist/js/admin/data/logistics.js
+공통CSS : src/main/webapp/dist/css/admin/list.css
+          src/main/webapp/dist/css/admin/modal.css
+공통JS  : src/main/webapp/dist/js/admin/list.js
+
+5) 고객지원
+URL     : /yss/admin/support
+Mapping : @GetMapping("/admin/support")
+JSP     : src/main/webapp/WEB-INF/views/admin/support/main.jsp
+데이터JS: src/main/webapp/dist/js/admin/data/support.js
+공통CSS : src/main/webapp/dist/css/admin/list.css
+          src/main/webapp/dist/css/admin/modal.css
+공통JS  : src/main/webapp/dist/js/admin/list.js
+
+6) 통계현황
+URL     : /yss/admin/status
+Mapping : @GetMapping("/admin/status")
+JSP     : src/main/webapp/WEB-INF/views/admin/status/main.jsp
+데이터JS: src/main/webapp/dist/js/admin/data/status.js
+공통CSS : src/main/webapp/dist/css/admin/list.css
+          src/main/webapp/dist/css/admin/modal.css
+공통JS  : src/main/webapp/dist/js/admin/list.js
+
+
+[2] 관리자 JSP 전체 실제 구조
+-----------------------------
+src/main/webapp/WEB-INF/views/admin/
+├─ dashboard/main.jsp          실제 대시보드
+├─ member/main.jsp             회원관리
+├─ product/main.jsp            상품관리
+├─ logistics/main.jsp          물류관리
+├─ support/main.jsp            고객지원
+├─ status/main.jsp             통계현황
+│
+├─ layout/
+│  ├─ headerResources.jsp      관리자 공통 CSS 로드
+│  ├─ header.jsp               관리자 상단 Header
+│  ├─ left.jsp                 관리자 왼쪽 메뉴
+│  ├─ listContent.jsp          회원/상품/물류/지원/통계 공통 목록 본문
+│  ├─ modal.jsp                등록/수정/답변/삭제 공통 모달
+│  ├─ footer.jsp               관리자 Footer 조각
+│  ├─ footerResources.jsp      관리자 공통 JS 로드
+│  ├─ template.jsp             템플릿 파일
+│  └─ template2.jsp            템플릿 파일
+│
+└─ home/main.jsp               현재 Controller Mapping 없음 (기존/미사용 화면)
+
+중요:
+실제 /yss/admin 대시보드는 admin/home/main.jsp가 아니라
+admin/dashboard/main.jsp 입니다.
+
+
+[3] 관리자 CSS 정확한 역할
+--------------------------
+src/main/webapp/dist/css/admin/common.css
+- 관리자 Header / Sidebar / 공통 표 / 공통 버튼 등
+- headerResources.jsp에서 로드
+
+src/main/webapp/dist/css/admin/dashboard.css
+- /admin 대시보드 전용
+
+src/main/webapp/dist/css/admin/list.css
+- 회원/상품/물류/고객지원/통계 목록 화면 공통
+
+src/main/webapp/dist/css/admin/modal.css
+- 등록/수정/답변/삭제 확인 모달 공통
+
+
+[4] 관리자 JavaScript 정확한 역할
+---------------------------------
+src/main/webapp/dist/js/admin/common.js
+- 관리자 공통 동작
+- footerResources.jsp에서 로드
+
+src/main/webapp/dist/js/admin/dashboard.js
+- 대시보드 전용
+
+src/main/webapp/dist/js/admin/list.js
+- 회원/상품/물류/고객지원/통계에서 같이 쓰는 목록 공통 동작
+- 검색/필터/등록/수정/삭제/CSV 등 공통 UI 로직
+
+화면별 현재 데모 데이터/설정
+src/main/webapp/dist/js/admin/data/member.js
+src/main/webapp/dist/js/admin/data/product.js
+src/main/webapp/dist/js/admin/data/logistics.js
+src/main/webapp/dist/js/admin/data/support.js
+src/main/webapp/dist/js/admin/data/status.js
+
+현재 관리자 목록 화면은 DB에서 읽는 최종 구현이 아니라
+위 data/*.js + list.js로 UI/데모 동작이 구성되어 있습니다.
+Service/Mapper/DB 작업을 시작하면 각 화면 데이터를 서버 응답으로 교체해야 합니다.
+
+
+[5] 담당 화면별 Eclipse에서 먼저 열 파일
+------------------------------------------
+회원관리 작업
+1. src/main/webapp/WEB-INF/views/admin/member/main.jsp
+2. src/main/webapp/dist/js/admin/data/member.js
+3. src/main/webapp/WEB-INF/views/admin/layout/listContent.jsp      [공통]
+4. src/main/webapp/WEB-INF/views/admin/layout/modal.jsp            [공통]
+5. src/main/webapp/dist/js/admin/list.js                            [공통]
+
+상품관리 작업
+1. src/main/webapp/WEB-INF/views/admin/product/main.jsp
+2. src/main/webapp/dist/js/admin/data/product.js
+3. listContent.jsp / modal.jsp / list.js                            [공통]
+
+물류관리 작업
+1. src/main/webapp/WEB-INF/views/admin/logistics/main.jsp
+2. src/main/webapp/dist/js/admin/data/logistics.js
+3. listContent.jsp / modal.jsp / list.js                            [공통]
+
+고객지원 작업
+1. src/main/webapp/WEB-INF/views/admin/support/main.jsp
+2. src/main/webapp/dist/js/admin/data/support.js
+3. listContent.jsp / modal.jsp / list.js                            [공통]
+
+통계현황 작업
+1. src/main/webapp/WEB-INF/views/admin/status/main.jsp
+2. src/main/webapp/dist/js/admin/data/status.js
+3. listContent.jsp / modal.jsp / list.js                            [공통]
+
+대시보드 작업
+1. src/main/webapp/WEB-INF/views/admin/dashboard/main.jsp
+2. src/main/webapp/dist/css/admin/dashboard.css
+3. src/main/webapp/dist/js/admin/dashboard.js
+
+
+[6] 공통 관리자 레이아웃 수정 위치
+---------------------------------
+상단 Header
+src/main/webapp/WEB-INF/views/admin/layout/header.jsp
+
+왼쪽 메뉴
+src/main/webapp/WEB-INF/views/admin/layout/left.jsp
+
+공통 목록 마크업
+src/main/webapp/WEB-INF/views/admin/layout/listContent.jsp
+
+공통 모달
+src/main/webapp/WEB-INF/views/admin/layout/modal.jsp
+
+공통 스타일
+src/main/webapp/dist/css/admin/common.css
+src/main/webapp/dist/css/admin/list.css
+src/main/webapp/dist/css/admin/modal.css
+
+공통 스크립트
+src/main/webapp/dist/js/admin/common.js
+src/main/webapp/dist/js/admin/list.js
+
+주의:
+위 공통파일은 회원/상품/물류/고객지원/통계가 모두 공유합니다.
+한 명이 자기 화면만 바꾸려고 공통 listContent.jsp/list.js를 수정하면
+다른 관리자 화면까지 같이 바뀔 수 있습니다.
+
+가능하면 화면별 데이터/표현은 data/member.js, data/product.js 등 각자 파일에서 처리하고,
+공통 구조 변경이 꼭 필요할 때만 팀과 공유 후 공통파일을 수정합니다.
+
+
+[7] 관리자 백엔드 구현 시 생성/수정 위치
+----------------------------------------
+현재 화면 이동 Controller
+src/main/java/com/yss/controller/admin/HomeManageController.java
+
+현재는 관리자별 Service/Mapper가 따로 만들어져 있지 않습니다.
+DB 연결 작업을 시작할 때 기존 회원 구조를 참고해 아래 위치에 기능별 파일을 추가하면 됩니다.
+[아래 파일명은 권장 예시이며 yss(4)에 현재 존재한다는 뜻이 아닙니다.]
+
+예: 관리자 상품관리
+Controller : src/main/java/com/yss/controller/admin/ProductManageController.java
+Service    : src/main/java/com/yss/service/ProductService.java
+ServiceImpl: src/main/java/com/yss/service/ProductServiceImpl.java
+Mapper     : src/main/java/com/yss/mapper/ProductMapper.java
+Mapper XML : src/main/webapp/WEB-INF/classes/mybatis/mapper/ProductMapper.xml
+DTO        : src/main/java/com/yss/dto/ProductDTO.java
+
+예: 관리자 물류관리
+Controller : src/main/java/com/yss/controller/admin/LogisticsManageController.java
+Service    : src/main/java/com/yss/service/LogisticsService.java
+Mapper     : src/main/java/com/yss/mapper/LogisticsMapper.java
+Mapper XML : src/main/webapp/WEB-INF/classes/mybatis/mapper/LogisticsMapper.xml
+
+중요:
+이 프로젝트의 Mapper XML 실제 기준 폴더는
+src/main/webapp/WEB-INF/classes/mybatis/mapper/
+입니다.
+
+
+[8] 관리자 로그인/권한 경로 주의
+--------------------------------
+파일:
+src/main/java/com/yss/filter/LoginFilter.java
+
+현재 동작:
+- URL에 admin이 포함되고
+- 로그인 SessionInfo의 role이 5 미만이면
+- /member/noAuthorized 로 redirect
+
+현재 문제:
+yss(4) Controller에는 /member/noAuthorized Mapping이 없습니다.
+따라서 관리자 권한 테스트를 시작하기 전에
+1) noAuthorized Controller/JSP를 만들거나
+2) LoginFilter의 redirect 목적지를 기존 화면으로 변경해야 합니다.
+
+또한 관리자 URL은 로그인하지 않은 상태에서는 LoginFilter에 의해
+/member/login 으로 이동합니다.
+
+
+[9] Git 작업 시 관리자 충돌 방지
+--------------------------------
+충돌 위험이 높은 공통파일
+- src/main/webapp/WEB-INF/views/admin/layout/listContent.jsp
+- src/main/webapp/WEB-INF/views/admin/layout/modal.jsp
+- src/main/webapp/WEB-INF/views/admin/layout/header.jsp
+- src/main/webapp/WEB-INF/views/admin/layout/left.jsp
+- src/main/webapp/dist/js/admin/list.js
+- src/main/webapp/dist/js/admin/common.js
+- src/main/webapp/dist/css/admin/common.css
+- src/main/webapp/dist/css/admin/list.css
+- src/main/webapp/dist/css/admin/modal.css
+
+화면별로 분리되어 충돌이 비교적 적은 파일
+- data/member.js
+- data/product.js
+- data/logistics.js
+- data/support.js
+- data/status.js
+- admin/member/main.jsp
+- admin/product/main.jsp
+- admin/logistics/main.jsp
+- admin/support/main.jsp
+- admin/status/main.jsp
+
+작업 원칙
+1. 시작 전 git pull
+2. 공통파일 수정이 필요하면 팀에 먼저 공유
+3. 자기 화면 data/*.js 위주로 먼저 작업
+4. 작은 단위로 commit
+5. push 전 최신 branch를 다시 반영하고 충돌 확인
+
+
+[10] Eclipse에서 관리자 화면 확인 순서
+--------------------------------------
+1. yss 프로젝트 우클릭 -> Refresh(F5)
+2. Project -> Clean -> yss
+3. Tomcat Stop -> Start
+4. 관리자 권한(role 5) 계정으로 로그인
+5. 아래 URL 확인
+
+http://localhost:8080/yss/admin
+http://localhost:8080/yss/admin/member
+http://localhost:8080/yss/admin/product
+http://localhost:8080/yss/admin/logistics
+http://localhost:8080/yss/admin/support
+http://localhost:8080/yss/admin/status
+
+※ Context Root를 Eclipse Servers > Modules에서 따로 변경했다면 /yss 부분만 변경됩니다.
+
+
+[11] 관리자 경로 한 줄 정리
+---------------------------
+화면 JSP        -> src/main/webapp/WEB-INF/views/admin/<화면>/main.jsp
+공통 JSP        -> src/main/webapp/WEB-INF/views/admin/layout/...
+화면별 데모데이터 -> src/main/webapp/dist/js/admin/data/<화면>.js
+공통 목록 JS     -> src/main/webapp/dist/js/admin/list.js
+공통 관리자 CSS  -> src/main/webapp/dist/css/admin/...
+화면 이동 URL    -> /admin, /admin/member, /admin/product, /admin/logistics, /admin/support, /admin/status
+Controller       -> src/main/java/com/yss/controller/admin/HomeManageController.java
+build/classes    -> 수정 금지
