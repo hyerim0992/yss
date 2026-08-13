@@ -609,7 +609,6 @@ button:disabled {
   right: 0;
   border-bottom: 1px solid rgba(0, 0, 0, 0.05);
   background: rgba(255, 255, 255, 0.97);
-  box-shadow: 0 2px 9px rgba(0, 0, 0, 0.1);
   backdrop-filter: blur(8px);
   transform: translateY(-115%);
   transition: transform 0.25s ease;
@@ -727,27 +726,27 @@ button:disabled {
   border-top: 1px solid var(--line);
 }
 
-.detail-tabs {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  border-bottom: 1px solid #d8d8d8;
+.detail-navbar {
+	position: sticky;
+	top: 100px; /* 중요: 화면 상단에서 고정될 위치 (공통 헤더가 고정형이라면 헤더 높이만큼(예: 60px) 값을 주어야 합니다) */
+	z-index: 40; /* 중요: 스크롤 시 다른 컨텐츠 밑으로 숨지 않게 띄움 */
+	background-color: #fff; /* 중요: 뒤에 글씨가 비치지 않게 배경색 지정 */
+	  
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	border-bottom: 1px solid #d8d8d8;
 }
 
-.detail-tabs button {
+.detail-navbar .nav-item {
   position: relative;
   height: 58px;
   border: 0;
   color: #888;
   background: #fff;
-  font-size: 15px;
+  font-size: 15px;  
 }
 
-.detail-tabs button.active {
-  color: #111;
-  font-weight: 700;
-}
-
-.detail-tabs button.active::after {
+.detail-navbar .nav-item.active::after {
   content: "";
   position: absolute;
   right: 0;
@@ -758,7 +757,6 @@ button:disabled {
 }
 
 .tab-panel {
-  display: none;
   padding: 45px 6px 20px;
 }
 
@@ -1487,11 +1485,31 @@ button:disabled {
     padding: 0;
     border: 0;
   }
+  
 
-  .detail-tabs button {
-    height: 52px;
-    font-size: 12px;
-  }
+
+
+  
+  /* 부트스트랩 스크롤스파이 active 클래스 스타일 */
+.detail-navbar .nav-link.active {
+  color: #111 !important;
+  font-weight: 700;
+  background-color: transparent !important;
+  border-bottom: 3px solid var(--blue);
+  border-radius: 0;
+}
+
+/* 스티키 보정을 위한 상단 여백 (헤더 높이만큼 필요) */
+[data-bs-spy="scroll"] {
+  position: relative;
+  overflow-y: auto;
+}
+
+/* 스티키 네비게이션이 가리지 않도록 타겟 요소에 여백 추가 */
+#info, #review, #question {
+  padding-top: 80px; /* 네비게이션 높이 + 알파 */
+  margin-top: -80px;
+}
 
   .tab-panel {
     padding-top: 32px;

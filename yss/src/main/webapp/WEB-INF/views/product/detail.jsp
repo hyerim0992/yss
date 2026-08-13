@@ -161,7 +161,7 @@
         </div>
       </section>
 
-      <aside class="sticky-trade" aria-label="빠른 구매 메뉴">
+<%--       <aside class="sticky-trade" aria-label="빠른 구매 메뉴">
         <div class="sticky-inner page-width">
           <div class="sticky-product">
             <img src="${ctx}/dist/images/product-detail/main-shoe.png" alt="상품 미리보기" />
@@ -182,16 +182,24 @@
             <strong>구매</strong>
           </button>
         </div>
-      </aside>
+      </aside> --%>
 
       <section class="detail-section page-width">
-        <nav class="detail-tabs" aria-label="상세 정보 탭">
-          <button type="button" class="active" data-tab="info">상품정보</button>
-          <button type="button" data-tab="review">상품리뷰(128)</button>
-          <button type="button" data-tab="question">상품 Q&amp;A(12)</button>
-        </nav>
-
-        <div class="tab-panel active" id="info">
+<nav id="detail-navbar" class="detail-navbar navbar sticky-top bg-white border-bottom" aria-label="상세 정보 탭">
+  <ul class="nav nav-pills">
+    <li class="nav-item">
+      <a class="nav-link" href="#info">상품정보</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="#review">상품리뷰(128)</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="#question">Q&amp;A(12)</a>
+    </li>
+  </ul>
+</nav>
+<div data-bs-spy="scroll" data-bs-target="#detail-navbar">
+        <div class="tab-panel" id="info">
           <h2>상품정보</h2>
           <p>
             <b>ADIDAS ZX 8000.</b><br />1980년대 러닝화의 감성을 현대적으로
@@ -290,6 +298,8 @@
             <p>품질보증 기간은 구매일로부터 6개월입니다. 상품 상태에 따라 수선 가능 여부와 비용이 달라질 수 있으므로 고객센터에 먼저 문의해주세요.</p>
           </details>
         </div>
+
+</div>
       </section>
 
       <section class="recommend-section page-width">
