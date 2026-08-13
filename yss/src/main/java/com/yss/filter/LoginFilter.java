@@ -101,6 +101,7 @@ public class LoginFilter implements Filter {
 				"/index.jsp", "/main", 
 				"/member/login", "/member/logout",
 				"/member/join", 
+				"/member/checkId",
 				"/product/**", 
 				"/customer/contact",
 				"/customer/faq/**",

@@ -151,5 +151,12 @@
   <script src="${ctx}/dist/js/common/main.js"></script>
   <script src="${ctx}/dist/js/common/layout.js?v=20260806-0200"></script>
   <script src="${ctx}/dist/js/pages/member/login.js?v=20260806-1420"></script>
+  
+  <c:if test="${not empty message}">
+  <script>
+    alert("${message}");
+  </script>
+</c:if>
+
 </body>
 </html>

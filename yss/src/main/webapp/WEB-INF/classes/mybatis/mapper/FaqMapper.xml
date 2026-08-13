@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yss.mapper.FaqMapper">
+
+	<!-- FAQ 등록 -->
+	<insert id="insertFaq" parameterType="com.yss.dto.FaqDTO">
+		INSERT INTO FAQ (
+			FAQID,
+			MEMBERID,
+			TITLE,
+			CONTENT,
+			CATEGORY
+		)
+		VALUES (
+			FAQ_SEQ.NEXTVAL,
+			#{memberId},
+			#{title},
+			#{content},
+			#{category}
+		)
+	</insert>
+	
+	
+	<!-- FAQ 전체 목록 -->
+	<select id="listFaq" resultType="com.yss.dto.FaqDTO">
+		SELECT
+			FAQID,
+			MEMBERID,
+			TITLE,
+			CONTENT,
+			CATEGORY
+		FROM FAQ
+		ORDER BY FAQID DESC
+	</select>
+	
+	
+	<!-- FAQ 한 개 조회 -->
+	<select id="findById"
+		parameterType="Long"
+		resultType="com.yss.dto.FaqDTO">
+		
+		SELECT
+			FAQID,
+			MEMBERID,
+			TITLE,
+			CONTENT,
+			CATEGORY
+		FROM FAQ
+		WHERE FAQID = #{faqId}
+		
+	</select>
+	
+	
+	<!-- FAQ 수정 -->
+	<update id="updateFaq"
+		parameterType="com.yss.dto.FaqDTO">
+		
+		UPDATE FAQ
+		SET
+			TITLE = #{title},
+			CONTENT = #{content},
+			CATEGORY = #{category}
+		WHERE FAQID = #{faqId}
+		
+	</update>
+	
+	
+	<!-- FAQ 삭제 -->
+	<delete id="deleteFaq" parameterType="Long">
+		DELETE FROM FAQ
+		WHERE FAQID = #{faqId}
+	</delete>
+
+</mapper>

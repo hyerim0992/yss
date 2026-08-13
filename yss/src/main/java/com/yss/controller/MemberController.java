@@ -13,6 +13,7 @@ import com.yss.mvc.annotation.RequestMapping;
 import com.yss.mvc.view.ModelAndView;
 import com.yss.service.MemberService;
 import com.yss.service.MemberServiceImpl;
+import com.yss.mvc.annotation.ResponseBody;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -102,5 +103,136 @@ public class MemberController {
 		session.invalidate();
 		
 		return new ModelAndView("redirect:/");
+	}
+	
+	@ResponseBody
+	@GetMapping("checkId")
+	public Map<String, Object> checkId(HttpServletRequest req, HttpServletResponse resp)
+			throws ServletException, IOException {
+
+		Map<String, Object> model = new HashMap<>();
+
+		try {
+
+			// 현재 join.jsp의 name이 memberId라서 이렇게 받음
+			String userId = req.getParameter("memberId");
+
+			int count = service.checkUserId(userId);
+
+			if(count == 0) {
+
+				model.put("available", true);
+				model.put("message", "사용 가능한 아이디입니다.");
+
+			} else {
+
+				model.put("available", false);
+				model.put("message", "이미 사용 중인 아이디입니다.");
+			}
+
+		} catch (Exception e) {
+
+			model.put("available", false);
+			model.put("message", "아이디 확인 중 오류가 발생했습니다.");
+
+			e.printStackTrace();
+		}
+
+		return model;
+	}
+	
+	@PostMapping("join")
+	public ModelAndView joinSubmit(HttpServletRequest req, HttpServletResponse resp)
+			throws ServletException, IOException {
+
+		try {
+			String userId = req.getParameter("memberId");
+			String password = req.getParameter("password");
+			String passwordConfirm = req.getParameter("passwordConfirm");
+			String name = req.getParameter("memberName");
+			String email = req.getParameter("email");
+			String phone = req.getParameter("phone");
+			String zip = req.getParameter("postalCode");
+			String addr1 = req.getParameter("address");
+			String addr2 = req.getParameter("addressDetail");
+			String birth = req.getParameter("birthDate");
+
+			// 필수값 검사
+			if(userId == null || userId.isBlank()
+					|| password == null || password.isBlank()
+					|| name == null || name.isBlank()
+					|| email == null || email.isBlank()
+					|| phone == null || phone.isBlank()
+					|| zip == null || zip.isBlank()
+					|| addr1 == null || addr1.isBlank()
+					|| addr2 == null || addr2.isBlank()
+					|| birth == null || birth.isBlank()) {
+
+				ModelAndView mav =
+						new ModelAndView("member/join");
+
+				mav.addObject("joinError","필수 항목을 모두 입력해 주세요.");
+
+				return mav;
+			}
+
+
+			// 비밀번호 확인
+			if(! password.equals(passwordConfirm)) {
+
+				ModelAndView mav = new ModelAndView("member/join");
+
+				mav.addObject("joinError", "비밀번호가 일치하지 않습니다.");
+
+				return mav;
+			}
+
+
+			// 서버에서도 아이디 중복확인
+			if(service.checkUserId(userId) > 0) {
+
+				ModelAndView mav = new ModelAndView("member/join");
+
+				mav.addObject("joinError", "이미 사용 중인 아이디입니다.");
+
+				return mav;
+			}
+
+
+			MemberDTO dto = new MemberDTO();
+
+			dto.setUserId(userId);
+			dto.setPassword(password);
+			dto.setName(name);
+			dto.setEmail(email);
+			dto.setPhone(phone);
+			dto.setBirth(birth);
+
+			dto.setZip(zip);
+			dto.setAddr1(addr1);
+			dto.setAddr2(addr2);
+
+
+			service.insertMember(dto);
+
+
+		} catch (Exception e) {
+
+			e.printStackTrace();
+
+			ModelAndView mav =
+					new ModelAndView("member/join");
+
+			mav.addObject(
+					"joinError",
+					"회원가입 처리 중 오류가 발생했습니다.");
+
+			return mav;
+		}
+
+
+		// 회원가입 성공 → 로그인 화면
+		return new ModelAndView(
+				"redirect:/member/login");
 	}
 }

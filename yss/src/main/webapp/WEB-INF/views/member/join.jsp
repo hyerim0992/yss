@@ -33,9 +33,6 @@
 		}
 	</style>
 
-
-
-
     
 
     <link rel="stylesheet" href="${pageContext.request.contextPath}/dist/css/pages/member/join.css" />
@@ -43,7 +40,6 @@
 </head>
 <body class="has-site-layout">
     <jsp:include page="/WEB-INF/views/common/header.jsp" />
-
 
 
 
@@ -67,8 +63,7 @@
 					<div class="ys-server-message ys-server-message--error" role="alert"><c:out value="${joinError}" /></div>
 				</c:if>
 
-				<form id="joinForm" action="${ctx}/members/join" method="post" novalidate
-					  data-context-path="${ctx}" data-id-check-url="${ctx}/api/members/check-id">
+				<form id="joinForm" action="${ctx}/member/join" method="post" novalidate data-context-path="${ctx}" data-id-check-url="${ctx}/member/checkId">
 					<c:if test="${not empty _csrf}">
 						<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
 					</c:if>
@@ -212,7 +207,6 @@
 <script src="${ctx}/dist/js/vendor/jquery.magnific-popup.js"></script>
 <script src="${ctx}/dist/js/vendor/jquery.scrollUp.min.js"></script>
 <script src="${ctx}/dist/js/vendor/jquery.nice-select.min.js"></script>
-
 <script src="${ctx}/dist/js/vendor/jquery.ajaxchimp.min.js"></script>
 <script src="${ctx}/dist/js/common/plugins.js"></script>
 <script src="${ctx}/dist/js/common/main.js"></script>

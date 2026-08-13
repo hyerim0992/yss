@@ -70,7 +70,7 @@
 
               <div class="abc-cs-list-title">
                 <strong>자주 묻는 질문 BEST</strong>
-                <span>총 <b id="abcFaqCount">8</b>건</span>
+                <span>총 <b id="abcFaqCount">${list.size()}</b>건</span>
               </div>
 
               <!--
@@ -80,39 +80,40 @@
                 답변 공개 여부 같은 조건이 생기면 조건문도 직접 작성하는 연습용입니다.
               -->
               <div class="abc-cs-faq-list" id="abcFaqList">
-                <article class="abc-cs-faq-item" data-category="주문/결제" data-search="주문 취소 결제 환불 주문을 취소하고 싶어요">
-                  <button type="button" class="abc-cs-faq-question" aria-expanded="false"><span class="abc-cs-row-category">주문/결제</span><strong>주문을 취소하고 싶어요.</strong><span class="abc-cs-arrow" aria-hidden="true"></span></button>
-                  <div class="abc-cs-faq-answer"><p>상품 준비 전에는 마이페이지 주문내역에서 직접 취소할 수 있습니다. 상품 준비가 시작된 이후에는 판매자 확인이 필요할 수 있습니다.</p></div>
-                </article>
-                <article class="abc-cs-faq-item" data-category="배송" data-search="배송 조회 운송장 언제 출발 배송 상태">
-                  <button type="button" class="abc-cs-faq-question" aria-expanded="false"><span class="abc-cs-row-category">배송</span><strong>배송 상태와 운송장 번호는 어디에서 확인하나요?</strong><span class="abc-cs-arrow" aria-hidden="true"></span></button>
-                  <div class="abc-cs-faq-answer"><p>마이페이지의 구매내역에서 배송 단계와 운송장 번호를 확인할 수 있습니다.</p></div>
-                </article>
-                <article class="abc-cs-faq-item" data-category="교환/반품" data-search="교환 반품 접수 환불 사이즈 변경">
-                  <button type="button" class="abc-cs-faq-question" aria-expanded="false"><span class="abc-cs-row-category">교환/반품</span><strong>교환 또는 반품은 어떻게 신청하나요?</strong><span class="abc-cs-arrow" aria-hidden="true"></span></button>
-                  <div class="abc-cs-faq-answer"><p>상품 수령 후 7일 이내 마이페이지에서 신청해 주세요.</p></div>
-                </article>
-                <article class="abc-cs-faq-item" data-category="상품정보" data-search="상품 가격 같은 상품 가격 다른 이유 판매 희망가">
-                  <button type="button" class="abc-cs-faq-question" aria-expanded="false"><span class="abc-cs-row-category">상품정보</span><strong>같은 상품인데 가격이 다른 이유가 무엇인가요?</strong><span class="abc-cs-arrow" aria-hidden="true"></span></button>
-                  <div class="abc-cs-faq-answer"><p>판매자, 사이즈, 상품 상태와 판매 희망가에 따라 가격이 달라질 수 있습니다.</p></div>
-                </article>
-                <article class="abc-cs-faq-item" data-category="회원" data-search="회원 정보 비밀번호 아이디 연락처 변경">
-                  <button type="button" class="abc-cs-faq-question" aria-expanded="false"><span class="abc-cs-row-category">회원</span><strong>회원정보와 비밀번호는 어디서 변경하나요?</strong><span class="abc-cs-arrow" aria-hidden="true"></span></button>
-                  <div class="abc-cs-faq-answer"><p>마이페이지의 내 정보 메뉴에서 변경할 수 있습니다.</p></div>
-                </article>
-                <article class="abc-cs-faq-item" data-category="심의" data-search="심의 신청 상품 상태 하자 오배송 이의 접수">
-                  <button type="button" class="abc-cs-faq-question" aria-expanded="false"><span class="abc-cs-row-category">심의</span><strong>상품 상태에 대한 심의는 어떻게 신청하나요?</strong><span class="abc-cs-arrow" aria-hidden="true"></span></button>
-                  <div class="abc-cs-faq-answer"><p>1:1 문의에서 주문번호, 문제 내용과 확인 가능한 사진을 함께 등록해 주세요.</p></div>
-                </article>
-                <article class="abc-cs-faq-item" data-category="주문/결제" data-search="결제 수단 카드 간편 결제 변경">
-                  <button type="button" class="abc-cs-faq-question" aria-expanded="false"><span class="abc-cs-row-category">주문/결제</span><strong>결제 완료 후 결제수단을 변경할 수 있나요?</strong><span class="abc-cs-arrow" aria-hidden="true"></span></button>
-                  <div class="abc-cs-faq-answer"><p>결제 완료 후에는 결제수단만 따로 변경할 수 없습니다.</p></div>
-                </article>
-                <article class="abc-cs-faq-item" data-category="기타" data-search="포인트 쿠폰 사용 유효 기간">
-                  <button type="button" class="abc-cs-faq-question" aria-expanded="false"><span class="abc-cs-row-category">기타</span><strong>포인트와 쿠폰의 유효기간은 어디서 확인하나요?</strong><span class="abc-cs-arrow" aria-hidden="true"></span></button>
-                  <div class="abc-cs-faq-answer"><p>마이페이지의 혜택 관리 메뉴에서 확인할 수 있습니다.</p></div>
-                </article>
-              </div>
+
+	<c:forEach var="dto" items="${list}">
+	
+		<article class="abc-cs-faq-item"
+			data-category="${dto.category}"
+			data-search="${dto.category} ${dto.title} ${dto.content}">
+			
+			<button type="button"
+				class="abc-cs-faq-question"
+				aria-expanded="false">
+				
+				<span class="abc-cs-row-category">
+					${dto.category}
+				</span>
+				
+				<strong>
+					${dto.title}
+				</strong>
+				
+				<span class="abc-cs-arrow"
+					aria-hidden="true">
+				</span>
+				
+			</button>
+			
+			<div class="abc-cs-faq-answer">
+				<p>${dto.content}</p>
+			</div>
+			
+		</article>
+		
+	</c:forEach>
+
+</div>
               <div class="abc-cs-empty" id="abcFaqEmpty" hidden><strong>검색 결과가 없습니다.</strong><p>다른 검색어를 입력하거나 카테고리를 변경해 보세요.</p></div>
             </section>
           </div>

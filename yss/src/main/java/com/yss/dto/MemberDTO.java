@@ -10,8 +10,7 @@ public class MemberDTO {
 	private String updateAt;
 	private String deleteAt;
 	private String name;
-	private String email1;
-	private String email2;
+	private String email;
 	private String phone;
 	private String birth;
 	private String zip;
@@ -75,17 +74,11 @@ public class MemberDTO {
 	public void setName(String name) {
 		this.name = name;
 	}
-	public String getEmail1() {
-		return email1;
+	public String getEmail() {
+		return email;
 	}
-	public void setEmail1(String email1) {
-		this.email1 = email1;
-	}
-	public String getEmail2() {
-		return email2;
-	}
-	public void setEmail2(String email2) {
-		this.email2 = email2;
+	public void setEmail(String email) {
+		this.email = email;
 	}
 	public String getPhone() {
 		return phone;
