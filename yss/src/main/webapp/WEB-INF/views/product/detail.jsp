@@ -9,8 +9,6 @@
     <title>아디다스 ZX 8000 | SHOES STORE</title>
     <jsp:include page="/WEB-INF/views/common/head-styles.jsp" />
     
-  
-    
 
     <link rel="stylesheet" href="${pageContext.request.contextPath}/dist/css/pages/product/detail.css?v=20260806-price-coupon-1" />
     <link rel="stylesheet" href="${pageContext.request.contextPath}/dist/css/common/layout.css?v=20260806-0140" />
