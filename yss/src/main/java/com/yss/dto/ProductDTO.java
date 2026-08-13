@@ -5,12 +5,15 @@ public class ProductDTO {
 	
 	private long productId;
 	private String prodName;
+	private int inboundPrice; // 입고가
 	private int price;
 	private int discRate; // 할인율
 	private String thumbail;
 	private String brand;
 	private int heelHeight;
 	private String status; // 판매중, 재고없음
+	private int minGrade; // 최소노출등급
+	private String regDate;
 	
 	private long imageId;
 	private String files;
@@ -140,7 +143,24 @@ public class ProductDTO {
 	public void setDepth(int depth) {
 		this.depth = depth;
 	}
-	
+	public int getInboundPrice() {
+		return inboundPrice;
+	}
+	public void setInboundPrice(int inboundPrice) {
+		this.inboundPrice = inboundPrice;
+	}
+	public int getMinGrade() {
+		return minGrade;
+	}
+	public void setMinGrade(int minGrade) {
+		this.minGrade = minGrade;
+	}
+	public String getRegDate() {
+		return regDate;
+	}
+	public void setRegDate(String regDate) {
+		this.regDate = regDate;
+	}
 	
 	
 	

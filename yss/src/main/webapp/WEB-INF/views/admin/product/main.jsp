@@ -27,14 +27,13 @@
         <div>
           <p>관리자 페이지 / 상품관리</p>
           <h1>상품관리</h1>
-          <span>상품 등록·조회와 브랜드 정보를 관리합니다.</span>
+          <span>상품 등록·조회·재고관리를 합니다.</span>
         </div>
         <button type="button" class="primary-btn" id="addButton">+ 상품 등록</button>
       </div>
 
       <nav class="sub-tabs" aria-label="상품관리 탭">
-        <button type="button" data-section-target="0" class="active">등록 상품 조회</button>
-        <button type="button" data-section-target="1" class="">브랜드 관리</button>
+        <button type="button" data-section-target="0" class="active" disabled>등록 상품 조회</button>
       </nav>
 
       <section class="admin-section-panel active" data-admin-section="0" data-section-name="등록 상품 조회" data-table-title="등록 상품 목록" data-add-label="+ 상품 등록" data-can-add="true">
@@ -42,15 +41,13 @@
           <div class="search-row">
             <select class="js-search-type" aria-label="검색 항목">
               <option value="all">전체</option>
-              <option value="0">물품번호</option>
+              <option value="0">상품번호</option>
               <option value="1">상품명</option>
               <option value="2">브랜드</option>
               <option value="3">카테고리</option>
-              <option value="4">가격</option>
-              <option value="5">판매자</option>
-              <option value="6">판매자레벨</option>
-              <option value="7">등록일</option>
-              <option value="8">상태</option>
+              <option value="4">입고가</option>
+              <option value="5">판매가</option>
+              <option value="6">힐높이</option>
             </select>
             <input type="search" class="js-search-keyword" placeholder="검색어를 입력하세요">
             <button type="button" class="dark-btn js-search-button">검색</button>
@@ -66,19 +63,19 @@
             </div>
           </div>
           <div class="filter-control" data-filter-type="select" data-filter-column="6">
-            <label>판매자레벨</label>
+            <label>상품 노출등급</label>
             <select class="extra-filter" id="filter-sellerLevel">
               <option value="">전체</option>
-              <option value="회원">회원</option>
-              <option value="우수회원">우수회원</option>
+              <option value="실버회원">실버회원</option>
+              <option value="골드회원">골드회원</option>
               <option value="VIP">VIP</option>
-              <option value="판매자">판매자</option>
             </select>
           </div>
           <div class="filter-control" data-filter-type="select" data-filter-column="8">
             <label>상품상태</label>
             <select class="extra-filter" id="filter-productStatus">
               <option value="">전체</option>
+              <option value="">판매대기</option>
               <option value="판매중">판매중</option>
               <option value="품절">품절</option>
             </select>
@@ -103,13 +100,14 @@
               <thead>
                 <tr>
                   <th><input type="checkbox" class="check-all" aria-label="현재 페이지 전체 선택"></th>
-                  <th>물품번호</th>
+                  <th>상품번호</th>
                   <th>상품명</th>
                   <th>브랜드</th>
                   <th>카테고리</th>
-                  <th>가격</th>
-                  <th>판매자</th>
-                  <th>판매자레벨</th>
+                  <th>입고가</th>
+                  <th>판매가</th>
+                  <th>힐높이</th>
+                  <th>노출등급</th>
                   <th>등록일</th>
                   <th>상태</th>
                   <th>관리</th>
@@ -131,9 +129,11 @@
                   <td data-field-index="4">139,000원</td>
                   <td data-field-index="5">shoe_lab</td>
                   <td data-field-index="6">판매자</td>
-                  <td data-field-index="7">2026-08-05</td>
-                  <td data-field-index="8"><span class="badge green">판매중</span></td>
+                  <td data-field-index="7">판매자</td>
+                  <td data-field-index="8">2026-08-05</td>
+                  <td data-field-index="9"><span class="badge green">판매중</span></td>
                   <td class="action-cell">
+                    <button type="button" class="light-btn stock-row">재고</button>
                     <button type="button" class="light-btn edit-row">수정</button>
                     <button type="button" class="light-btn delete-row">삭제</button>
                   </td>
@@ -199,7 +199,7 @@
           </div>
         </article>
 
-                <template class="admin-row-template">
+         <template class="admin-row-template">
           <tr class="data-row">
             <td><input type="checkbox" class="row-check" aria-label="항목 선택"></td>
               <td data-field-index="0"></td>
@@ -220,7 +220,7 @@
 
         <template class="admin-form-template">
           <div class="form-field">
-            <label>물품번호</label>
+            <label>상품번호</label>
             <input type="text" data-field-index="0" data-default="" placeholder="물품번호 입력">
           </div>
           <div class="form-field">
@@ -236,33 +236,36 @@
             <input type="text" data-field-index="3" data-default="" placeholder="카테고리 입력">
           </div>
           <div class="form-field">
-            <label>가격</label>
+            <label>입고가</label>
             <input type="text" data-field-index="4" data-default="" placeholder="가격 입력">
           </div>
           <div class="form-field">
-            <label>판매자</label>
-            <input type="text" data-field-index="5" data-default="" placeholder="판매자 입력">
+            <label>판매가</label>
+            <input type="text" data-field-index="5" data-default="" placeholder="가격 입력">
           </div>
           <div class="form-field">
-            <label>판매자레벨</label>
-            <select data-field-index="6" data-default="">
-              <option value="">선택해 주세요</option>
-              <option value="회원">회원</option>
-              <option value="우수회원">우수회원</option>
-              <option value="VIP">VIP</option>
-              <option value="판매자">판매자</option>
-            </select>
+            <label>힐높이</label>
+            <input type="text" data-field-index="6" data-default="" placeholder="판매자 입력">
           </div>
           <div class="form-field">
-            <label>등록일</label>
+            <label>할인율</label>
             <input type="text" data-field-index="7" data-default="" placeholder="등록일 입력">
           </div>
           <div class="form-field">
+            <label>상품노출레벨</label>
+            <select data-field-index="8" data-default="all">
+              <option value="all" selected>전체</option>
+              <option value="silver">실버이상</option>
+              <option value="gold">골드이상</option>
+              <option value="vip">VIP</option>
+            </select>
+          </div>
+          <div class="form-field">
             <label>상태</label>
-            <select data-field-index="8" data-default="판매중">
-              <option value="">선택해 주세요</option>
-              <option value="판매중" selected>판매중</option>
-              <option value="품절">품절</option>
+            <select data-field-index="9" data-default="ready">
+              <option value="ready" selected>판매대기</option>
+              <option value="onSele" >판매중</option>
+              <option value="soldOut">품절</option>
             </select>
           </div>
         </template>

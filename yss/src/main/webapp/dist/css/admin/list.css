@@ -15,6 +15,7 @@
   background: #111;
   color: #fff;
   border-color: #111;
+  cursor: default;
 }
 .search-panel { padding: 16px; }
 .search-row {
