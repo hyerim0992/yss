@@ -35,7 +35,7 @@ public class ProductDetailController {
     	return new ModelAndView("product/detail/review");
     }
     
-    //AJAX
+    //AJAX //리뷰 작성
     @ResponseBody
     @PostMapping("review")
     public ModelAndView reviewSubmit(HttpServletRequest req, HttpServletResponse resp)
@@ -50,7 +50,7 @@ public class ProductDetailController {
     	return new ModelAndView("product/detail/qna");
     }
 
-    //AJAX
+    //AJAX //qna 작성
     @ResponseBody
     @PostMapping("qna")
     public ModelAndView qnaSubmit(HttpServletRequest req, HttpServletResponse resp)
