@@ -11,7 +11,7 @@
           <strong class="cs-title">통합고객센터</strong>
           <span class="cs-phone">1111-2222</span>
           <span class="cs-time">월~금 09:00 ~ 12:00 / 13:00 ~ 18:00 (주말·공휴일 휴무)</span>
-          <button type="button" class="chat-btn" onclick="location.href='${ctx}/customer/contact'">챗봇 상담</button>
+          <button type="button" class="chat-btn" onclick="location.href='${ctx}/customer/faq/list'">챗봇 상담</button>
         </div>
 
         <div class="footer-top-right">
@@ -70,8 +70,8 @@
             <div class="footer-menu-box">
               <h4>HELP</h4>
               <ul>
-                <li><a href="${ctx}/customer/contact">고객센터</a></li>
-                <li><a href="${ctx}/mypage#inquiry">1:1 문의</a></li>
+                <li><a href="${ctx}/customer/faq/list">고객센터</a></li>
+                <li><a href="${ctx}/customer/inquiry/list">1:1 문의</a></li>
                 <li><a href="${ctx}/mypage#shipping">배송 조회</a></li>
                 <li><a href="${ctx}/mypage#purchase">취소/교환/반품</a></li>
                 <li><a href="${ctx}/mypage#guide">이용 안내</a></li>

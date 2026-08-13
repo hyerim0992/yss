@@ -27,7 +27,7 @@
     <p>SERVICE</p>
 
     <a class="nav-item ${requestScope.adminPage eq 'support' ? 'active' : ''}"
-       href="<c:url value='/admin/support' />">
+       href="<c:url value='/admin/support/inquiry/list' />">
       <span>?</span>고객지원 <b>5</b>
     </a>
 

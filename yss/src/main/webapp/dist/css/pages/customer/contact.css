@@ -90,7 +90,8 @@
   gap: 2px;
 }
 
-.abc-cs-side-menu button {
+.abc-cs-side-menu button,
+.abc-cs-side-menu a {
   width: max-content;
   max-width: 100%;
   justify-self: start;
@@ -105,16 +106,19 @@
   cursor: pointer;
 }
 
-.abc-cs-side-menu button:hover {
+.abc-cs-side-menu button:hover,
+.abc-cs-side-menu a:hover {
   color: var(--abc-ink);
 }
 
-.abc-cs-side-menu button.is-active {
+.abc-cs-side-menu button.is-active,
+.abc-cs-side-menu a.is-active {
   color: var(--abc-ink);
   font-weight: 800;
 }
 
-.abc-cs-side-menu button.is-active::after {
+.abc-cs-side-menu button.is-active::after,
+.abc-cs-side-menu a.is-active::after {
   content: "";
   display: block;
   width: 100%;
@@ -837,7 +841,8 @@
     border-bottom: 1px solid var(--abc-line);
   }
 
-  .abc-cs-side-menu button {
+  .abc-cs-side-menu button,
+.abc-cs-side-menu a {
     width: 100%;
     max-width: none;
     justify-self: stretch;
@@ -846,7 +851,8 @@
     white-space: nowrap;
   }
 
-  .abc-cs-side-menu button.is-active::after {
+  .abc-cs-side-menu button.is-active::after,
+.abc-cs-side-menu a.is-active::after {
     width: 100%;
     margin-top: 10px;
   }
@@ -946,4 +952,32 @@
 .abc-cs-file-button {
   color: var(--abc-ink);
   -webkit-text-fill-color: currentColor;
+}
+
+
+/* 고객센터를 탭 JS가 아닌 JSP 링크 페이지로 분리하면서 추가한 스타일 */
+.abc-cs-side-menu a {
+  text-decoration: none;
+}
+
+.abc-cs-qna-columns,
+.abc-cs-qna-row {
+  grid-template-columns: minmax(160px, 1.2fr) minmax(0, 1.8fr) 100px 120px;
+}
+
+.abc-cs-qna-row {
+  display: grid;
+  align-items: center;
+  min-height: 64px;
+  border-bottom: 1px solid var(--abc-line);
+  font-size: 13px;
+}
+
+.abc-cs-qna-row > * {
+  padding: 0 14px;
+}
+
+.abc-cs-qna-row time {
+  color: #999ca1;
+  text-align: center;
 }

@@ -102,7 +102,10 @@ public class LoginFilter implements Filter {
 				"/member/login", "/member/logout",
 				"/member/join", 
 				"/product/**", 
-				"/customer/contact", // 고객센터는 공지사항, FAQ만 비회원 접근가능
+				"/customer/contact",
+				"/customer/faq/**",
+				"/customer/notice/**",
+				"/customer/qna/**", // FAQ/공지/상품문의 목록은 비회원도 확인 가능
 				"/order",
 				"/uploads/photo/**", 
 				"/dist/**"

@@ -44,7 +44,7 @@ public class ViewController {
     @GetMapping("/customer/contact")
     public ModelAndView contact(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-        return new ModelAndView("customer/contact");
+        return new ModelAndView("customer/faq/list");
     }
 
     @GetMapping("/order/agreement")

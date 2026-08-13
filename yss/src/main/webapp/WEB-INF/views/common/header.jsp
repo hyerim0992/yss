@@ -75,12 +75,12 @@
                       </ul>
                     </li>
                     <li class="header-help-menu">
-                      <a href="${ctx}/customer/contact#faq" aria-haspopup="true">HELP</a>
+                      <a href="${ctx}/customer/faq/list" aria-haspopup="true">HELP</a>
                       <ul class="submenu header-help-submenu" aria-label="고객센터 하위 메뉴">
-                        <li><a href="${ctx}/customer/contact#faq">자주 묻는 질문</a></li>
-                        <li><a href="${ctx}/customer/contact#notice">공지사항</a></li>
-                        <li><a href="${ctx}/customer/contact#inquiry">1:1 문의</a></li>
-                        <li><a href="${ctx}/customer/contact#voice">고객의 소리</a></li>
+                        <li><a href="${ctx}/customer/faq/list">자주 묻는 질문</a></li>
+                        <li><a href="${ctx}/customer/notice/list">공지사항</a></li>
+                        <li><a href="${ctx}/customer/inquiry/list">1:1 문의</a></li>
+                        <li><a href="${ctx}/customer/qna/list">상품문의</a></li>
                       </ul>
                     </li>
                     <li class="d-lg-none"><a href="${ctx}/mypage" data-mypage-link>MY PAGE</a></li>

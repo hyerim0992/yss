@@ -1,0 +1,71 @@
+/* 고객지원 JSP 분리 화면 전용 보조 스타일
+   기존 admin/common.css + admin/list.css 디자인을 그대로 사용하면서
+   탭을 <a> 링크로 사용할 수 있도록 필요한 부분만 추가합니다. */
+.support-tabs {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-bottom: 18px;
+}
+.support-tabs a {
+  display: inline-block;
+  border: 1px solid var(--line);
+  background: #fff;
+  padding: 9px 13px;
+  border-radius: 7px;
+  color: #666;
+  text-decoration: none;
+}
+.support-tabs a.active {
+  background: #111;
+  color: #fff;
+  border-color: #111;
+}
+.support-search-form .search-row {
+  align-items: center;
+}
+.support-search-form .filter-row {
+  align-items: flex-end;
+}
+.support-actions {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+}
+.support-actions .light-btn,
+.support-actions .answer-btn {
+  margin-left: 0;
+  text-decoration: none;
+  white-space: nowrap;
+}
+.support-empty {
+  text-align: center;
+  color: #999;
+  padding: 45px 15px;
+}
+.support-pagination {
+  text-align: center;
+  margin-top: 22px;
+}
+.support-pagination a,
+.support-pagination span {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 34px;
+  height: 34px;
+  margin: 2px;
+  border-radius: 6px;
+  text-decoration: none;
+}
+.support-pagination .active {
+  background: #111;
+  color: #fff;
+}
+@media (max-width: 760px) {
+  .support-search-form .search-row { flex-wrap: wrap; }
+  .support-actions { flex-wrap: wrap; }
+}
+
+.text-reset { color: inherit; text-decoration: none; }
+.text-reset:hover { text-decoration: underline; }
