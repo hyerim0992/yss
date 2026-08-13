@@ -12,8 +12,9 @@
     window.__ysPageLoaderStart = Date.now();
   </script>
   <jsp:include page="/WEB-INF/views/admin/layout/headerResources.jsp"/>
-  <link rel="stylesheet" href="${pageContext.request.contextPath}/dist/css/admin/list.css?v=20260810">
-  <link rel="stylesheet" href="${pageContext.request.contextPath}/dist/css/admin/modal.css?v=20260810">
+  <link rel="stylesheet" href="${pageContext.request.contextPath}/dist/css/admin/list.css?v=20260813">
+  <link rel="stylesheet" href="${pageContext.request.contextPath}/dist/css/admin/modal.css?v=20260813">
+  <link rel="stylesheet" href="${pageContext.request.contextPath}/dist/css/admin/static-list.css?v=20260813">
 </head>
 <body data-context-path="${pageContext.request.contextPath}">
   <jsp:include page="/WEB-INF/views/common/page-loader.jsp"/>
@@ -21,12 +22,432 @@
   <jsp:include page="/WEB-INF/views/admin/layout/left.jsp"/>
 
   <main class="admin-main">
-    <jsp:include page="/WEB-INF/views/admin/layout/listContent.jsp"/>
+    <section class="page active admin-static-page" data-page-key="product">
+      <div class="page-heading">
+        <div>
+          <p>관리자 페이지 / 상품관리</p>
+          <h1>상품관리</h1>
+          <span>상품 등록·조회와 브랜드 정보를 관리합니다.</span>
+        </div>
+        <button type="button" class="primary-btn" id="addButton">+ 상품 등록</button>
+      </div>
+
+      <nav class="sub-tabs" aria-label="상품관리 탭">
+        <button type="button" data-section-target="0" class="active">등록 상품 조회</button>
+        <button type="button" data-section-target="1" class="">브랜드 관리</button>
+      </nav>
+
+      <section class="admin-section-panel active" data-admin-section="0" data-section-name="등록 상품 조회" data-table-title="등록 상품 목록" data-add-label="+ 상품 등록" data-can-add="true">
+        <article class="panel search-panel">
+          <div class="search-row">
+            <select class="js-search-type" aria-label="검색 항목">
+              <option value="all">전체</option>
+              <option value="0">물품번호</option>
+              <option value="1">상품명</option>
+              <option value="2">브랜드</option>
+              <option value="3">카테고리</option>
+              <option value="4">가격</option>
+              <option value="5">판매자</option>
+              <option value="6">판매자레벨</option>
+              <option value="7">등록일</option>
+              <option value="8">상태</option>
+            </select>
+            <input type="search" class="js-search-keyword" placeholder="검색어를 입력하세요">
+            <button type="button" class="dark-btn js-search-button">검색</button>
+            <button type="button" class="light-btn js-reset-button">초기화</button>
+          </div>
+          <div class="filter-row" aria-label="추가 검색 조건">
+          <div class="filter-control range-control" data-filter-type="dateRange" data-filter-column="7">
+            <label>등록기간</label>
+            <div class="filter-date-range">
+              <input type="date" class="filter-from" aria-label="등록기간 시작일">
+              <span>~</span>
+              <input type="date" class="filter-to" aria-label="등록기간 종료일">
+            </div>
+          </div>
+          <div class="filter-control" data-filter-type="select" data-filter-column="6">
+            <label>판매자레벨</label>
+            <select class="extra-filter" id="filter-sellerLevel">
+              <option value="">전체</option>
+              <option value="회원">회원</option>
+              <option value="우수회원">우수회원</option>
+              <option value="VIP">VIP</option>
+              <option value="판매자">판매자</option>
+            </select>
+          </div>
+          <div class="filter-control" data-filter-type="select" data-filter-column="8">
+            <label>상품상태</label>
+            <select class="extra-filter" id="filter-productStatus">
+              <option value="">전체</option>
+              <option value="판매중">판매중</option>
+              <option value="품절">품절</option>
+            </select>
+          </div>
+          </div>
+        </article>
+
+        <article class="panel">
+          <div class="panel-title">
+            <div>
+              <h2>등록 상품 목록</h2>
+              <p>검색 결과 <b class="result-count">4</b>건 · 선택 <b class="selected-count">0</b>건</p>
+            </div>
+            <div>
+              <button type="button" class="light-btn danger-btn delete-selected-button">선택 삭제</button>
+              <button type="button" class="light-btn export-button">CSV 저장</button>
+            </div>
+          </div>
+
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th><input type="checkbox" class="check-all" aria-label="현재 페이지 전체 선택"></th>
+                  <th>물품번호</th>
+                  <th>상품명</th>
+                  <th>브랜드</th>
+                  <th>카테고리</th>
+                  <th>가격</th>
+                  <th>판매자</th>
+                  <th>판매자레벨</th>
+                  <th>등록일</th>
+                  <th>상태</th>
+                  <th>관리</th>
+                </tr>
+              </thead>
+              <tbody class="data-body">
+                <!--
+                  ★ 연습 포인트
+                  아래 샘플 행을 보고 나중에 Controller에서 List를 받아
+                  직접 c:forEach / DTO 출력 코드로 바꿔보세요.
+                  지금은 연습할 수 있도록 샘플 HTML을 그대로 둔 상태입니다.
+                -->
+              <tr class="data-row">
+                  <td><input type="checkbox" class="row-check" aria-label="항목 선택"></td>
+                  <td data-field-index="0">NK-AF1-001</td>
+                  <td data-field-index="1">나이키 에어포스 1 &#x27;07</td>
+                  <td data-field-index="2">NIKE</td>
+                  <td data-field-index="3">스니커즈</td>
+                  <td data-field-index="4">139,000원</td>
+                  <td data-field-index="5">shoe_lab</td>
+                  <td data-field-index="6">판매자</td>
+                  <td data-field-index="7">2026-08-05</td>
+                  <td data-field-index="8"><span class="badge green">판매중</span></td>
+                  <td class="action-cell">
+                    <button type="button" class="light-btn edit-row">수정</button>
+                    <button type="button" class="light-btn delete-row">삭제</button>
+                  </td>
+              </tr>
+
+              <tr class="data-row">
+                  <td><input type="checkbox" class="row-check" aria-label="항목 선택"></td>
+                  <td data-field-index="0">NB-993-002</td>
+                  <td data-field-index="1">뉴발란스 993 그레이</td>
+                  <td data-field-index="2">NEW BALANCE</td>
+                  <td data-field-index="3">러닝화</td>
+                  <td data-field-index="4">289,000원</td>
+                  <td data-field-index="5">rare_kicks</td>
+                  <td data-field-index="6">VIP</td>
+                  <td data-field-index="7">2026-08-04</td>
+                  <td data-field-index="8"><span class="badge green">판매중</span></td>
+                  <td class="action-cell">
+                    <button type="button" class="light-btn edit-row">수정</button>
+                    <button type="button" class="light-btn delete-row">삭제</button>
+                  </td>
+              </tr>
+
+              <tr class="data-row">
+                  <td><input type="checkbox" class="row-check" aria-label="항목 선택"></td>
+                  <td data-field-index="0">AD-SAM-003</td>
+                  <td data-field-index="1">아디다스 삼바 OG</td>
+                  <td data-field-index="2">ADIDAS</td>
+                  <td data-field-index="3">스니커즈</td>
+                  <td data-field-index="4">149,000원</td>
+                  <td data-field-index="5">runner88</td>
+                  <td data-field-index="6">우수회원</td>
+                  <td data-field-index="7">2026-08-03</td>
+                  <td data-field-index="8"><span class="badge gray">품절</span></td>
+                  <td class="action-cell">
+                    <button type="button" class="light-btn edit-row">수정</button>
+                    <button type="button" class="light-btn delete-row">삭제</button>
+                  </td>
+              </tr>
+
+              <tr class="data-row">
+                  <td><input type="checkbox" class="row-check" aria-label="항목 선택"></td>
+                  <td data-field-index="0">AS-K14-004</td>
+                  <td data-field-index="1">아식스 젤 카야노 14</td>
+                  <td data-field-index="2">ASICS</td>
+                  <td data-field-index="3">러닝화</td>
+                  <td data-field-index="4">189,000원</td>
+                  <td data-field-index="5">shoe_box</td>
+                  <td data-field-index="6">판매자</td>
+                  <td data-field-index="7">2026-08-02</td>
+                  <td data-field-index="8"><span class="badge green">판매중</span></td>
+                  <td class="action-cell">
+                    <button type="button" class="light-btn edit-row">수정</button>
+                    <button type="button" class="light-btn delete-row">삭제</button>
+                  </td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="empty-state">검색 결과가 없습니다.</div>
+          <div class="pagination" aria-label="목록 페이지 이동">
+            <!-- 페이지 버튼의 모양은 JSP에 있고 JS는 이 template을 복제해서 번호만 바꿉니다. -->
+          </div>
+        </article>
+
+                <template class="admin-row-template">
+          <tr class="data-row">
+            <td><input type="checkbox" class="row-check" aria-label="항목 선택"></td>
+              <td data-field-index="0"></td>
+              <td data-field-index="1"></td>
+              <td data-field-index="2"></td>
+              <td data-field-index="3"></td>
+              <td data-field-index="4"></td>
+              <td data-field-index="5"></td>
+              <td data-field-index="6"></td>
+              <td data-field-index="7"></td>
+              <td data-field-index="8"><span class="badge blue"></span></td>
+            <td class="action-cell">
+              <button type="button" class="light-btn edit-row">수정</button>
+              <button type="button" class="light-btn delete-row">삭제</button>
+            </td>
+          </tr>
+        </template>
+
+        <template class="admin-form-template">
+          <div class="form-field">
+            <label>물품번호</label>
+            <input type="text" data-field-index="0" data-default="" placeholder="물품번호 입력">
+          </div>
+          <div class="form-field">
+            <label>상품명</label>
+            <input type="text" data-field-index="1" data-default="" placeholder="상품명 입력">
+          </div>
+          <div class="form-field">
+            <label>브랜드</label>
+            <input type="text" data-field-index="2" data-default="" placeholder="브랜드 입력">
+          </div>
+          <div class="form-field">
+            <label>카테고리</label>
+            <input type="text" data-field-index="3" data-default="" placeholder="카테고리 입력">
+          </div>
+          <div class="form-field">
+            <label>가격</label>
+            <input type="text" data-field-index="4" data-default="" placeholder="가격 입력">
+          </div>
+          <div class="form-field">
+            <label>판매자</label>
+            <input type="text" data-field-index="5" data-default="" placeholder="판매자 입력">
+          </div>
+          <div class="form-field">
+            <label>판매자레벨</label>
+            <select data-field-index="6" data-default="">
+              <option value="">선택해 주세요</option>
+              <option value="회원">회원</option>
+              <option value="우수회원">우수회원</option>
+              <option value="VIP">VIP</option>
+              <option value="판매자">판매자</option>
+            </select>
+          </div>
+          <div class="form-field">
+            <label>등록일</label>
+            <input type="text" data-field-index="7" data-default="" placeholder="등록일 입력">
+          </div>
+          <div class="form-field">
+            <label>상태</label>
+            <select data-field-index="8" data-default="판매중">
+              <option value="">선택해 주세요</option>
+              <option value="판매중" selected>판매중</option>
+              <option value="품절">품절</option>
+            </select>
+          </div>
+        </template>
+      </section>
+
+      <section class="admin-section-panel" data-admin-section="1" data-section-name="브랜드 관리" data-table-title="브랜드 목록" data-add-label="+ 브랜드 등록" data-can-add="true" hidden>
+        <article class="panel search-panel">
+          <div class="search-row">
+            <select class="js-search-type" aria-label="검색 항목">
+              <option value="all">전체</option>
+              <option value="0">브랜드코드</option>
+              <option value="1">브랜드명</option>
+              <option value="2">영문명</option>
+              <option value="3">등록상품수</option>
+              <option value="4">등록일</option>
+              <option value="5">상태</option>
+            </select>
+            <input type="search" class="js-search-keyword" placeholder="검색어를 입력하세요">
+            <button type="button" class="dark-btn js-search-button">검색</button>
+            <button type="button" class="light-btn js-reset-button">초기화</button>
+          </div>
+          <div class="filter-row is-hidden" aria-label="추가 검색 조건">
+            <!-- 이 탭은 추가 검색 조건이 없습니다. -->
+          </div>
+        </article>
+
+        <article class="panel">
+          <div class="panel-title">
+            <div>
+              <h2>브랜드 목록</h2>
+              <p>검색 결과 <b class="result-count">4</b>건 · 선택 <b class="selected-count">0</b>건</p>
+            </div>
+            <div>
+              <button type="button" class="light-btn danger-btn delete-selected-button">선택 삭제</button>
+              <button type="button" class="light-btn export-button">CSV 저장</button>
+            </div>
+          </div>
+
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th><input type="checkbox" class="check-all" aria-label="현재 페이지 전체 선택"></th>
+                  <th>브랜드코드</th>
+                  <th>브랜드명</th>
+                  <th>영문명</th>
+                  <th>등록상품수</th>
+                  <th>등록일</th>
+                  <th>상태</th>
+                  <th>관리</th>
+                </tr>
+              </thead>
+              <tbody class="data-body">
+                <!--
+                  ★ 연습 포인트
+                  아래 샘플 행을 보고 나중에 Controller에서 List를 받아
+                  직접 c:forEach / DTO 출력 코드로 바꿔보세요.
+                  지금은 연습할 수 있도록 샘플 HTML을 그대로 둔 상태입니다.
+                -->
+              <tr class="data-row">
+                  <td><input type="checkbox" class="row-check" aria-label="항목 선택"></td>
+                  <td data-field-index="0">BR-NK</td>
+                  <td data-field-index="1">나이키</td>
+                  <td data-field-index="2">NIKE</td>
+                  <td data-field-index="3">128개</td>
+                  <td data-field-index="4">2026-05-10</td>
+                  <td data-field-index="5"><span class="badge green">사용중</span></td>
+                  <td class="action-cell">
+                    <button type="button" class="light-btn edit-row">수정</button>
+                    <button type="button" class="light-btn delete-row">삭제</button>
+                  </td>
+              </tr>
+
+              <tr class="data-row">
+                  <td><input type="checkbox" class="row-check" aria-label="항목 선택"></td>
+                  <td data-field-index="0">BR-NB</td>
+                  <td data-field-index="1">뉴발란스</td>
+                  <td data-field-index="2">NEW BALANCE</td>
+                  <td data-field-index="3">76개</td>
+                  <td data-field-index="4">2026-05-10</td>
+                  <td data-field-index="5"><span class="badge green">사용중</span></td>
+                  <td class="action-cell">
+                    <button type="button" class="light-btn edit-row">수정</button>
+                    <button type="button" class="light-btn delete-row">삭제</button>
+                  </td>
+              </tr>
+
+              <tr class="data-row">
+                  <td><input type="checkbox" class="row-check" aria-label="항목 선택"></td>
+                  <td data-field-index="0">BR-AD</td>
+                  <td data-field-index="1">아디다스</td>
+                  <td data-field-index="2">ADIDAS</td>
+                  <td data-field-index="3">94개</td>
+                  <td data-field-index="4">2026-05-11</td>
+                  <td data-field-index="5"><span class="badge green">사용중</span></td>
+                  <td class="action-cell">
+                    <button type="button" class="light-btn edit-row">수정</button>
+                    <button type="button" class="light-btn delete-row">삭제</button>
+                  </td>
+              </tr>
+
+              <tr class="data-row">
+                  <td><input type="checkbox" class="row-check" aria-label="항목 선택"></td>
+                  <td data-field-index="0">BR-AS</td>
+                  <td data-field-index="1">아식스</td>
+                  <td data-field-index="2">ASICS</td>
+                  <td data-field-index="3">42개</td>
+                  <td data-field-index="4">2026-05-15</td>
+                  <td data-field-index="5"><span class="badge green">사용중</span></td>
+                  <td class="action-cell">
+                    <button type="button" class="light-btn edit-row">수정</button>
+                    <button type="button" class="light-btn delete-row">삭제</button>
+                  </td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="empty-state">검색 결과가 없습니다.</div>
+          <div class="pagination" aria-label="목록 페이지 이동">
+            <!-- 페이지 버튼의 모양은 JSP에 있고 JS는 이 template을 복제해서 번호만 바꿉니다. -->
+          </div>
+        </article>
+
+                <template class="admin-row-template">
+          <tr class="data-row">
+            <td><input type="checkbox" class="row-check" aria-label="항목 선택"></td>
+              <td data-field-index="0"></td>
+              <td data-field-index="1"></td>
+              <td data-field-index="2"></td>
+              <td data-field-index="3"></td>
+              <td data-field-index="4"></td>
+              <td data-field-index="5"><span class="badge blue"></span></td>
+            <td class="action-cell">
+              <button type="button" class="light-btn edit-row">수정</button>
+              <button type="button" class="light-btn delete-row">삭제</button>
+            </td>
+          </tr>
+        </template>
+
+        <template class="admin-form-template">
+          <div class="form-field">
+            <label>브랜드코드</label>
+            <input type="text" data-field-index="0" data-default="" placeholder="브랜드코드 입력">
+          </div>
+          <div class="form-field">
+            <label>브랜드명</label>
+            <input type="text" data-field-index="1" data-default="" placeholder="브랜드명 입력">
+          </div>
+          <div class="form-field">
+            <label>영문명</label>
+            <input type="text" data-field-index="2" data-default="" placeholder="영문명 입력">
+          </div>
+          <div class="form-field">
+            <label>등록상품수</label>
+            <input type="text" data-field-index="3" data-default="" placeholder="등록상품수 입력">
+          </div>
+          <div class="form-field">
+            <label>등록일</label>
+            <input type="text" data-field-index="4" data-default="" placeholder="등록일 입력">
+          </div>
+          <div class="form-field">
+            <label>상태</label>
+            <select data-field-index="5" data-default="사용중">
+              <option value="">선택해 주세요</option>
+              <option value="사용중" selected>사용중</option>
+              <option value="사용중지">사용중지</option>
+            </select>
+          </div>
+        </template>
+      </section>
+
+      <!-- JS가 버튼 HTML을 문자열로 만들지 않도록 JSP에 페이지 버튼 템플릿을 둡니다. -->
+      <template id="paginationButtonTemplate">
+        <button type="button" class="page-number-button"></button>
+      </template>
+
+      <!-- CSV 저장용 링크도 JSP에 미리 둡니다. JS는 주소와 파일명만 설정합니다. -->
+      <a id="adminCsvDownloadLink" hidden aria-hidden="true"></a>
+    </section>
   </main>
 
+  <!-- 등록/수정 모달의 바깥 디자인은 기존 공용 JSP를 그대로 사용합니다. -->
   <jsp:include page="/WEB-INF/views/admin/layout/modal.jsp"/>
   <jsp:include page="/WEB-INF/views/admin/layout/footerResources.jsp"/>
-  <script src="${pageContext.request.contextPath}/dist/js/admin/data/product.js?v=20260810"></script>
-  <script src="${pageContext.request.contextPath}/dist/js/admin/list.js?v=20260810"></script>
+  <script src="${pageContext.request.contextPath}/dist/js/admin/list.js?v=20260813"></script>
 </body>
 </html>

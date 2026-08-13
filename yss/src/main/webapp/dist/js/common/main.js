@@ -26,8 +26,6 @@
         dots: false,
         fade: true,
         arrows: false,
-        prevArrow: '<button type="button" class="slick-prev"><i class="ti-shift-left"></i></button>',
-        nextArrow: '<button type="button" class="slick-next"><i class="ti-shift-right"></i></button>',
         responsive: [{
             breakpoint: 1024,
             settings: {
@@ -85,8 +83,6 @@
         autoplay:false,
         loop:true,
         arrows: true,
-        prevArrow: '<button type="button" class="slick-prev"><i class="ti-angle-left"></i></button>',
-        nextArrow: '<button type="button" class="slick-next"><i class="ti-angle-right"></i></button>',
         slidesToShow: 1,
         slidesToScroll: 1,
         responsive: [
@@ -404,10 +400,10 @@
             seconds = "0" + seconds;
           }
 
-          $("#days").html("<span>Days</span>" + days);
-          $("#hours").html("<span>Hours</span>" + hours);
-          $("#minutes").html("<span>Minutes</span>" + minutes);
-          $("#seconds").html("<span>Seconds</span>" + seconds);
+          $("#days").text(days);
+          $("#hours").text(hours);
+          $("#minutes").text(minutes);
+          $("#seconds").text(seconds);
 
         }
 // 기능 설명
@@ -481,109 +477,3 @@
 
 
 })(jQuery);
-
-/* 공통 검색 모달 로더: main.js를 사용하는 모든 화면에 검색 기능 연결 */
-(function () {
-  "use strict";
-
-  if (window.__yongsinsaSearchLoaderStarted) return;
-  window.__yongsinsaSearchLoaderStarted = true;
-
-  function getContextPath() {
-    var scripts = document.getElementsByTagName("script");
-    var marker = "/dist/js/common/main.js";
-
-    for (var i = scripts.length - 1; i >= 0; i -= 1) {
-      var src = scripts[i].getAttribute("src") || "";
-      var markerIndex = src.indexOf(marker);
-      if (markerIndex !== -1) {
-        try {
-          var url = new URL(src, window.location.href);
-          return url.pathname.substring(0, url.pathname.indexOf(marker));
-        } catch (error) {
-          return src.substring(0, markerIndex);
-        }
-      }
-    }
-
-    return "";
-  }
-
-  function loadStyle(contextPath) {
-    if (document.querySelector('link[data-global-search-style]')) return;
-
-    var link = document.createElement("link");
-    link.rel = "stylesheet";
-    link.href = contextPath + "/dist/css/pages/product/search.css";
-    link.setAttribute("data-global-search-style", "true");
-    document.head.appendChild(link);
-  }
-
-  function markSearchTriggers() {
-    var selectors = [
-      ".search-icon",
-      '.form-box input[name="Search"]',
-      '.form-box input[placeholder*="Search"]',
-      "[data-search-open]"
-    ];
-
-    var triggers = document.querySelectorAll(selectors.join(","));
-    Array.prototype.forEach.call(triggers, function (trigger) {
-      trigger.setAttribute("data-open-search", "true");
-
-      if (trigger.tagName === "INPUT") {
-        trigger.setAttribute("autocomplete", "off");
-        trigger.setAttribute("readonly", "readonly");
-        trigger.style.cursor = "pointer";
-      }
-    });
-  }
-
-  function loadSearchScript(contextPath) {
-    if (document.querySelector('script[data-global-search-script]')) return;
-
-    var script = document.createElement("script");
-    script.src = contextPath + "/dist/js/pages/product/search.js";
-    script.setAttribute("data-global-search-script", "true");
-    document.body.appendChild(script);
-  }
-
-  function initialize() {
-    var contextPath = getContextPath();
-    document.body.setAttribute("data-context-path", contextPath);
-    loadStyle(contextPath);
-    markSearchTriggers();
-
-    if (document.getElementById("globalSearch")) {
-      loadSearchScript(contextPath);
-      return;
-    }
-
-    fetch(contextPath + "/common/search-modal", { credentials: "same-origin" })
-      .then(function (response) {
-        if (!response.ok) throw new Error("검색 모달을 불러오지 못했습니다.");
-        return response.text();
-      })
-      .then(function (html) {
-        var wrapper = document.createElement("div");
-        wrapper.innerHTML = html.trim();
-
-        while (wrapper.firstChild) {
-          document.body.appendChild(wrapper.firstChild);
-        }
-
-        loadSearchScript(contextPath);
-      })
-      .catch(function (error) {
-        if (window.console && console.error) {
-          console.error(error);
-        }
-      });
-  }
-
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", initialize);
-  } else {
-    initialize();
-  }
-})();

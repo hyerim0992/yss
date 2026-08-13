@@ -138,4 +138,5 @@
 </header>
 
 <jsp:include page="/WEB-INF/views/common/search-modal.jsp" />
+<script src="${ctx}/dist/js/pages/product/search.js?v=20260813-jsp-template" defer></script>
 <script src="${ctx}/dist/js/common/auth-header.js?v=20260806-1420" defer></script>

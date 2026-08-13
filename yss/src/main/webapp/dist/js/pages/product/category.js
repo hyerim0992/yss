@@ -1,175 +1,23 @@
 (function () {
-    "use strict";
-
-    var CART_STORAGE_KEY = "yongsinsaCart";
-    var toastTimer = null;
-
-    function readCart() {
-        try {
-            var saved = window.localStorage.getItem(CART_STORAGE_KEY);
-            var parsed = saved ? JSON.parse(saved) : [];
-            return Array.isArray(parsed) ? parsed : [];
-        } catch (error) {
-            return [];
-        }
-    }
-
-    function saveCart(cart) {
-        try {
-            window.localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cart));
-            return true;
-        } catch (error) {
-            return false;
-        }
-    }
-
-    function getCartQuantity(cart) {
-        return cart.reduce(function (total, item) {
-            var quantity = Number(item.quantity) || 1;
-            return total + quantity;
-        }, 0);
-    }
-
-    function updateCartCount(cart) {
-        var count = getCartQuantity(cart);
-        document.querySelectorAll("[data-cart-count]").forEach(function (element) {
-            element.textContent = String(count).padStart(2, "0");
-        });
-    }
-
-    function showCartToast(message) {
-        var toast = document.getElementById("ysCartToast");
-        if (!toast) return;
-
-        var text = toast.querySelector("span");
-        if (text) text.textContent = message;
-
-        toast.classList.add("is-visible");
-        toast.setAttribute("aria-hidden", "false");
-
-        window.clearTimeout(toastTimer);
-        toastTimer = window.setTimeout(function () {
-            toast.classList.remove("is-visible");
-            toast.setAttribute("aria-hidden", "true");
-        }, 2600);
-    }
-
-    function addToCart(button) {
-        var product = {
-            id: button.getAttribute("data-product-id") || "",
-            name: button.getAttribute("data-product-name") || "상품",
-            brand: button.getAttribute("data-product-brand") || "",
-            price: Number(button.getAttribute("data-product-price")) || 0,
-            image: button.getAttribute("data-product-image") || "",
-            size: button.getAttribute("data-product-size") || "",
-            quantity: 1
-        };
-
-        var cart = readCart();
-        var existing = cart.find(function (item) {
-            return String(item.id) === String(product.id) && String(item.size || "") === String(product.size || "");
-        });
-
-        if (existing) {
-            existing.quantity = (Number(existing.quantity) || 1) + 1;
-        } else {
-            cart.push(product);
-        }
-
-        if (!saveCart(cart)) {
-            window.alert("브라우저 저장 공간을 사용할 수 없어 장바구니에 담지 못했습니다.");
-            return;
-        }
-
-        updateCartCount(cart);
-        button.classList.add("is-added");
-        button.setAttribute("aria-label", "장바구니에 담김");
-        showCartToast(product.name + " 상품을 장바구니에 담았습니다.");
-    }
-
-    document.addEventListener("DOMContentLoaded", function () {
-        var filterArea = document.querySelector(".ys-filter-area");
-        var filterToggle = document.getElementById("ysFilterToggle");
-        var FILTER_STATE_KEY = "yongsinsaCategoryFilterCollapsed";
-
-        function setFilterCollapsed(collapsed, saveState) {
-            if (!filterArea || !filterToggle) return;
-
-            filterArea.classList.toggle("is-collapsed", collapsed);
-            filterToggle.setAttribute("aria-expanded", collapsed ? "false" : "true");
-            filterToggle.setAttribute("aria-label", collapsed ? "필터 펼치기" : "필터 접기");
-
-            if (saveState) {
-                try {
-                    window.localStorage.setItem(FILTER_STATE_KEY, collapsed ? "1" : "0");
-                } catch (error) {
-                    // 저장소를 사용할 수 없어도 화면 동작은 유지한다.
-                }
-            }
-        }
-
-        if (filterArea && filterToggle) {
-            var savedCollapsed = false;
-
-            try {
-                savedCollapsed = window.localStorage.getItem(FILTER_STATE_KEY) === "1";
-            } catch (error) {
-                savedCollapsed = false;
-            }
-
-            if (window.innerWidth > 991) {
-                setFilterCollapsed(savedCollapsed, false);
-            }
-
-            filterToggle.addEventListener("click", function () {
-                setFilterCollapsed(!filterArea.classList.contains("is-collapsed"), true);
-            });
-        }
-
-        document.querySelectorAll(".ys-filter-head").forEach(function (head) {
-            head.addEventListener("click", function () {
-                var group = head.closest(".ys-filter-group");
-                if (group) group.classList.toggle("open");
-            });
-        });
-
-        var headerWish = document.querySelector(".header-wishlist-btn");
-        if (headerWish) {
-            headerWish.addEventListener("click", function (event) {
-                event.preventDefault();
-                var parent = headerWish.closest(".favorit-items");
-                if (parent) parent.classList.toggle("active");
-            });
-        }
-
-        updateCartCount(readCart());
-
-        document.addEventListener("click", function (event) {
-            var wishBtn = event.target.closest(".ys-wish-btn");
-            var cartBtn = event.target.closest(".ys-cart-btn");
-
-            if (wishBtn) {
-                event.preventDefault();
-                event.stopPropagation();
-                wishBtn.classList.toggle("active");
-
-                var icon = wishBtn.querySelector("i");
-                if (icon) {
-                    if (wishBtn.classList.contains("active")) {
-                        icon.classList.remove("far");
-                        icon.classList.add("fas");
-                    } else {
-                        icon.classList.remove("fas");
-                        icon.classList.add("far");
-                    }
-                }
-            }
-
-            if (cartBtn) {
-                event.preventDefault();
-                event.stopPropagation();
-                addToCart(cartBtn);
-            }
-        });
-    });
+  "use strict";
+  var CART_STORAGE_KEY = "yongsinsaCart";
+  var toastTimer = null;
+  function readCart(){try{var saved=localStorage.getItem(CART_STORAGE_KEY);var parsed=saved?JSON.parse(saved):[];return Array.isArray(parsed)?parsed:[];}catch(e){return[];}}
+  function saveCart(cart){try{localStorage.setItem(CART_STORAGE_KEY,JSON.stringify(cart));return true;}catch(e){return false;}}
+  function updateCartCount(cart){var count=cart.reduce(function(t,i){return t+(Number(i.quantity)||1);},0);document.querySelectorAll("[data-cart-count]").forEach(function(el){el.textContent=String(count).padStart(2,"0");});}
+  function showCartToast(message){var toast=document.getElementById("ysCartToast");if(!toast)return;var text=toast.querySelector("span");if(text)text.textContent=message;toast.classList.add("is-visible");toast.setAttribute("aria-hidden","false");clearTimeout(toastTimer);toastTimer=setTimeout(function(){toast.classList.remove("is-visible");toast.setAttribute("aria-hidden","true");},2600);}
+  function addToCart(button){var product={id:button.dataset.productId||"",name:button.dataset.productName||"상품",brand:button.dataset.productBrand||"",price:Number(button.dataset.productPrice)||0,image:button.dataset.productImage||"",size:button.dataset.productSize||"",quantity:1};var cart=readCart();var existing=cart.find(function(i){return String(i.id)===String(product.id)&&String(i.size||"")===String(product.size||"");});if(existing)existing.quantity=(Number(existing.quantity)||1)+1;else cart.push(product);if(!saveCart(cart)){alert("브라우저 저장 공간을 사용할 수 없어 장바구니에 담지 못했습니다.");return;}updateCartCount(cart);button.classList.add("is-added");showCartToast(product.name+" 상품을 장바구니에 담았습니다.");}
+  function values(params,name){return params.getAll(name).filter(Boolean);}
+  function setCheckedFromParams(params){document.querySelectorAll("#filterForm input[type=checkbox],#filterForm input[type=radio]").forEach(function(input){input.checked=values(params,input.name).indexOf(input.value)!==-1;});var keyword=document.querySelector("#filterForm [name=keyword]");if(keyword)keyword.value=params.get("keyword")||"";}
+  function productMatches(card,params){var type=params.get("type")||"all";if(type!=="all"&&card.dataset.type!==type)return false;var brands=values(params,"brand");if(brands.length&&brands.indexOf(card.dataset.brand)===-1)return false;var colors=values(params,"color");if(colors.length&&colors.indexOf(card.dataset.color)===-1)return false;var sizes=values(params,"size");if(sizes.length){var productSizes=(card.dataset.sizes||"").split(",");if(!sizes.some(function(s){return productSizes.indexOf(s)!==-1;}))return false;}var range=params.get("price");if(range){var parts=range.split("-");var price=Number(card.dataset.price)||0;if(price<Number(parts[0])||price>Number(parts[1]))return false;}var keyword=(params.get("keyword")||"").trim().toLowerCase().replace(/\s+/g,"");if(keyword){var target=((card.dataset.name||"")+" "+(card.querySelector(".ys-brand")?card.querySelector(".ys-brand").textContent:"")).toLowerCase().replace(/\s+/g,"");if(target.indexOf(keyword)===-1)return false;}return true;}
+  function sortCards(cards,mode){var list=cards.slice();if(mode==="low")list.sort(function(a,b){return Number(a.dataset.price)-Number(b.dataset.price);});else if(mode==="high")list.sort(function(a,b){return Number(b.dataset.price)-Number(a.dataset.price);});else if(mode==="new")list.sort(function(a,b){return Number(b.dataset.id)-Number(a.dataset.id);});else list.sort(function(a,b){return Number(b.dataset.popularity)-Number(a.dataset.popularity);});return list;}
+  function updateHeading(params){var type=params.get("type")||"all";var typeNames={all:"전체",sneakers:"스니커즈",sports:"스포츠",dress:"구두",casual:"캐주얼",sandals:"샌들",boots:"부츠"};var audience=params.get("audience")||"man";var isNew=params.get("sort")==="new"&&!params.get("audience");var audienceTitle=isNew?"New":audience==="woman"?"Woman":audience==="kids"?"Kids":"Man";var collection=isNew?"NEW COLLECTION":audience==="woman"?"WOMEN'S COLLECTION":audience==="kids"?"KIDS' COLLECTION":"MEN'S COLLECTION";var menu=isNew?"NEW":audience==="woman"?"WOMAN":audience==="kids"?"KIDS":"MAN";var t=typeNames[type]||"전체";["categoryTypeTitle","categoryTypeBreadcrumb"].forEach(function(id){var el=document.getElementById(id);if(el)el.textContent=t;});var a=document.getElementById("categoryAudienceTitle");if(a)a.textContent=audienceTitle;var c=document.getElementById("categoryCollectionTitle");if(c)c.textContent=collection;var link=document.getElementById("categoryAudienceLink");if(link){link.textContent=menu;link.href=location.pathname+(isNew?"?sort=new":"?audience="+audience);}var typeInput=document.getElementById("categoryTypeInput");if(typeInput)typeInput.value=type;var audienceInput=document.getElementById("categoryAudienceInput");if(audienceInput){audienceInput.value=audience;audienceInput.disabled=isNew;}document.querySelectorAll("[data-category-type]").forEach(function(tab){tab.classList.toggle("active",tab.dataset.categoryType===type);});}
+  function render(params){var grid=document.getElementById("categoryProductGrid");if(!grid)return;var all=Array.prototype.slice.call(grid.querySelectorAll("[data-category-product]"));var visible=sortCards(all.filter(function(c){return productMatches(c,params);}),params.get("sort")||"best");var set=new Set(visible);visible.forEach(function(c){grid.appendChild(c);});all.forEach(function(c){c.hidden=!set.has(c);});var count=document.getElementById("categoryResultCount");if(count)count.textContent=visible.length;var empty=document.getElementById("categoryEmptyState");if(empty)empty.hidden=visible.length!==0;}
+  document.addEventListener("DOMContentLoaded",function(){var params=new URLSearchParams(location.search);if(!params.get("type"))params.set("type","all");if(!params.get("audience")&&params.get("sort")!=="new")params.set("audience","man");setCheckedFromParams(params);updateHeading(params);var sort=document.getElementById("categorySort");if(sort)sort.value=params.get("sort")||"best";render(params);
+    var filterArea=document.querySelector(".ys-filter-area"),toggle=document.getElementById("ysFilterToggle"),KEY="yongsinsaCategoryFilterCollapsed";function collapse(v,save){if(!filterArea||!toggle)return;filterArea.classList.toggle("is-collapsed",v);toggle.setAttribute("aria-expanded",v?"false":"true");if(save)try{localStorage.setItem(KEY,v?"1":"0");}catch(e){}}if(filterArea&&toggle){var saved=false;try{saved=localStorage.getItem(KEY)==="1";}catch(e){}if(innerWidth>991)collapse(saved,false);toggle.addEventListener("click",function(){collapse(!filterArea.classList.contains("is-collapsed"),true);});}
+    document.querySelectorAll(".ys-filter-head").forEach(function(h){h.addEventListener("click",function(){var g=h.closest(".ys-filter-group");if(g)g.classList.toggle("open");});});
+    document.querySelectorAll("[data-category-type]").forEach(function(tab){tab.addEventListener("click",function(e){e.preventDefault();var next=new URLSearchParams(location.search);next.set("type",tab.dataset.categoryType);location.href=location.pathname+"?"+next.toString();});});
+    if(sort)sort.addEventListener("change",function(){document.getElementById("filterForm").submit();});
+    updateCartCount(readCart());document.addEventListener("click",function(e){var wish=e.target.closest(".ys-wish-btn"),cart=e.target.closest(".ys-cart-btn");if(wish){e.preventDefault();wish.classList.toggle("active");var icon=wish.querySelector("i");if(icon){icon.classList.toggle("far",!wish.classList.contains("active"));icon.classList.toggle("fas",wish.classList.contains("active"));}}if(cart){e.preventDefault();addToCart(cart);}});
+  });
 })();

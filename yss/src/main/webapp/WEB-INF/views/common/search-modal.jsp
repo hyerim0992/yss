@@ -34,6 +34,13 @@
           <button type="button" data-clear-recent>전체 지우기</button>
         </div>
         <div class="recent-search-list" data-recent-search-list></div>
+        <!-- 최근 검색어 한 건의 HTML 모양은 JSP template에 두고 JS는 복제/값 입력만 합니다. -->
+        <template id="recentSearchChipTemplate">
+          <span class="recent-search-chip">
+            <button type="button" class="recent-search-chip__word"></button>
+            <button type="button" class="recent-search-chip__remove">×</button>
+          </span>
+        </template>
         <p class="recent-search-empty" data-recent-search-empty>최근 검색한 내역이 없습니다.</p>
       </section>
 

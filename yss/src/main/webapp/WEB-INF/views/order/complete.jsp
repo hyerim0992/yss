@@ -45,6 +45,7 @@
         <span>주문번호</span>
         <strong id="orderNumber">A0000001</strong>
         <button id="copyOrderNumber" type="button">복사</button>
+        <textarea id="orderCopyFallback" aria-hidden="true" tabindex="-1" style="position:fixed;left:-9999px;top:-9999px;"></textarea>
       </section>
 
       <section class="pay-card complete-card refined-card">

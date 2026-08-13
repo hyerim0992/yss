@@ -15,29 +15,6 @@ document.addEventListener("DOMContentLoaded", function () {
   var productCouponDiscount = 0;
   var issuedProductCoupon = false;
 
-  var salesData = {
-    week: {
-      label: "최근 7일 판매량",
-      total: 86,
-      change: "지난주보다 12% 증가",
-      labels: ["월", "화", "수", "목", "금", "토", "일"],
-      values: [8, 11, 9, 14, 12, 16, 16]
-    },
-    month: {
-      label: "최근 1개월 판매량",
-      total: 342,
-      change: "지난달보다 8% 증가",
-      labels: ["1주", "2주", "3주", "4주", "5주"],
-      values: [61, 73, 68, 79, 61]
-    },
-    quarter: {
-      label: "최근 3개월 판매량",
-      total: 914,
-      change: "이전 3개월보다 15% 증가",
-      labels: ["6월", "7월", "8월"],
-      values: [271, 301, 342]
-    }
-  };
 
   function showToast(message) {
     if (!toast) return;
@@ -322,10 +299,11 @@ document.addEventListener("DOMContentLoaded", function () {
     productCouponIssue.addEventListener("click", function () {
       if (issuedProductCoupon) return;
       issuedProductCoupon = true;
-      var option = document.createElement("option");
-      option.value = "issued5";
-      option.textContent = "상품 전용 5% 할인 쿠폰";
-      productCouponSelect.appendChild(option);
+      var option = document.getElementById("issuedProductCouponOption");
+      if (option) {
+        option.hidden = false;
+        option.disabled = false;
+      }
       productCouponSelect.value = "issued5";
       productCouponIssue.disabled = true;
       productCouponIssue.textContent = "발급 완료";
@@ -470,37 +448,20 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
-  function renderSalesChart(period) {
-    var data = salesData[period];
+  function renderSalesChart(button) {
     var chart = document.getElementById("salesChart");
-    if (!data || !chart) return;
-
-    setTextForAll(".sales-period-label", data.label);
-    setTextForAll(".sales-total", String(data.total));
-    setTextForAll(".sales-change", data.change);
-
-    var max = Math.max.apply(null, data.values);
-    chart.innerHTML = "";
-    data.labels.forEach(function (label, index) {
-      var item = document.createElement("div");
-      item.className = "sales-bar-item";
-
-      var bar = document.createElement("span");
-      var height = Math.max(18, Math.round((data.values[index] / max) * 82));
-      bar.style.setProperty("--bar", height + "%");
-
-      var name = document.createElement("b");
-      name.textContent = label;
-      var value = document.createElement("small");
-      value.textContent = data.values[index];
-
-      item.appendChild(bar);
-      item.appendChild(name);
-      item.appendChild(value);
-      chart.appendChild(item);
+    if (!button || !chart) return;
+    var period = button.dataset.period;
+    setTextForAll(".sales-period-label", button.dataset.label || "");
+    setTextForAll(".sales-total", button.dataset.total || "0");
+    setTextForAll(".sales-change", button.dataset.change || "");
+    var visibleCount = 0;
+    chart.querySelectorAll("[data-sales-period]").forEach(function (item) {
+      var show = item.dataset.salesPeriod === period;
+      item.hidden = !show;
+      if (show) visibleCount += 1;
     });
-
-    chart.style.gridTemplateColumns = "repeat(" + data.labels.length + ", 1fr)";
+    chart.style.gridTemplateColumns = "repeat(" + visibleCount + ", 1fr)";
   }
 
   document.querySelectorAll(".period-tabs button").forEach(function (button) {
@@ -509,7 +470,7 @@ document.addEventListener("DOMContentLoaded", function () {
         item.classList.remove("active");
       });
       button.classList.add("active");
-      renderSalesChart(button.dataset.period);
+      renderSalesChart(button);
     });
   });
 

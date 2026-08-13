@@ -40,7 +40,7 @@ public class HomeManageController {
     @GetMapping("/admin/support")
     public ModelAndView support(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-        return new ModelAndView("admin/support/main");
+        return new ModelAndView("redirect:/admin/support/inquiry/list");
     }
 
     @GetMapping("/admin/status")
