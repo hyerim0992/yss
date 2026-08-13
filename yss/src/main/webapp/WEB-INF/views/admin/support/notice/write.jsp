@@ -39,11 +39,48 @@
         <a href="${pageContext.request.contextPath}/admin/support/notice/list" class="active">공지사항 관리</a>
         <a href="${pageContext.request.contextPath}/admin/support/qna/list">상품문의 관리</a>
       </nav>
-
-  
-      
-
     </section>
+    
+    <article class="panel">
+		<form name="noticeForm"  method="post">
+				
+			<table>
+				<tr>
+					<th>제목</th> 
+					<td>
+						<input type="text" name="title">
+				 	</td>
+				</tr>
+				
+				<tr>
+					<th>내 용</th>
+					<td>
+						<textarea name="content"></textarea>
+					</td>
+				</tr>
+			</table>
+			
+			<button type="button" onclick="sendOk()">등록</button>
+		</form>    
+    </article>
+    
+    <script type="text/javascript">
+    function sendOk() {
+    	const f = document.noticeForm;
+    	
+    	if(! f.title.value.trim()) {
+    		f.title.focus();
+    		return;
+    	} else if( ! f.content.value.trim()) {
+    		f.content.focus();
+    		return;
+    	}
+    	
+    	f.action = '${pageContext.request.contextPath}/admin/support/notice/${mode}';
+    	f.submit();
+    }
+    </script>
+    
   </main>
 
   <jsp:include page="/WEB-INF/views/admin/layout/footerResources.jsp"/>

@@ -3,7 +3,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.yss.mapper.NoticeMapper">
 	<insert id="insertNotice" parameterType="com.yss.dto.NoticeDTO">
-		INSERT INTO NOTICEID, MEMBERID, TITLE, CONTENT, CREATEDATE
-		VALUES NOTICE_SEQ.NEXTVAL, MEMBER_SEQ.NEXTVAL, #{TITLE}, #{CONTENT}, SYSDATE
+		INSERT INTO notice (noticeId, memberId, title, content, createDate)
+		VALUES (NOTICE_SEQ.NEXTVAL, #{memberId}, #{title}, #{content}, SYSDATE)
 	</insert>
 </mapper>
