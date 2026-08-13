@@ -1,0 +1,35 @@
+/*
+ * 관리자 JSP 연습용 목록 화면 보조 스타일
+ * 실제 디자인의 대부분은 기존 common.css / list.css / modal.css를 그대로 사용합니다.
+ * 이 파일은 JavaScript가 만들던 여러 탭 화면을 JSP에 동시에 두기 위한 최소 보조 스타일만 담습니다.
+ */
+.admin-section-panel[hidden] {
+  display: none !important;
+}
+
+.admin-section-panel > .panel:first-child {
+  margin-top: 0;
+}
+
+.admin-section-panel .data-row[hidden] {
+  display: none !important;
+}
+
+.admin-section-panel .filter-row.is-hidden {
+  display: none;
+}
+
+.admin-section-panel .pagination:empty {
+  display: none;
+}
+
+.admin-section-panel .form-field select,
+.admin-section-panel .form-field input {
+  width: 100%;
+}
+
+@media (max-width: 760px) {
+  .admin-section-panel .action-cell {
+    min-width: 120px;
+  }
+}

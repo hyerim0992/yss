@@ -1,16 +1,15 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<% String ctx = request.getContextPath(); %>
 <!doctype html>
 <html lang="ko">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>통합 검색 | Yongsinsa</title>
-    <link rel="shortcut icon" href="<%=ctx%>/dist/images/favicon.ico" />
+    <link rel="shortcut icon" href="${pageContext.request.contextPath}/dist/images/favicon.ico" />
     <jsp:include page="/WEB-INF/views/common/head-styles.jsp" />
     <link rel="stylesheet" href="${pageContext.request.contextPath}/dist/css/common/layout.css?v=20260806-0140" />
 </head>
-  <body class="yp-page has-site-layout" data-context-path="<%=ctx%>">
+  <body class="yp-page has-site-layout" data-context-path="${pageContext.request.contextPath}">
     <jsp:include page="/WEB-INF/views/common/header.jsp" />
     
 
@@ -132,7 +131,213 @@
               </select>
             </div>
 
-            <div class="search-product-grid" id="searchProductGrid"></div>
+            <div class="search-product-grid" id="searchProductGrid">
+              <!--
+                ★ 연습 포인트
+                아래 상품 카드가 반복되는 부분입니다.
+                나중에 Controller에서 List를 넘겨받은 뒤 직접 c:forEach / DTO 값 출력 형태로 바꿔보세요.
+                현재는 화면 확인과 필터 동작 연습을 위해 샘플 HTML을 JSP에 직접 둡니다.
+              -->
+              <article class="search-product-card" data-search-product
+                data-brand="Adidas" data-name="Samba OG Core Black" data-keywords="아디다스 삼바 블랙 스니커즈"
+                data-price="149000" data-popularity="98" data-male="94" data-female="87"
+                data-wish="1230" data-review="421" data-release="20260801"
+                data-category="sneakers" data-gender="unisex" data-color="black" data-size="255"
+                data-delivery="fast" data-soldout="false">
+                <a href="${pageContext.request.contextPath}/product/detail">
+                  <div class="search-product-card__image">
+                    <span class="search-product-card__badge">빠른배송</span>
+                    <img src="${pageContext.request.contextPath}/dist/images/product/product_list_1.png" alt="Adidas Samba OG Core Black">
+                  </div>
+                  <div class="search-product-card__body">
+                    <p class="search-product-card__brand">Adidas</p>
+                    <h2 class="search-product-card__name">Samba OG Core Black</h2>
+                    <p class="search-product-card__meta">관심 1,230 · 리뷰 421</p>
+                    <div class="search-product-card__price"><strong>149,000원</strong><span>255mm</span></div>
+                  </div>
+                </a>
+              </article>
+
+              <article class="search-product-card" data-search-product
+                data-brand="Nike" data-name="Air Force 1 &#x27;07 White" data-keywords="나이키 에어포스 화이트 스니커즈"
+                data-price="139000" data-popularity="96" data-male="91" data-female="92"
+                data-wish="1580" data-review="612" data-release="20260720"
+                data-category="sneakers" data-gender="unisex" data-color="white" data-size="260"
+                data-delivery="normal" data-soldout="false">
+                <a href="${pageContext.request.contextPath}/product/detail">
+                  <div class="search-product-card__image">
+                    <span class="search-product-card__badge">일반배송</span>
+                    <img src="${pageContext.request.contextPath}/dist/images/product/product_list_2.png" alt="Nike Air Force 1 &#x27;07 White">
+                  </div>
+                  <div class="search-product-card__body">
+                    <p class="search-product-card__brand">Nike</p>
+                    <h2 class="search-product-card__name">Air Force 1 &#x27;07 White</h2>
+                    <p class="search-product-card__meta">관심 1,580 · 리뷰 612</p>
+                    <div class="search-product-card__price"><strong>139,000원</strong><span>260mm</span></div>
+                  </div>
+                </a>
+              </article>
+
+              <article class="search-product-card" data-search-product
+                data-brand="New Balance" data-name="530 Steel Grey" data-keywords="뉴발란스 530 스틸그레이 러닝화"
+                data-price="119000" data-popularity="95" data-male="84" data-female="96"
+                data-wish="2110" data-review="886" data-release="20260711"
+                data-category="running" data-gender="unisex" data-color="gray" data-size="240"
+                data-delivery="warehouse" data-soldout="false">
+                <a href="${pageContext.request.contextPath}/product/detail">
+                  <div class="search-product-card__image">
+                    <span class="search-product-card__badge">창고보관</span>
+                    <img src="${pageContext.request.contextPath}/dist/images/product/product_list_3.png" alt="New Balance 530 Steel Grey">
+                  </div>
+                  <div class="search-product-card__body">
+                    <p class="search-product-card__brand">New Balance</p>
+                    <h2 class="search-product-card__name">530 Steel Grey</h2>
+                    <p class="search-product-card__meta">관심 2,110 · 리뷰 886</p>
+                    <div class="search-product-card__price"><strong>119,000원</strong><span>240mm</span></div>
+                  </div>
+                </a>
+              </article>
+
+              <article class="search-product-card" data-search-product
+                data-brand="Asics" data-name="Gel-Kayano 14 Cream Black" data-keywords="아식스 젤카야노 크림 블랙 러닝화"
+                data-price="189000" data-popularity="91" data-male="95" data-female="80"
+                data-wish="970" data-review="302" data-release="20260618"
+                data-category="running" data-gender="men" data-color="beige" data-size="270"
+                data-delivery="overseas" data-soldout="false">
+                <a href="${pageContext.request.contextPath}/product/detail">
+                  <div class="search-product-card__image">
+                    <span class="search-product-card__badge">해외배송</span>
+                    <img src="${pageContext.request.contextPath}/dist/images/product/product_list_4.png" alt="Asics Gel-Kayano 14 Cream Black">
+                  </div>
+                  <div class="search-product-card__body">
+                    <p class="search-product-card__brand">Asics</p>
+                    <h2 class="search-product-card__name">Gel-Kayano 14 Cream Black</h2>
+                    <p class="search-product-card__meta">관심 970 · 리뷰 302</p>
+                    <div class="search-product-card__price"><strong>189,000원</strong><span>270mm</span></div>
+                  </div>
+                </a>
+              </article>
+
+              <article class="search-product-card" data-search-product
+                data-brand="Converse" data-name="Chuck 70 Classic Black" data-keywords="컨버스 척70 클래식 블랙 스니커즈"
+                data-price="95000" data-popularity="89" data-male="85" data-female="91"
+                data-wish="760" data-review="234" data-release="20260529"
+                data-category="sneakers" data-gender="unisex" data-color="black" data-size="250"
+                data-delivery="fast" data-soldout="false">
+                <a href="${pageContext.request.contextPath}/product/detail">
+                  <div class="search-product-card__image">
+                    <span class="search-product-card__badge">빠른배송</span>
+                    <img src="${pageContext.request.contextPath}/dist/images/product/product_list_5.png" alt="Converse Chuck 70 Classic Black">
+                  </div>
+                  <div class="search-product-card__body">
+                    <p class="search-product-card__brand">Converse</p>
+                    <h2 class="search-product-card__name">Chuck 70 Classic Black</h2>
+                    <p class="search-product-card__meta">관심 760 · 리뷰 234</p>
+                    <div class="search-product-card__price"><strong>95,000원</strong><span>250mm</span></div>
+                  </div>
+                </a>
+              </article>
+
+              <article class="search-product-card" data-search-product
+                data-brand="Adidas" data-name="Ecliptain Cloud White" data-keywords="아디다스 이클립테인 클라우드 화이트"
+                data-price="79000" data-popularity="82" data-male="78" data-female="86"
+                data-wish="660" data-review="199" data-release="20260510"
+                data-category="slipon" data-gender="women" data-color="white" data-size="235"
+                data-delivery="normal" data-soldout="false">
+                <a href="${pageContext.request.contextPath}/product/detail">
+                  <div class="search-product-card__image">
+                    <span class="search-product-card__badge">일반배송</span>
+                    <img src="${pageContext.request.contextPath}/dist/images/product/product_list_6.png" alt="Adidas Ecliptain Cloud White">
+                  </div>
+                  <div class="search-product-card__body">
+                    <p class="search-product-card__brand">Adidas</p>
+                    <h2 class="search-product-card__name">Ecliptain Cloud White</h2>
+                    <p class="search-product-card__meta">관심 660 · 리뷰 199</p>
+                    <div class="search-product-card__price"><strong>79,000원</strong><span>235mm</span></div>
+                  </div>
+                </a>
+              </article>
+
+              <article class="search-product-card" data-search-product
+                data-brand="Nike" data-name="Pegasus 41 Black" data-keywords="나이키 페가수스 러닝화 블랙"
+                data-price="159000" data-popularity="87" data-male="90" data-female="82"
+                data-wish="540" data-review="167" data-release="20260424"
+                data-category="running" data-gender="men" data-color="black" data-size="275"
+                data-delivery="fast" data-soldout="true">
+                <a href="${pageContext.request.contextPath}/product/detail">
+                  <div class="search-product-card__image">
+                    <span class="search-product-card__badge">품절</span>
+                    <img src="${pageContext.request.contextPath}/dist/images/product/product_list_7.png" alt="Nike Pegasus 41 Black">
+                  </div>
+                  <div class="search-product-card__body">
+                    <p class="search-product-card__brand">Nike</p>
+                    <h2 class="search-product-card__name">Pegasus 41 Black</h2>
+                    <p class="search-product-card__meta">관심 540 · 리뷰 167</p>
+                    <div class="search-product-card__price"><strong>159,000원</strong><span>275mm</span></div>
+                  </div>
+                </a>
+              </article>
+
+              <article class="search-product-card" data-search-product
+                data-brand="New Balance" data-name="574 Legacy Beige" data-keywords="뉴발란스 574 레거시 베이지"
+                data-price="129000" data-popularity="85" data-male="79" data-female="90"
+                data-wish="820" data-review="275" data-release="20260412"
+                data-category="sneakers" data-gender="women" data-color="beige" data-size="245"
+                data-delivery="warehouse" data-soldout="false">
+                <a href="${pageContext.request.contextPath}/product/detail">
+                  <div class="search-product-card__image">
+                    <span class="search-product-card__badge">창고보관</span>
+                    <img src="${pageContext.request.contextPath}/dist/images/product/product_list_8.png" alt="New Balance 574 Legacy Beige">
+                  </div>
+                  <div class="search-product-card__body">
+                    <p class="search-product-card__brand">New Balance</p>
+                    <h2 class="search-product-card__name">574 Legacy Beige</h2>
+                    <p class="search-product-card__meta">관심 820 · 리뷰 275</p>
+                    <div class="search-product-card__price"><strong>129,000원</strong><span>245mm</span></div>
+                  </div>
+                </a>
+              </article>
+
+              <article class="search-product-card" data-search-product
+                data-brand="Asics" data-name="Gel-Nimbus 26 White" data-keywords="아식스 젤님버스 화이트 러닝화"
+                data-price="179000" data-popularity="80" data-male="82" data-female="77"
+                data-wish="430" data-review="143" data-release="20260330"
+                data-category="running" data-gender="unisex" data-color="white" data-size="265"
+                data-delivery="overseas" data-soldout="false">
+                <a href="${pageContext.request.contextPath}/product/detail">
+                  <div class="search-product-card__image">
+                    <span class="search-product-card__badge">해외배송</span>
+                    <img src="${pageContext.request.contextPath}/dist/images/product/product_list_9.png" alt="Asics Gel-Nimbus 26 White">
+                  </div>
+                  <div class="search-product-card__body">
+                    <p class="search-product-card__brand">Asics</p>
+                    <h2 class="search-product-card__name">Gel-Nimbus 26 White</h2>
+                    <p class="search-product-card__meta">관심 430 · 리뷰 143</p>
+                    <div class="search-product-card__price"><strong>179,000원</strong><span>265mm</span></div>
+                  </div>
+                </a>
+              </article>
+
+              <article class="search-product-card" data-search-product
+                data-brand="Converse" data-name="Run Star Hike Low" data-keywords="컨버스 런스타 하이크 로우"
+                data-price="109000" data-popularity="78" data-male="73" data-female="88"
+                data-wish="590" data-review="188" data-release="20260302"
+                data-category="sneakers" data-gender="women" data-color="black" data-size="230"
+                data-delivery="normal" data-soldout="false">
+                <a href="${pageContext.request.contextPath}/product/detail">
+                  <div class="search-product-card__image">
+                    <span class="search-product-card__badge">일반배송</span>
+                    <img src="${pageContext.request.contextPath}/dist/images/product/product_list_10.png" alt="Converse Run Star Hike Low">
+                  </div>
+                  <div class="search-product-card__body">
+                    <p class="search-product-card__brand">Converse</p>
+                    <h2 class="search-product-card__name">Run Star Hike Low</h2>
+                    <p class="search-product-card__meta">관심 590 · 리뷰 188</p>
+                    <div class="search-product-card__price"><strong>109,000원</strong><span>230mm</span></div>
+                  </div>
+                </a>
+              </article>
+            </div>
 
             <div class="search-empty" id="searchEmptyState">
               <div>
@@ -150,7 +355,6 @@
     <jsp:include page="/WEB-INF/views/common/footer.jsp" />
     
 
-    <script src="${pageContext.request.contextPath}/dist/js/pages/product/search.js"></script>
     <script src="${pageContext.request.contextPath}/dist/js/common/layout.js?v=20260806-0056"></script>
 </body>
 </html>

@@ -516,12 +516,12 @@
           copyOrderNumber.textContent = "복사됨";
         });
       } else {
-        var temp = document.createElement("textarea");
-        temp.value = value;
-        document.body.appendChild(temp);
-        temp.select();
-        document.execCommand("copy");
-        temp.remove();
+        var temp = document.querySelector("#orderCopyFallback");
+        if (temp) {
+          temp.value = value;
+          temp.select();
+          document.execCommand("copy");
+        }
         copyOrderNumber.textContent = "복사됨";
       }
     });

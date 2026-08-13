@@ -157,9 +157,9 @@
               <span class="sales-update">오늘 15:30 기준</span>
             </div>
             <div class="period-tabs" role="tablist" aria-label="판매량 기간">
-              <button type="button" class="active" data-period="week">1주</button>
-              <button type="button" data-period="month">1개월</button>
-              <button type="button" data-period="quarter">3개월</button>
+              <button type="button" class="active" data-period="week" data-label="최근 7일 판매량" data-total="86" data-change="지난주보다 12% 증가">1주</button>
+              <button type="button" data-period="month" data-label="최근 1개월 판매량" data-total="342" data-change="지난달보다 8% 증가">1개월</button>
+              <button type="button" data-period="quarter" data-label="최근 3개월 판매량" data-total="914" data-change="이전 3개월보다 15% 증가">3개월</button>
             </div>
             <div class="sales-highlight">
               <div>
@@ -169,13 +169,22 @@
               <em class="sales-change">지난주보다 12% 증가</em>
             </div>
             <div class="sales-chart" id="salesChart" aria-label="최근 판매량 막대그래프">
-              <div class="sales-bar-item"><span style="--bar: 42%"></span><b>월</b><small>8</small></div>
-              <div class="sales-bar-item"><span style="--bar: 58%"></span><b>화</b><small>11</small></div>
-              <div class="sales-bar-item"><span style="--bar: 47%"></span><b>수</b><small>9</small></div>
-              <div class="sales-bar-item"><span style="--bar: 70%"></span><b>목</b><small>14</small></div>
-              <div class="sales-bar-item"><span style="--bar: 62%"></span><b>금</b><small>12</small></div>
-              <div class="sales-bar-item"><span style="--bar: 82%"></span><b>토</b><small>16</small></div>
-              <div class="sales-bar-item"><span style="--bar: 82%"></span><b>일</b><small>16</small></div>
+              <!-- 그래프 막대의 HTML은 JSP에 두고 JS는 기간에 따라 보이기/숨기기만 합니다. -->
+              <div class="sales-bar-item" data-sales-period="week"><span style="--bar: 42%"></span><b>월</b><small>8</small></div>
+              <div class="sales-bar-item" data-sales-period="week"><span style="--bar: 58%"></span><b>화</b><small>11</small></div>
+              <div class="sales-bar-item" data-sales-period="week"><span style="--bar: 47%"></span><b>수</b><small>9</small></div>
+              <div class="sales-bar-item" data-sales-period="week"><span style="--bar: 70%"></span><b>목</b><small>14</small></div>
+              <div class="sales-bar-item" data-sales-period="week"><span style="--bar: 62%"></span><b>금</b><small>12</small></div>
+              <div class="sales-bar-item" data-sales-period="week"><span style="--bar: 82%"></span><b>토</b><small>16</small></div>
+              <div class="sales-bar-item" data-sales-period="week"><span style="--bar: 82%"></span><b>일</b><small>16</small></div>
+              <div class="sales-bar-item" data-sales-period="month" hidden><span style="--bar: 63%"></span><b>1주</b><small>61</small></div>
+              <div class="sales-bar-item" data-sales-period="month" hidden><span style="--bar: 76%"></span><b>2주</b><small>73</small></div>
+              <div class="sales-bar-item" data-sales-period="month" hidden><span style="--bar: 71%"></span><b>3주</b><small>68</small></div>
+              <div class="sales-bar-item" data-sales-period="month" hidden><span style="--bar: 82%"></span><b>4주</b><small>79</small></div>
+              <div class="sales-bar-item" data-sales-period="month" hidden><span style="--bar: 63%"></span><b>5주</b><small>61</small></div>
+              <div class="sales-bar-item" data-sales-period="quarter" hidden><span style="--bar: 65%"></span><b>6월</b><small>271</small></div>
+              <div class="sales-bar-item" data-sales-period="quarter" hidden><span style="--bar: 72%"></span><b>7월</b><small>301</small></div>
+              <div class="sales-bar-item" data-sales-period="quarter" hidden><span style="--bar: 82%"></span><b>8월</b><small>342</small></div>
             </div>
             <dl class="sales-stat-grid">
               <div><dt>7일</dt><dd>86켤레</dd></div>
@@ -450,6 +459,7 @@
             <option value="none">쿠폰을 적용하지 않음</option>
             <option value="rate10">10% 할인 쿠폰 · 최대 20,000원</option>
             <option value="fixed15">15,000원 할인 쿠폰</option>
+            <option value="issued5" id="issuedProductCouponOption" hidden disabled>상품 전용 5% 할인 쿠폰</option>
           </select>
         </label>
 

@@ -1,47 +1,43 @@
 YSS 전체 UI / Eclipse 경로 최종 안내
 =====================================
-기준 파일: yss(4).zip 실제 프로젝트 구조 확인본
-목적: Git 배포 후 팀원이 Eclipse Project Explorer에서 바로 파일을 찾고 작업하기 위한 경로 안내
+기준 프로젝트: 최종 JSP 템플릿 구조
+목적: 팀원이 Eclipse에서 실제 수정 파일을 바로 찾고, JSP -> Controller -> Service -> Mapper 흐름으로 연습하기 위한 경로 안내
 
-
-[0] 제일 먼저 기억할 것
+[0] 가장 먼저 기억할 것
 -----------------------
-1. 실제로 수정할 소스는 반드시 yss/src/main/... 아래입니다.
-2. yss/build/classes/... 는 Eclipse가 만들어 주는 컴파일 결과물이므로 직접 수정하지 않습니다.
-3. JSP는 src/main/webapp/WEB-INF/views/... 에 있습니다.
+1. 직접 수정할 소스는 yss/src/main/... 아래입니다.
+2. yss/build/classes/... 는 Eclipse 컴파일 결과물이므로 직접 수정하지 않습니다.
+3. JSP 화면은 src/main/webapp/WEB-INF/views/... 에 있습니다.
 4. CSS / JS / 이미지는 src/main/webapp/dist/... 에 있습니다.
-5. WEB-INF/views 아래 JSP는 브라우저에서 JSP 파일 경로로 직접 호출하지 않습니다.
-   반드시 Controller URL로 들어갑니다.
-6. 현재 Eclipse 프로젝트의 Context Root는 .settings/org.eclipse.wst.common.component 기준 "yss" 입니다.
-   따라서 기본 테스트 주소는 http://localhost:8080/yss/... 형태입니다.
+5. WEB-INF/views 아래 JSP는 브라우저에서 JSP 경로로 직접 호출하지 않고 Controller URL로 들어갑니다.
+6. Context Root는 yss 입니다. 기본 주소는 http://localhost:8080/yss/... 형태입니다.
+   Tomcat 포트를 9090으로 설정했다면 http://localhost:9090/yss/... 로 사용합니다.
+7. jQuery는 4.0.0, Bootstrap은 5.3.8 기준입니다.
 
-브라우저 URL 예)
-- 올바름 : /yss/product/detail
-- 잘못됨 : /yss/WEB-INF/views/product/detail.jsp
-
-정적파일 예)
-- 브라우저 경로 : /yss/dist/css/pages/product/detail.css
-- Eclipse 파일   : yss/src/main/webapp/dist/css/pages/product/detail.css
+현재 UI 작성 원칙
+- JSP : 화면 HTML, 테이블/카드/폼/샘플 데이터, template 마크업
+- JavaScript : 클릭, 탭, 필터, 정렬, 모달, 수량, 슬라이드 등 동작
+- DB 연결 연습 시 : JSP의 샘플 반복 HTML을 직접 c:forEach / EL 출력으로 교체
 
 
-[1] Eclipse에서 가장 많이 들어갈 폴더
---------------------------------------
+[1] Eclipse 핵심 폴더
+---------------------
 yss
 ├─ src/main/java/com/yss/
-│  ├─ controller/              Controller
-│  ├─ controller/admin/        관리자 Controller
-│  ├─ dto/                     DTO
-│  ├─ service/                 Service
-│  ├─ mapper/                  Mapper Interface
-│  ├─ filter/                  로그인/트랜잭션/인코딩 Filter
-│  └─ mvc/                     학원 MVC 프레임워크
+│  ├─ controller/
+│  ├─ controller/admin/
+│  ├─ dto/
+│  ├─ service/
+│  ├─ mapper/
+│  ├─ filter/
+│  └─ mvc/
 │
 ├─ src/main/webapp/
 │  ├─ index.jsp
 │  ├─ WEB-INF/
-│  │  ├─ views/                JSP 화면
-│  │  ├─ classes/mybatis/      MyBatis 설정 및 Mapper XML
-│  │  ├─ lib/                  라이브러리
+│  │  ├─ views/
+│  │  ├─ classes/mybatis/
+│  │  ├─ lib/
 │  │  └─ web.xml
 │  └─ dist/
 │     ├─ css/
@@ -49,89 +45,67 @@ yss
 │     ├─ images/
 │     └─ fonts/
 │
-└─ build/classes/              [수정 금지] 컴파일 결과물
+└─ build/classes/              [수정 금지]
 
 
-[2] 현재 사용자 화면 URL -> Controller -> JSP 정확한 연결
-----------------------------------------------------------
-※ 아래 URL 앞에는 Context Path /yss 가 붙습니다.
+[2] 사용자 화면 URL -> Controller -> JSP -> 화면 JS
+----------------------------------------------------
+※ URL 앞에는 Context Path /yss 가 붙습니다.
 
 1) 메인
 URL        : /yss/ 또는 /yss/main
 Controller : src/main/java/com/yss/controller/HomeController.java
-Mapping    : @GetMapping("/main")
 JSP        : src/main/webapp/WEB-INF/views/home/main.jsp
-참고       : src/main/webapp/index.jsp 가 /main 으로 forward 합니다.
+공통 JS    : src/main/webapp/dist/js/common/main.js
+참고       : index.jsp가 /main으로 forward 합니다.
 
 2) 로그인
 URL        : /yss/member/login
 Controller : src/main/java/com/yss/controller/MemberController.java
-GET        : 로그인 화면
-POST       : 실제 로그인 처리
 JSP        : src/main/webapp/WEB-INF/views/member/login.jsp
 CSS        : src/main/webapp/dist/css/pages/member/login.css
 JS         : src/main/webapp/dist/js/pages/member/login.js
-주의       : 현재 pages/member/login.js의 데모 로그인 코드는 주석 처리되어 있고,
-             실제 로그인 POST는 MemberController가 처리합니다.
 
-3) 로그아웃
-URL        : /yss/member/logout
-Controller : src/main/java/com/yss/controller/MemberController.java
-동작       : 세션 제거 후 / 로 redirect
-주의       : src/main/webapp/WEB-INF/views/member/logout.jsp 파일은 존재하지만
-             현재 MemberController의 logout Mapping에서는 이 JSP를 사용하지 않습니다.
-
-4) 회원가입 화면
+3) 회원가입
 URL        : /yss/member/join
 Controller : src/main/java/com/yss/controller/ViewController.java
 JSP        : src/main/webapp/WEB-INF/views/member/join.jsp
 CSS        : src/main/webapp/dist/css/pages/member/join.css
 JS         : src/main/webapp/dist/js/pages/member/join.js
-중요 TODO  : 현재 join.jsp의 실제 form action은 /members/join 이고,
-             아이디 중복확인은 /api/members/check-id 입니다.
-             yss(4) 현재 Controller에는 이 두 서버 URL Mapping이 아직 없습니다.
-             회원가입 담당자는 Service/Mapper/DB 연결 단계에서 Controller를 추가/연결해야 합니다.
 
-5) 상품 카테고리
+4) 상품 카테고리 / 필터
 URL        : /yss/product/category
 Controller : src/main/java/com/yss/controller/ViewController.java
 JSP        : src/main/webapp/WEB-INF/views/product/category.jsp
 CSS        : src/main/webapp/dist/css/pages/product/category.css
 JS         : src/main/webapp/dist/js/pages/product/category.js
+구조       : 상품 카드 HTML과 샘플 데이터는 JSP에 있으며 JS는 필터/정렬/장바구니/좋아요 동작만 담당합니다.
 
-6) 상품 상세
-URL        : /yss/product/detail
-Controller : src/main/java/com/yss/controller/ViewController.java
-JSP        : src/main/webapp/WEB-INF/views/product/detail.jsp
-CSS        : src/main/webapp/dist/css/pages/product/detail.css
-JS         : src/main/webapp/dist/js/pages/product/detail.js
-
-7) 상품 검색
+5) 상품 통합 검색
 URL        : /yss/product/search
 Controller : src/main/java/com/yss/controller/ViewController.java
 JSP        : src/main/webapp/WEB-INF/views/product/search.jsp
 CSS        : src/main/webapp/dist/css/pages/product/search.css
 JS         : src/main/webapp/dist/js/pages/product/search.js
-참고       : search.css는 common/head-styles.jsp에서 공통 로드됩니다.
+구조       : 검색 결과 상품 카드 HTML은 JSP에 있으며 JS는 검색어/필터/정렬/최근검색어 동작만 담당합니다.
 
-8) 마이페이지
+6) 상품 상세
+URL        : /yss/product/detail
+Controller : src/main/java/com/yss/controller/ProductDetailController.java
+JSP        : src/main/webapp/WEB-INF/views/product/detail.jsp
+CSS        : src/main/webapp/dist/css/pages/product/detail.css
+JS         : src/main/webapp/dist/js/pages/product/detail.js
+구조       : 옵션 모달, 리뷰/Q&A, 판매량 그래프 막대, 쿠폰 option 등 화면 마크업은 JSP에 있습니다.
+
+7) 마이페이지
 URL        : /yss/mypage
 Controller : src/main/java/com/yss/controller/ViewController.java
 JSP        : src/main/webapp/WEB-INF/views/mypage/mypage.jsp
 CSS        : src/main/webapp/dist/css/pages/mypage/mypage.css
 JS         : src/main/webapp/dist/js/pages/mypage/mypage.js
-중요       : 구매내역/위시리스트/장바구니/리뷰/포인트/쿠폰/내정보/배송지/
-             문의/FAQ/배송조회 등이 현재 한 JSP와 한 JS 안에 함께 들어 있습니다.
+참고       : 구매내역/위시리스트/장바구니/리뷰/포인트/쿠폰/내정보/배송지 등 여러 섹션이 한 JSP에 있습니다.
 
-9) 고객센터
-URL        : /yss/customer/contact
-Controller : src/main/java/com/yss/controller/ViewController.java
-JSP        : src/main/webapp/WEB-INF/views/customer/contact.jsp
-CSS        : src/main/webapp/dist/css/pages/customer/contact.css
-JS         : src/main/webapp/dist/js/pages/customer/contact.js
-중요       : FAQ/공지사항/1:1문의/고객의소리가 현재 contact.jsp 한 파일 안에 함께 있습니다.
-
-10) 구매 약관 동의
+8) 구매 동의
 URL        : /yss/order/agreement
 Controller : src/main/java/com/yss/controller/ViewController.java
 JSP        : src/main/webapp/WEB-INF/views/order/agreement.jsp
@@ -139,7 +113,7 @@ CSS        : src/main/webapp/dist/css/pages/order/checkout.css
              src/main/webapp/dist/css/pages/order/checkout-form.css
 JS         : src/main/webapp/dist/js/pages/order/checkout.js
 
-11) 결제
+9) 배송 및 결제
 URL        : /yss/order/checkout
 Controller : src/main/java/com/yss/controller/ViewController.java
 JSP        : src/main/webapp/WEB-INF/views/order/checkout.jsp
@@ -147,7 +121,7 @@ CSS        : src/main/webapp/dist/css/pages/order/checkout.css
              src/main/webapp/dist/css/pages/order/checkout-form.css
 JS         : src/main/webapp/dist/js/pages/order/checkout.js
 
-12) 주문 완료
+10) 주문 완료
 URL        : /yss/order/complete
 Controller : src/main/java/com/yss/controller/ViewController.java
 JSP        : src/main/webapp/WEB-INF/views/order/complete.jsp
@@ -155,31 +129,58 @@ CSS        : src/main/webapp/dist/css/pages/order/checkout.css
              src/main/webapp/dist/css/pages/order/checkout-form.css
 JS         : src/main/webapp/dist/js/pages/order/checkout.js
 
-13) 검색 모달 URL Mapping
-URL        : /yss/common/search-modal
-Controller : src/main/java/com/yss/controller/ViewController.java
-JSP        : src/main/webapp/WEB-INF/views/common/search-modal.jsp
-참고       : 일반적으로는 common/header.jsp 안에서 JSP include로 사용합니다.
+
+[3] 사용자 고객센터 최종 분리 경로
+---------------------------------
+1:1 문의
+URL        : /yss/customer/inquiry/list
+Controller : src/main/java/com/yss/controller/InquiryController.java
+JSP        : src/main/webapp/WEB-INF/views/customer/inquiry/list.jsp
+JS         : src/main/webapp/dist/js/pages/customer/inquiry.js
+
+FAQ
+URL        : /yss/customer/faq/list
+Controller : src/main/java/com/yss/controller/FaqController.java
+JSP        : src/main/webapp/WEB-INF/views/customer/faq/list.jsp
+JS         : src/main/webapp/dist/js/pages/customer/faq.js
+
+공지사항
+URL        : /yss/customer/notice/list
+Controller : src/main/java/com/yss/controller/NoticeController.java
+JSP        : src/main/webapp/WEB-INF/views/customer/notice/list.jsp
+JS         : src/main/webapp/dist/js/pages/customer/notice.js
+
+상품문의
+URL        : /yss/customer/qna/list
+Controller : src/main/java/com/yss/controller/QnaController.java
+JSP        : src/main/webapp/WEB-INF/views/customer/qna/list.jsp
+JS         : src/main/webapp/dist/js/pages/customer/qna.js
+
+고객센터 공통 CSS
+src/main/webapp/dist/css/pages/customer/contact.css
 
 
-[3] 사용자 공통 JSP 경로
+[4] 사용자 공통 JSP / JS
 ------------------------
 공통 HEAD/CSS
 src/main/webapp/WEB-INF/views/common/head-styles.jsp
 
 공통 Header
 src/main/webapp/WEB-INF/views/common/header.jsp
+- HELP 메뉴의 FAQ / 공지사항 / 1:1 문의 / 상품문의 링크가 여기 있습니다.
+- 공통 검색모달 JSP와 검색 동작 JS도 여기서 정적으로 연결합니다.
 
 공통 Footer
 src/main/webapp/WEB-INF/views/common/footer.jsp
 
 공통 검색 모달
 src/main/webapp/WEB-INF/views/common/search-modal.jsp
+- 최근검색어 한 건의 마크업은 JSP template에 있습니다.
 
 페이지 로더
 src/main/webapp/WEB-INF/views/common/page-loader.jsp
 
-공통 레이아웃 CSS
+공통 CSS
 src/main/webapp/dist/css/common/layout.css
 src/main/webapp/dist/css/common/style.css
 src/main/webapp/dist/css/common/page-loader.css
@@ -191,188 +192,139 @@ src/main/webapp/dist/js/common/plugins.js
 src/main/webapp/dist/js/common/page-loader.js
 src/main/webapp/dist/js/common/auth-header.js
 
-※ Header/Footer/공통 CSS/공통 JS는 여러 사람이 동시에 수정하면 Git 충돌 가능성이 큽니다.
-   공통파일 수정 전에는 팀에 먼저 알리고 한 사람이 수정한 뒤 merge 하는 것을 권장합니다.
+
+[5] JSP 템플릿 연습 방법
+------------------------
+현재 목록/상품 카드 화면에는 화면 확인용 샘플 HTML이 JSP에 직접 들어 있습니다.
+백엔드 구현 시 샘플 한 행 또는 한 카드를 기준으로 다음을 직접 연습합니다.
+
+Controller
+  -> Service
+  -> Mapper
+  -> DB 조회
+  -> Controller에서 List/DTO를 request(ModelAndView)에 저장
+  -> JSP에서 반복 출력 및 조건 처리
+
+예: 상품검색
+src/main/webapp/WEB-INF/views/product/search.jsp 안의 반복되는 article.search-product-card 부분을
+나중에 직접 반복 출력 구조로 교체합니다.
+
+예: 상품카테고리
+src/main/webapp/WEB-INF/views/product/category.jsp 안의 반복되는 data-category-product 카드 부분을
+나중에 직접 반복 출력 구조로 교체합니다.
+
+JavaScript 파일에는 화면 전체 HTML 문자열을 작성하지 않습니다.
 
 
-[4] 이미지 / CSS / JS 경로 원칙
--------------------------------
-Eclipse 실제 파일 경로
-- CSS    : src/main/webapp/dist/css/...
-- JS     : src/main/webapp/dist/js/...
-- 이미지 : src/main/webapp/dist/images/...
-- 폰트   : src/main/webapp/dist/fonts/...
+[6] Java / DB 작업 실제 경로
+----------------------------
+Controller
+src/main/java/com/yss/controller/...
+src/main/java/com/yss/controller/admin/...
 
-JSP에서 사용할 때
-${pageContext.request.contextPath}/dist/...
-또는 JSP에 ctx를 선언한 경우 ${ctx}/dist/...
+DTO
+src/main/java/com/yss/dto/...
 
-예)
-<link rel="stylesheet" href="${pageContext.request.contextPath}/dist/css/pages/product/detail.css">
-<script src="${pageContext.request.contextPath}/dist/js/pages/product/detail.js"></script>
-<img src="${pageContext.request.contextPath}/dist/images/...">
+Service / ServiceImpl
+src/main/java/com/yss/service/...
 
-절대 다시 /resources/... 로 작성하지 않습니다.
+Mapper Interface
+src/main/java/com/yss/mapper/...
 
-
-[5] Java / DB 작업할 때 실제 경로
----------------------------------
-현재 Controller
-src/main/java/com/yss/controller/HomeController.java
-src/main/java/com/yss/controller/MemberController.java
-src/main/java/com/yss/controller/ViewController.java
-src/main/java/com/yss/controller/admin/HomeManageController.java
-
-현재 회원 DTO
-src/main/java/com/yss/dto/MemberDTO.java
-src/main/java/com/yss/dto/SessionInfo.java
-
-현재 회원 Service
-src/main/java/com/yss/service/MemberService.java
-src/main/java/com/yss/service/MemberServiceImpl.java
-
-현재 회원 Mapper Interface
-src/main/java/com/yss/mapper/MemberMapper.java
-
-현재 MyBatis 설정
+MyBatis 설정
 src/main/webapp/WEB-INF/classes/mybatis/mybatis-config.xml
 
-현재 Mapper XML
-src/main/webapp/WEB-INF/classes/mybatis/mapper/MemberMapper.xml
-src/main/webapp/WEB-INF/classes/mybatis/mapper/tempMapper.xml
+Mapper XML
+src/main/webapp/WEB-INF/classes/mybatis/mapper/...
 
-※ 이 프로젝트는 Mapper XML이 src/main/resources가 아니라
-   src/main/webapp/WEB-INF/classes/mybatis/mapper/ 아래에 있습니다.
-   다른 일반 프로젝트 경로와 헷갈리지 마세요.
-
-새 기능을 만들 때는 기존 Member 구조를 참고해 아래 패키지에 추가합니다.
-[아래 파일명은 예시이며 현재 존재한다는 뜻이 아님]
-- Controller : src/main/java/com/yss/controller/ProductController.java
-- DTO        : src/main/java/com/yss/dto/ProductDTO.java
-- Service    : src/main/java/com/yss/service/ProductService.java
-- ServiceImpl: src/main/java/com/yss/service/ProductServiceImpl.java
-- Mapper     : src/main/java/com/yss/mapper/ProductMapper.java
-- Mapper XML : src/main/webapp/WEB-INF/classes/mybatis/mapper/ProductMapper.xml
+※ 이 프로젝트의 Mapper XML 기준 폴더는 src/main/resources가 아니라
+   src/main/webapp/WEB-INF/classes/mybatis/mapper/ 입니다.
 
 
-[6] Controller에서 JSP 연결하는 방법
-------------------------------------
-이 프로젝트의 JspView는 자동으로 아래처럼 붙입니다.
-
-Controller에서
+[7] Controller에서 JSP 연결 원칙
+-------------------------------
+예)
 return new ModelAndView("product/detail");
 
-실제 forward 대상
+실제 JSP
 /WEB-INF/views/product/detail.jsp
 
-따라서 Controller에서는 아래처럼 쓰지 않습니다.
-X return new ModelAndView("/WEB-INF/views/product/detail.jsp");
+브라우저에서 WEB-INF/views 경로를 직접 입력하지 않습니다.
 
-redirect는
+redirect 예)
 return new ModelAndView("redirect:/main");
-처럼 사용하면 Context Path가 자동으로 앞에 붙습니다.
 
 
-[7] 현재 로그인 Filter에서 꼭 알아둘 경로
------------------------------------------
-파일:
+[8] 현재 LoginFilter 확인사항
+----------------------------
+파일
 src/main/java/com/yss/filter/LoginFilter.java
 
-현재 비로그인 접근 허용 목록에 포함된 주요 URL
+비로그인 허용 주요 경로
+- /index.jsp
 - /main
 - /member/login
 - /member/logout
 - /member/join
 - /product/**
 - /customer/contact
+- /customer/faq/**
+- /customer/notice/**
+- /customer/qna/**
 - /dist/**
 
-중요 확인사항 1)
-현재 허용 목록에는 정확히 "/order" 만 들어 있고 "/order/**" 가 아닙니다.
-따라서 현재 코드 그대로면 비로그인 사용자가
-/order/agreement, /order/checkout, /order/complete 에 접근할 때 로그인 화면으로 이동합니다.
-비회원 주문을 실제 구현할 예정이면 주문 담당자가 LoginFilter의 허용 범위를 반드시 검토해야 합니다.
-
-중요 확인사항 2)
-관리자 URL에 접근한 로그인 사용자의 role이 5 미만이면
-/member/noAuthorized 로 redirect 하도록 되어 있습니다.
-그러나 yss(4) 현재 Controller에는 /member/noAuthorized Mapping이 없습니다.
-관리자 권한 화면을 실제 사용할 때 추가 구현 또는 redirect 경로 수정이 필요합니다.
+1:1 문의(/customer/inquiry/**)는 로그인 대상입니다.
+현재 주문 허용 목록은 정확히 /order만 있으므로 /order/agreement, /order/checkout, /order/complete 접근 정책은 주문 구현 시 확인합니다.
+관리자 URL은 로그인 회원 role이 5 미만이면 /member/noAuthorized 로 이동하도록 되어 있으므로 해당 Mapping 구현 여부를 확인합니다.
 
 
-[8] 현재 프로젝트에서 경로 때문에 헷갈리기 쉬운 파일
-------------------------------------------------------
-1) 아래 파일은 존재하지만 현재 JSP에서 로드하지 않는 이전/중복 JS입니다.
-- src/main/webapp/dist/js/member/login.js
-- src/main/webapp/dist/js/member/join.js
+[9] Git 충돌 위험이 큰 파일
+---------------------------
+공통 사용자 파일
+- src/main/webapp/WEB-INF/views/common/header.jsp
+- src/main/webapp/WEB-INF/views/common/footer.jsp
+- src/main/webapp/WEB-INF/views/common/search-modal.jsp
+- src/main/webapp/dist/js/common/main.js
+- src/main/webapp/dist/js/common/layout.js
 
-실제 현재 JSP가 로드하는 파일은 아래입니다.
-- src/main/webapp/dist/js/pages/member/login.js
-- src/main/webapp/dist/js/pages/member/join.js
+마이페이지
+- src/main/webapp/WEB-INF/views/mypage/mypage.jsp
+- src/main/webapp/dist/js/pages/mypage/mypage.js
+- src/main/webapp/dist/css/pages/mypage/mypage.css
 
-따라서 회원 화면 JS 수정 시 pages/member/... 쪽을 수정합니다.
-
-2) src/main/webapp/WEB-INF/views/member/logout.jsp
-- 파일은 존재하지만 현재 /member/logout Controller는 이 JSP를 사용하지 않고 redirect 합니다.
-
-3) src/main/webapp/WEB-INF/views/admin/home/main.jsp
-- 파일은 존재하지만 현재 HomeManageController에서 연결된 Mapping이 없습니다.
-- 실제 관리자 대시보드는 admin/dashboard/main.jsp 입니다.
+공통 파일은 한 명이 담당하여 작은 단위로 merge하는 방식을 권장합니다.
+고객센터는 기능별 JSP/JS가 분리되어 있으므로 각 담당자가 자기 폴더 위주로 작업합니다.
 
 
-[9] Git 시작 전에 꼭 공유할 충돌 위험 파일
-------------------------------------------
-현재 UI 구조상 아래 두 파일은 여러 담당 기능이 한 파일에 모여 있습니다.
-
-A. 마이페이지
-src/main/webapp/WEB-INF/views/mypage/mypage.jsp
-src/main/webapp/dist/js/pages/mypage/mypage.js
-src/main/webapp/dist/css/pages/mypage/mypage.css
-
-B. 고객센터
-src/main/webapp/WEB-INF/views/customer/contact.jsp
-src/main/webapp/dist/js/pages/customer/contact.js
-src/main/webapp/dist/css/pages/customer/contact.css
-
-여러 명이 같은 날 같은 파일을 수정하면 merge conflict가 날 가능성이 높습니다.
-각자 기능은 나눠도 현재 물리 파일은 하나이므로,
-작업 전 pull -> 담당 구간 수정 -> commit/push -> 다음 담당 pull 순서를 지키거나
-추후 JSP/JS를 기능별 partial 파일로 분리하는 방식이 안전합니다.
-
-
-[10] Eclipse에서 최초 실행 확인 순서
-------------------------------------
-1. Git에서 최신 프로젝트를 받습니다.
-2. Eclipse Project Explorer에서 yss 프로젝트 우클릭 -> Refresh(F5)
-3. Project -> Clean -> yss -> Clean
-4. Servers에서 Tomcat Stop -> Start
-5. Servers 탭에서 yss Module이 올라가 있는지 확인
-6. 아래 주소 테스트
-
-사용자 화면
+[10] 최초 실행 확인 URL
+----------------------
 http://localhost:8080/yss/main
 http://localhost:8080/yss/member/login
 http://localhost:8080/yss/member/join
 http://localhost:8080/yss/product/category
-http://localhost:8080/yss/product/detail
 http://localhost:8080/yss/product/search
+http://localhost:8080/yss/product/detail
 http://localhost:8080/yss/mypage
-http://localhost:8080/yss/customer/contact
+http://localhost:8080/yss/customer/inquiry/list
+http://localhost:8080/yss/customer/faq/list
+http://localhost:8080/yss/customer/notice/list
+http://localhost:8080/yss/customer/qna/list
 http://localhost:8080/yss/order/agreement
 http://localhost:8080/yss/order/checkout
 http://localhost:8080/yss/order/complete
 
-관리자 화면은 ADMIN_SPLIT_GUIDE.txt 참고.
+관리자 화면은 ADMIN_SPLIT_GUIDE_FINAL.txt 참고.
+포트가 9090이면 8080만 9090으로 바꾸면 됩니다.
 
 
-[11] 최종 경로 원칙 한 줄 정리
-------------------------------
-JSP 수정     -> src/main/webapp/WEB-INF/views/...
-CSS 수정     -> src/main/webapp/dist/css/...
-JS 수정      -> src/main/webapp/dist/js/...
+[11] 한 줄 경로 정리
+--------------------
+JSP          -> src/main/webapp/WEB-INF/views/...
+CSS          -> src/main/webapp/dist/css/...
+JS           -> src/main/webapp/dist/js/...
 Controller   -> src/main/java/com/yss/controller/...
 Service      -> src/main/java/com/yss/service/...
 Mapper       -> src/main/java/com/yss/mapper/...
 Mapper XML   -> src/main/webapp/WEB-INF/classes/mybatis/mapper/...
-브라우저 이동 -> JSP 직접 경로 X, Controller URL 사용
+브라우저 URL -> Controller Mapping 사용
 build/classes -> 수정 금지
