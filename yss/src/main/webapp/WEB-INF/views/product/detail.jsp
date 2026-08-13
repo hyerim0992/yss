@@ -147,43 +147,6 @@
               <small>수령 후 7일 이내 신청</small>
             </li>
           </ul>
-
-          <section class="sales-section" aria-labelledby="salesTitle">
-            <div class="section-title">
-              <div>
-                <h2 id="salesTitle">최근 판매량</h2>
-                <p>선택한 기간의 실제 구매 완료 수량입니다.</p>
-              </div>
-              <span class="sales-update">오늘 15:30 기준</span>
-            </div>
-            <div class="period-tabs" role="tablist" aria-label="판매량 기간">
-              <button type="button" class="active" data-period="week">1주</button>
-              <button type="button" data-period="month">1개월</button>
-              <button type="button" data-period="quarter">3개월</button>
-            </div>
-            <div class="sales-highlight">
-              <div>
-                <small class="sales-period-label">최근 7일 판매량</small>
-                <strong><span class="sales-total">86</span>켤레</strong>
-              </div>
-              <em class="sales-change">지난주보다 12% 증가</em>
-            </div>
-            <div class="sales-chart" id="salesChart" aria-label="최근 판매량 막대그래프">
-              <div class="sales-bar-item"><span style="--bar: 42%"></span><b>월</b><small>8</small></div>
-              <div class="sales-bar-item"><span style="--bar: 58%"></span><b>화</b><small>11</small></div>
-              <div class="sales-bar-item"><span style="--bar: 47%"></span><b>수</b><small>9</small></div>
-              <div class="sales-bar-item"><span style="--bar: 70%"></span><b>목</b><small>14</small></div>
-              <div class="sales-bar-item"><span style="--bar: 62%"></span><b>금</b><small>12</small></div>
-              <div class="sales-bar-item"><span style="--bar: 82%"></span><b>토</b><small>16</small></div>
-              <div class="sales-bar-item"><span style="--bar: 82%"></span><b>일</b><small>16</small></div>
-            </div>
-            <dl class="sales-stat-grid">
-              <div><dt>7일</dt><dd>86켤레</dd></div>
-              <div><dt>30일</dt><dd>342켤레</dd></div>
-              <div><dt>누적</dt><dd>1,248켤레</dd></div>
-            </dl>
-          </section>
-
           <section class="basic-info" aria-labelledby="basicInfoTitle">
             <h2 id="basicInfoTitle">기본 정보</h2>
             <dl class="basic-info-grid">
