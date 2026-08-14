@@ -6,76 +6,107 @@
 <mapper namespace="com.yss.mapper.MemberMapper">
 
 	<!-- 로그인 -->
-	<select id="loginMember"
-		parameterType="map"
+	<select id="loginMember" parameterType="map"
 		resultType="com.yss.dto.MemberDTO">
 
 		SELECT
-			m.memberId,	d.userId, d.password, d.name, m.role
-		FROM member m
-		LEFT OUTER JOIN memberDetail d
-			ON m.memberId = d.memberId
-		WHERE d.userId = #{userId}
-			AND d.password = #{password}
-
+		m.memberId, d.userId, d.password, d.name, m.role
+		FROM
+		member m
+		LEFT OUTER JOIN
+		memberDetail d
+		ON m.memberId = d.memberId
+		WHERE
+		d.userId = #{userId}
+		AND d.password = #{password}
 	</select>
-
 
 	<!-- 회원번호 생성 -->
 	<select id="memberSeq" resultType="Long">
 		SELECT MEMBER_SEQ.NEXTVAL
-		FROM dual
+		FROM
+		dual
 	</select>
 
-
 	<!-- MEMBER 등록 -->
-	<insert id="insertMember"
-		parameterType="com.yss.dto.MemberDTO">
+	<insert id="insertMember" parameterType="com.yss.dto.MemberDTO">
 
 		INSERT INTO MEMBER (
-			MEMBERID, ROLE,	STATUS,	CREATEDAT, DELETEDAT)
+		MEMBERID, ROLE, STATUS, CREATEDAT, DELETEDAT)
 		VALUES (
-			#{memberId}, 1, '일반', SYSDATE, NULL)
-
+		#{memberId}, 1,
+		'일반', SYSDATE, NULL)
 	</insert>
-
 
 	<!-- 회원 상세정보 등록 -->
 	<insert id="insertMemberDetail"
 		parameterType="com.yss.dto.MemberDTO">
 
 		INSERT INTO MEMBERDETAIL (
-			MEMBERID, USERID, PASSWORD, EMAIL, PHONE, BIRTH, NAME,
-			UPDATEDAT, REFUNDACCOUNT, BANKNAME, ACCOUNTHOLDER)
+		MEMBERID, USERID, PASSWORD,
+		EMAIL, PHONE, BIRTH, NAME,
+		UPDATEDAT, REFUNDACCOUNT, BANKNAME,
+		ACCOUNTHOLDER)
 		VALUES (
-			#{memberId}, #{userId},	#{password},#{email}, #{phone},
-			#{birth}, #{name}, SYSDATE,	NULL, NULL, NULL)
-
+		#{memberId}, #{userId}, #{password},#{email},
+		#{phone},
+		#{birth}, #{name}, SYSDATE, NULL, NULL, NULL)
 	</insert>
-
 
 	<!-- 기본 배송지 등록 -->
-	<insert id="insertAddress"
-		parameterType="com.yss.dto.MemberDTO">
+	<insert id="insertAddress" parameterType="com.yss.dto.MemberDTO">
 
 		INSERT INTO ADDRESS (
-			ADDRESSID, MEMBERID, RECEIVER, RECEIVERNO, ADDR1, ADDR2, ZIPCODE, ISDEFAULT)
+		ADDRESSID, MEMBERID, RECEIVER, RECEIVERNO, ADDR1, ADDR2, ZIPCODE,
+		ISDEFAULT)
 		VALUES (
-			ADDRESS_SEQ.NEXTVAL, #{memberId}, #{name}, TO_NUMBER(REPLACE(#{phone}, '-', '')),
-			#{addr1}, #{addr2}, #{zip}, 'yes')
-
+		ADDRESS_SEQ.NEXTVAL, #{memberId}, #{name},
+		TO_NUMBER(REPLACE(#{phone}, '-', '')),
+		#{addr1}, #{addr2}, #{zip},
+		'yes')
 	</insert>
 
-
 	<!-- 아이디 중복확인 -->
-	<select id="checkUserId"
-		parameterType="map"
+	<select id="checkUserId" parameterType="map"
 		resultType="Integer">
 
 		SELECT COUNT(*)
 		FROM MEMBERDETAIL
 		WHERE USERID = #{userId}
+	</select>
+
+	<!-- 아이디 찾기 -->
+	<select id="findUserId" parameterType="map"
+		resultType="com.yss.dto.MemberDTO">
+
+		SELECT
+		MEMBERID, USERID, NAME, EMAIL
+		FROM MEMBERDETAIL
+		WHERE
+		NAME = #{name}
+		AND EMAIL = #{email}
+	</select>
+
+	<!-- 비밀번호 찾기 회원 확인 -->
+	<select id="checkMemberForPassword" parameterType="map"
+		resultType="Integer">
+
+		SELECT COUNT(*)
+		FROM MEMBERDETAIL
+		WHERE USERID = #{userId}
+		AND NAME = #{name}
+		AND EMAIL = #{email}
 
 	</select>
 
+	<!-- 비밀번호 변경 -->
+	<update id="updatePassword" parameterType="map">
+
+		UPDATE MEMBERDETAIL
+		SET
+		PASSWORD = #{password},
+		UPDATEDAT = SYSDATE
+		WHERE USERID = #{userId}
+
+	</update>
 </mapper>

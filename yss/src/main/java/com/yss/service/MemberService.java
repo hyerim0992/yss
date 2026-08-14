@@ -11,4 +11,15 @@ public interface MemberService {
 	public void insertMember(MemberDTO dto);
 
 	public int checkUserId(String userId);
+	
+	public MemberDTO findUserId(String name, String email);
+
+	public boolean checkMemberForPassword(
+			String userId,
+			String name,
+			String email);
+
+	public void updatePassword(
+			String userId,
+			String password);
 }

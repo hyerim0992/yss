@@ -24,4 +24,13 @@ public interface MemberMapper {
 
 	// 아이디 중복확인
 	public int checkUserId(Map<String, Object> map);
+	
+	// 아이디 찾기
+	public MemberDTO findUserId(Map<String, Object> map);
+
+	// 비밀번호 찾기 전 회원 확인
+	public int checkMemberForPassword(Map<String, Object> map);
+
+	// 비밀번호 변경
+	public void updatePassword(Map<String, Object> map) throws SQLException;
 }

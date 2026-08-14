@@ -14,7 +14,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
-
 /*
  	- Filter
  		: 요청(request) 과 응답(response) 을 가로채어 전후 처리를 할 수 있는 컴포넌트
@@ -22,7 +21,6 @@ import jakarta.servlet.http.HttpSession;
  		: 요청(request) 전 - 인증, 권한검사, 인코딩, 로깅 등
  		: 응답(response) 전 - 응답 압축, 응답내용변경, 보안헤더 추가 등
  */
-
 
 @WebFilter("/*")
 public class LoginFilter implements Filter {
@@ -53,7 +51,6 @@ public class LoginFilter implements Filter {
 				if(uri.indexOf(req.getContextPath()) == 0) {
 					uri = uri.substring(req.getContextPath().length());
 				}
-				
 				uri = "redirect:" + uri;
 				
 				String queryString = req.getQueryString(); // getQueryString : GET 방식으로 넘어온 파라미터
@@ -64,9 +61,7 @@ public class LoginFilter implements Filter {
 				
 				// 로그인 페이지로 이동
 				resp.sendRedirect(cp + "/member/login");
-				
 			}
-			
 			return;
 			
 		} else if(info != null && uri.indexOf("admin") != -1) {
@@ -76,14 +71,12 @@ public class LoginFilter implements Filter {
 				return;
 			}
 		}
-		
 		// 다음 필터 또는 마지막 필터이면 end-pointer(서블릿, jsp등)을 실행
 		chain.doFilter(request, response);
 		
 		// response 필터
 		
 	}
-	
 	// 요청이 AJAX 인지를 확인하는 메소드
 	private boolean isAjaxRequest(HttpServletRequest req) {
 		String h = req.getHeader("AJAX");
@@ -102,6 +95,8 @@ public class LoginFilter implements Filter {
 				"/member/login", "/member/logout",
 				"/member/join", 
 				"/member/checkId",
+				"/member/findId",
+				"/member/findPassword",
 				"/product/**", 
 				"/customer/contact",
 				"/customer/faq/**",

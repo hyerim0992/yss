@@ -38,8 +38,7 @@
               action="${ctx}/member/login"
               method="post"
               data-member-login-form
-              novalidate
-            >
+              novalidate>
               <div class="ys-form-group">
                 <label for="loginUserId">아이디</label>
                 <input
@@ -48,8 +47,7 @@
                   name="userId"
                   autocomplete="username"
                   placeholder="아이디를 입력해 주세요"
-                  required
-                />
+                  required/>
               </div>
 
               <div class="ys-form-group">
@@ -60,8 +58,7 @@
                   name="password"
                   autocomplete="current-password"
                   placeholder="비밀번호를 입력해 주세요"
-                  required
-                />
+                  required/>
               </div>
 
               <div class="ys-login-option">
@@ -71,9 +68,9 @@
                 </label>
 
                 <div class="ys-find-links" aria-label="계정 찾기">
-                  <a href="#" data-no-page-loader data-demo-message="아이디 찾기 기능은 Controller 연결 단계에서 구현합니다.">아이디 찾기</a>
+                  <a href="${ctx}/member/findId">아이디 찾기</a>
                   <span aria-hidden="true"></span>
-                  <a href="#" data-no-page-loader data-demo-message="비밀번호 찾기 기능은 Controller 연결 단계에서 구현합니다.">비밀번호 찾기</a>
+                  <a href="${ctx}/member/findPassword">비밀번호 찾기</a>
                 </div>
               </div>
 
@@ -105,8 +102,7 @@
                   maxlength="8"
                   pattern="[0-9]{8}"
                   placeholder="주문번호 8자리"
-                  required
-                />
+                  required/>
               </div>
 
               <div class="ys-form-group">
@@ -117,8 +113,7 @@
                   name="guestOrderPassword"
                   minlength="6"
                   placeholder="주문 비밀번호 6자 이상"
-                  required
-                />
+                  required/>
               </div>
 
               <button type="submit" class="ys-guest-btn">주문조회</button>

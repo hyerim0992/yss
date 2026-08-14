@@ -15,7 +15,6 @@ public class MemberServiceImpl implements MemberService {
 
 	@Override
 	public MemberDTO loginMember(Map<String, Object> map) {
-
 		MemberDTO dto = null;
 
 		try {
@@ -28,10 +27,8 @@ public class MemberServiceImpl implements MemberService {
 		return dto;
 	}
 
-
 	@Override
 	public void insertMember(MemberDTO dto) {
-
 		try {
 
 			// 회원번호 생성
@@ -57,7 +54,6 @@ public class MemberServiceImpl implements MemberService {
 		}
 	}
 
-
 	@Override
 	public int checkUserId(String userId) {
 
@@ -73,5 +69,67 @@ public class MemberServiceImpl implements MemberService {
 		}
 
 		return result;
+	}
+	
+	@Override
+	public MemberDTO findUserId(String name, String email) {
+		MemberDTO dto = null;
+
+		try {
+			Map<String, Object> map = new HashMap<>();
+
+			map.put("name", name);
+			map.put("email", email);
+
+			dto = mapper.findUserId(map);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return dto;
+	}
+	
+	@Override
+	public boolean checkMemberForPassword(
+			String userId,
+			String name,
+			String email) {
+
+		try {
+			Map<String, Object> map = new HashMap<>();
+
+			map.put("userId", userId);
+			map.put("name", name);
+			map.put("email", email);
+
+			int count =
+					mapper.checkMemberForPassword(map);
+
+			return count > 0;
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return false;
+	}
+	
+	@Override
+	public void updatePassword(
+			String userId,
+			String password) {
+
+		try {
+			Map<String, Object> map = new HashMap<>();
+
+			map.put("userId", userId);
+			map.put("password", password);
+
+			mapper.updatePassword(map);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 }
