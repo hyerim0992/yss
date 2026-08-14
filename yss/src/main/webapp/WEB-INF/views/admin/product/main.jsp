@@ -220,49 +220,45 @@
 
         <template class="admin-form-template">
           <div class="form-field">
-            <label>상품번호</label>
-            <input type="text" data-field-index="0" data-default="" placeholder="물품번호 입력">
-          </div>
-          <div class="form-field">
             <label>상품명</label>
-            <input type="text" data-field-index="1" data-default="" placeholder="상품명 입력">
+            <input type="text" name="prodName" data-field-index="0" data-default="" placeholder="상품명 입력">
           </div>
           <div class="form-field">
             <label>브랜드</label>
-            <input type="text" data-field-index="2" data-default="" placeholder="브랜드 입력">
+            <input type="text" name="brand" data-field-index="1" data-default="" placeholder="브랜드 입력">
           </div>
           <div class="form-field">
             <label>카테고리</label>
-            <input type="text" data-field-index="3" data-default="" placeholder="카테고리 입력">
+            <input type="text" name="categoryId" data-field-index="2" data-default="" placeholder="카테고리 입력">
           </div>
           <div class="form-field">
             <label>입고가</label>
-            <input type="text" data-field-index="4" data-default="" placeholder="가격 입력">
+            <input type="text" name="inboundPrice" data-field-index="3" data-default="" placeholder="가격 입력">
           </div>
           <div class="form-field">
             <label>판매가</label>
-            <input type="text" data-field-index="5" data-default="" placeholder="가격 입력">
+            <input type="text" name="price" data-field-index="4" data-default="" placeholder="가격 입력">
           </div>
           <div class="form-field">
             <label>힐높이</label>
-            <input type="text" data-field-index="6" data-default="" placeholder="판매자 입력">
+            <input type="text" name="heelHeight" data-field-index="5" data-default="0" placeholder="힐높이 입력">
           </div>
           <div class="form-field">
             <label>할인율</label>
-            <input type="text" data-field-index="7" data-default="" placeholder="등록일 입력">
+            <input type="text" name="discRate" data-field-index="6" data-default="0" placeholder="할인율 입력">
           </div>
           <div class="form-field">
             <label>상품노출레벨</label>
-            <select data-field-index="8" data-default="all">
-              <option value="all" selected>전체</option>
-              <option value="silver">실버이상</option>
-              <option value="gold">골드이상</option>
-              <option value="vip">VIP</option>
+            <select name="minGrade" data-field-index="7" data-default="1">
+              <option value="1" selected>전체</option>
+              <option value="2">실버이상</option>
+              <option value="3">골드이상</option>
+              <option value="4">VIP</option>
             </select>
           </div>
           <div class="form-field">
             <label>상태</label>
-            <select data-field-index="9" data-default="ready">
+            <select name="status" data-field-index="8" data-default="ready">
               <option value="ready" selected>판매대기</option>
               <option value="onSele" >판매중</option>
               <option value="soldOut">품절</option>
@@ -447,6 +443,14 @@
       <a id="adminCsvDownloadLink" hidden aria-hidden="true"></a>
     </section>
   </main>
+  
+  <script type="text/javascript">
+  	function sendOk() {
+  		const f = document.editForm;
+  		
+  		f.submit();
+  	}
+  </script>
 
   <!-- 등록/수정 모달의 바깥 디자인은 기존 공용 JSP를 그대로 사용합니다. -->
   <jsp:include page="/WEB-INF/views/admin/layout/modal.jsp"/>

@@ -11,7 +11,7 @@ public interface ProductManageMapper {
 	public void updateProduct(ProductDTO dto) throws SQLException;
 	public void deleteProduct(ProductDTO dto) throws SQLException;
 	public List<ProductDTO> listProduct(Map<String, Object> map);
-	public List<ProductDTO> selectRoleProduct(Map<String, Object> map);
+	public List<ProductDTO> selectGradeProduct(Map<String, Object> map);
 	public List<ProductDTO> listCategory(Map<String, Object> map);
 	
 	public void insertProductOption(ProductDTO dto) throws SQLException;

@@ -2,14 +2,24 @@
 
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.yss.mapper.ProductManageMapper">
+	
+	<select id="productSeq" resultType="Long">
+		SELECT product_seq.NEXTVAL
+		FROM dual
+	</select>
+
 	<insert id="insertProduct" parameterType="com.yss.dto.ProductDTO">
-		INSERT INTO product(productId, prodName, brand, categoryId, inboundPrice, price, heelHeight, discRate, minGrade, status, regDate , thumbnail)
-		VALUES (#{productId}, #{prodName}, #{brand}, #{categoryId}, #{inboundPrice}, #{price}, #{heelHeight}, #{discRate}, #{minGrade}, #{status}, SYSDATE, #{thumbnail})
+		<selectKey keyProperty="productId" resultType="long" order="BEFORE">
+			SELECT product_seq.NEXTVAL
+			FROM dual
+		</selectKey>
+			INSERT INTO product(productId, prodName, brand, categoryId, inboundPrice, price, heelHeight, discRate, minGrade, status, regDate , thumbnail)
+			VALUES (product_seq.NEXTVAL, #{prodName}, #{brand}, #{categoryId}, #{inboundPrice}, #{price}, #{heelHeight}, #{discRate}, #{minGrade}, #{status}, SYSDATE, #{thumbnail})
 	</insert>
 	
 	<insert id="insertProductImage" parameterType="com.yss.dto.ProductDTO">
 		INSERT INTO productImage(imageId, productId, files, sortOrder)
-		VALUES (#{imageId}, #{productId}, #{files}, #{sortOrder})
+		VALUES (PRODUCT_IMAGE_SEQ.NEXTVAL, #{productId}, #{files}, #{sortOrder})
 	</insert>
 
 </mapper>

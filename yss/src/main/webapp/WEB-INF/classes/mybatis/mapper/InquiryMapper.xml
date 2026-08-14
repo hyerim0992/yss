@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yss.mapper.InquiryMapper">
+	<insert id="insertInquiry" parameterType="com.yss.dto.InquiryDTO">
+		INSERT INTO inquiry(inquiryId, memberId, inquiryType, title, content, status, createdAt)
+		VALUES (inquiry_SEQ.NEXTVAL, #{memberId}, #{inquiryType}, #{title}, #{content}, '대기중', SYSDATE)
+	</insert>
+	
+	<select id="dataCount" parameterType="map" resultType="Integer">
+		SELECT NVL(COUNT(*), 0)
+		FROM inquiry q
+		JOIN MEMBERDETAIL m ON q.memberId = m.memberId
+		WHERE q.memberId = #{memberId}
+	</select>
+
+	<select id="listInquiry" parameterType="map" resultType="com.yss.dto.InquiryDTO">
+		SELECT inquiryId, q.memberId, name, inquiryType, title, status,
+		       TO_CHAR(createdAt, 'YYYY-MM-DD') AS createdAt
+		FROM inquiry q
+		JOIN MEMBERDETAIL m ON q.memberId = m.memberId
+		WHERE memberId = #{memberId}
+		ORDER BY inquiryId DESC
+		OFFSET #{offset} ROWS FETCH FIRST #{size} ROWS ONLY
+	</select>
+	
+	
+</mapper>
