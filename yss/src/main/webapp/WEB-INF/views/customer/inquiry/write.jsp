@@ -47,20 +47,45 @@
               <header class="abc-cs-section-head"><div><h2 id="abcInquiryTitle">1:1 문의</h2><p>주문, 결제, 배송 등 해결되지 않은 문의를 남겨주세요.</p></div></header>
 
               <div class="abc-cs-subtabs">
-                <button type="button" class="is-active" data-abc-inquiry-tab="history">문의내역 조회</button>
-                <button type="button" data-abc-inquiry-tab="write" onclick="changeInquiry()">문의 작성</button>
+                <button type="button" data-abc-inquiry-tab="history" onclick="changeInquiry()">문의내역 조회</button>
+                <button type="button" class="is-active" data-abc-inquiry-tab="write">문의 작성</button>
               </div>
 
-              <div class="abc-cs-history" data-abc-inquiry-panel="history">
-                <div class="abc-cs-table-head abc-cs-history-columns"><span>문의유형</span><span>제목</span><span>접수일</span></div>
-                <!-- ★ 연습 포인트: 아래 샘플 3줄을 보고 나중에 직접 목록 반복 출력을 작성하세요. -->
-                <div id="abcInquiryHistoryList">
-                  <div class="abc-cs-history-row"><span>배송</span><strong>오늘 출고 가능한가요?</strong><time>2026.08.05</time></div>
-                  <div class="abc-cs-history-row"><span>회원정보</span><strong>VIP 등급 변경 시점 문의</strong><time>2026.08.05</time></div>
-                  <div class="abc-cs-history-row"><span>교환/반품</span><strong>사이즈 교환 요청</strong><time>2026.08.04</time></div>
-                </div>
-                <div class="abc-cs-empty" id="abcInquiryHistoryEmpty" hidden><strong>등록된 문의가 없습니다.</strong><p>문의 작성 탭에서 새로운 문의를 남겨보세요.</p></div>
-              </div>
+              <!-- ★ 연습 포인트: 나중에 action/method와 Controller 처리를 직접 연결하면 됩니다. -->
+              <form name="inquiryForm" method="post" class="abc-cs-form" id="abcInquiryForm" data-abc-inquiry-panel="write">
+                <div class="abc-cs-form-line">
+                	<div class="abc-cs-form-label">문의 유형 <b>*</b></div>
+	                	<div class="abc-cs-choice-group" data-choice-group="inquiryType">
+	                		<input type="hidden" name="inquiryType" />
+	                		<button type="button" data-choice-value="주문/결제">주문/결제</button>
+	                		<button type="button" data-choice-value="배송">배송</button>
+	                		<button type="button" data-choice-value="교환/반품">교환/반품</button>
+	                		<button type="button" data-choice-value="상품정보">상품정보</button>
+	                		<button type="button" data-choice-value="회원정보">회원정보</button>
+	                		<button type="button" data-choice-value="기타">기타</button>
+	                	</div>
+	               	    </div>
+		                <label class="abc-cs-form-line">
+			                <span class="abc-cs-form-label">제목 <b>*</b></span>
+			                <input name="title" maxlength="50" required placeholder="제목을 50자 이내로 입력해 주세요." />
+		                </label>
+		                <label class="abc-cs-form-line abc-cs-form-line--textarea">
+			                <span class="abc-cs-form-label">내용 <b>*</b></span>
+			                <span class="abc-cs-textarea-wrap">
+			                <textarea id="abcInquiryContent" name="content" maxlength="1000" required placeholder="문의 내용을 구체적으로 입력해 주세요."></textarea>
+			                <small><span data-abc-count="abcInquiryContent">0</span>/1000</small></span>
+		                </label>
+		                <div class="abc-cs-form-line"><div class="abc-cs-form-label">파일 첨부</div>
+			                <div class="abc-cs-file-area"><label class="abc-cs-file-button" for="abcInquiryFiles">파일 선택</label>
+				                <input id="abcInquiryFiles" type="file" multiple accept=".jpg,.jpeg,.png,.gif,.bmp" /><span>이미지 파일, 최대 3개까지 첨부할 수 있습니다.</span>
+				                <div class="abc-cs-file-list"><span id="abcInquiryFileNames">선택된 파일 없음</span></div>
+			                </div>
+		                </div>
+		                <div class="abc-cs-form-actions">
+			                <button type="reset" class="abc-cs-btn abc-cs-btn--light"><span class="abc-cs-btn-label">취소</span></button>
+			                <button type="button" class="abc-cs-btn abc-cs-btn--dark" onclick="sendOk()"><span class="abc-cs-btn-label">문의 접수</span></button>
+		                </div>
+	          </form>
 
               <!-- JS가 새 행의 HTML을 직접 만들지 않도록 행 디자인을 JSP template에 둡니다. -->
               <template id="abcInquiryHistoryTemplate"><div class="abc-cs-history-row"><span data-history-type></span><strong data-history-title></strong><time data-history-date></time></div></template>
@@ -69,10 +94,22 @@
         </div>
       </div>
     </main>
-
+    
     <script type="text/javascript">
     function changeInquiry() {
-    	location.href = '${pageContext.request.contextPath}/customer/inquiry/write';
+    	location.href = '${pageContext.request.contextPath}/customer/inquiry/list';
+    }
+    
+    function sendOk() {
+    	const f = document.inquiryForm;
+    	
+    	if(! f.inquiryType.value) {
+    		alert('문의 유형을 선택하세요');
+    		return;
+    	}
+    	
+    	f.action = '${pageContext.request.contextPath}/customer/inquiry/write';
+    	f.submit();
     }
     </script>
 
