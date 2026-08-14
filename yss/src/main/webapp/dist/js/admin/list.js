@@ -413,7 +413,6 @@
     var confirmOk = qs("#confirmOk");
 
     if (addButton) addButton.addEventListener("click", function () { if (currentSection && currentSection.getAttribute("data-can-add") !== "false") openEditModal(null); });
-    if (editForm) editForm.addEventListener("submit", function (event) { event.preventDefault(); var wasEditing = Boolean(editingRow); saveEditModal(); showToast(wasEditing ? "수정한 내용을 저장했습니다." : "새 항목을 등록했습니다."); });
     if (modalClose) modalClose.addEventListener("click", closeEditModal);
     if (modalCancel) modalCancel.addEventListener("click", closeEditModal);
     if (editModal) editModal.addEventListener("click", function (event) { if (event.target === editModal) closeEditModal(); });

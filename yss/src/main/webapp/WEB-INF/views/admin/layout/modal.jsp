@@ -9,11 +9,11 @@
       </div>
       <button type="button" class="modal-close" id="modalClose" aria-label="닫기">×</button>
     </div>
-    <form id="editForm">
+    <form name="editForm" id="editForm"  method="post" action="${pageContext.request.contextPath}/admin/product/write">
       <div class="form-grid" id="formFields"></div>
       <div class="modal-actions">
         <button type="button" class="light-btn" id="modalCancel">취소</button>
-        <button type="submit" class="primary-btn">저장</button>
+        <button type="button" class="primary-btn" onclick="sendOk()">저장</button>
       </div>
     </form>
   </section>
