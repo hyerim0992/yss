@@ -446,3 +446,17 @@
     init();
   }
 })();
+
+function sendOk() {
+	const f = document.editForm;
+	
+	f.submit();
+}
+
+// document.querySelector('#thumbnail').addEventListener('click', uploadFile);
+
+function uploadFile() {
+	
+}
+
+

@@ -2,19 +2,23 @@
 
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.yss.mapper.ProductManageMapper">
-	
-	<select id="productSeq" resultType="Long">
-		SELECT product_seq.NEXTVAL
-		FROM dual
-	</select>
 
+	<select id="listProductManage" parameterType="map" resultType="com.yss.dto.ProductDTO">
+		SELECT productId, prodName, brand, c.categoryId, inboundPrice, price, heelHeight, discRate, 
+			minGrade, status, TO_CHAR(regDate, 'YYYY-MM-DD') AS regDate
+		FROM product p
+		LEFT JOIN category c ON p.categoryId = c.categoryId
+		ORDER BY productId DESC
+		OFFSET #{offset} ROWS FETCH NEXT #{size} ROWS ONLY
+	</select>
+	
 	<insert id="insertProduct" parameterType="com.yss.dto.ProductDTO">
 		<selectKey keyProperty="productId" resultType="long" order="BEFORE">
 			SELECT product_seq.NEXTVAL
 			FROM dual
 		</selectKey>
 			INSERT INTO product(productId, prodName, brand, categoryId, inboundPrice, price, heelHeight, discRate, minGrade, status, regDate , thumbnail)
-			VALUES (product_seq.NEXTVAL, #{prodName}, #{brand}, #{categoryId}, #{inboundPrice}, #{price}, #{heelHeight}, #{discRate}, #{minGrade}, #{status}, SYSDATE, #{thumbnail})
+			VALUES (#{productId}, #{prodName}, #{brand}, #{categoryId}, #{inboundPrice}, #{price}, #{heelHeight}, #{discRate}, #{minGrade}, #{status}, SYSDATE, #{thumbnail})
 	</insert>
 	
 	<insert id="insertProductImage" parameterType="com.yss.dto.ProductDTO">

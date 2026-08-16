@@ -10,7 +10,7 @@ public interface ProductManageMapper {
 	public void insertProduct(ProductDTO dto) throws SQLException;
 	public void updateProduct(ProductDTO dto) throws SQLException;
 	public void deleteProduct(ProductDTO dto) throws SQLException;
-	public List<ProductDTO> listProduct(Map<String, Object> map);
+	public List<ProductDTO> listProductManage(Map<String, Object> map);
 	public List<ProductDTO> selectGradeProduct(Map<String, Object> map);
 	public List<ProductDTO> listCategory(Map<String, Object> map);
 	

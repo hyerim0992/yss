@@ -25,12 +25,6 @@ public class HomeManageController {
         return new ModelAndView("admin/member/main");
     }
 
-    @GetMapping("/admin/product")
-    public ModelAndView product(HttpServletRequest req, HttpServletResponse resp)
-            throws ServletException, IOException {
-        return new ModelAndView("admin/product/main");
-    }
-
     @GetMapping("/admin/logistics")
     public ModelAndView logistics(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {

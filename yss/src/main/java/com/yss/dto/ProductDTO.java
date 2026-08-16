@@ -1,5 +1,9 @@
 package com.yss.dto;
 
+import java.util.List;
+
+import com.yss.util.MyMultipartFile;
+
 public class ProductDTO {
 	// erd 청록색 테이블
 	
@@ -8,7 +12,7 @@ public class ProductDTO {
 	private int inboundPrice; // 입고가
 	private int price;
 	private int discRate; // 할인율
-	private String thumbail;
+	private String thumbnail;
 	private String brand;
 	private int heelHeight;
 	private String status; // 판매중, 재고없음
@@ -18,6 +22,7 @@ public class ProductDTO {
 	private long imageId;
 	private String files;
 	private int sortOrder; // 사진 노출 순서
+	private List<MyMultipartFile> listFile;
 
 	private long optionId;
 	private int prodSize;
@@ -53,11 +58,11 @@ public class ProductDTO {
 	public void setDiscRate(int discRate) {
 		this.discRate = discRate;
 	}
-	public String getThumbail() {
-		return thumbail;
+	public String getThumbnail() {
+		return thumbnail;
 	}
-	public void setThumbail(String thumbail) {
-		this.thumbail = thumbail;
+	public void setThumbnail(String thumbnail) {
+		this.thumbnail = thumbnail;
 	}
 	public String getBrand() {
 		return brand;
@@ -160,6 +165,13 @@ public class ProductDTO {
 	}
 	public void setRegDate(String regDate) {
 		this.regDate = regDate;
+	}
+	
+	public List<MyMultipartFile> getListFile() {
+		return listFile;
+	}
+	public void setListFile(List<MyMultipartFile> listFile) {
+		this.listFile = listFile;
 	}
 	
 	

@@ -1,5 +1,6 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core"%>
+<%@ taglib prefix="fmt" uri="jakarta.tags.fmt"%>
 <c:set var="adminPage" value="product" scope="request"/>
 <!DOCTYPE html>
 <html lang="ko">
@@ -74,10 +75,9 @@
           <div class="filter-control" data-filter-type="select" data-filter-column="8">
             <label>상품상태</label>
             <select class="extra-filter" id="filter-productStatus">
-              <option value="">전체</option>
-              <option value="">판매대기</option>
-              <option value="판매중">판매중</option>
-              <option value="품절">품절</option>
+              <option value="ready">판매대기</option>
+              <option value="onSale">판매중</option>
+              <option value="soldOut">품절</option>
             </select>
           </div>
           </div>
@@ -100,6 +100,7 @@
               <thead>
                 <tr>
                   <th><input type="checkbox" class="check-all" aria-label="현재 페이지 전체 선택"></th>
+                  <th>썸네일</th>
                   <th>상품번호</th>
                   <th>상품명</th>
                   <th>브랜드</th>
@@ -114,81 +115,42 @@
                 </tr>
               </thead>
               <tbody class="data-body">
-                <!--
-                  ★ 연습 포인트
-                  아래 샘플 행을 보고 나중에 Controller에서 List를 받아
-                  직접 c:forEach / DTO 출력 코드로 바꿔보세요.
-                  지금은 연습할 수 있도록 샘플 HTML을 그대로 둔 상태입니다.
-                -->
-              <tr class="data-row">
-                  <td><input type="checkbox" class="row-check" aria-label="항목 선택"></td>
-                  <td data-field-index="0">NK-AF1-001</td>
-                  <td data-field-index="1">나이키 에어포스 1 &#x27;07</td>
-                  <td data-field-index="2">NIKE</td>
-                  <td data-field-index="3">스니커즈</td>
-                  <td data-field-index="4">139,000원</td>
-                  <td data-field-index="5">shoe_lab</td>
-                  <td data-field-index="6">판매자</td>
-                  <td data-field-index="7">판매자</td>
-                  <td data-field-index="8">2026-08-05</td>
-                  <td data-field-index="9"><span class="badge green">판매중</span></td>
-                  <td class="action-cell">
-                    <button type="button" class="light-btn stock-row">재고</button>
-                    <button type="button" class="light-btn edit-row">수정</button>
-                    <button type="button" class="light-btn delete-row">삭제</button>
-                  </td>
-              </tr>
-
-              <tr class="data-row">
-                  <td><input type="checkbox" class="row-check" aria-label="항목 선택"></td>
-                  <td data-field-index="0">NB-993-002</td>
-                  <td data-field-index="1">뉴발란스 993 그레이</td>
-                  <td data-field-index="2">NEW BALANCE</td>
-                  <td data-field-index="3">러닝화</td>
-                  <td data-field-index="4">289,000원</td>
-                  <td data-field-index="5">rare_kicks</td>
-                  <td data-field-index="6">VIP</td>
-                  <td data-field-index="7">2026-08-04</td>
-                  <td data-field-index="8"><span class="badge green">판매중</span></td>
-                  <td class="action-cell">
-                    <button type="button" class="light-btn edit-row">수정</button>
-                    <button type="button" class="light-btn delete-row">삭제</button>
-                  </td>
-              </tr>
-
-              <tr class="data-row">
-                  <td><input type="checkbox" class="row-check" aria-label="항목 선택"></td>
-                  <td data-field-index="0">AD-SAM-003</td>
-                  <td data-field-index="1">아디다스 삼바 OG</td>
-                  <td data-field-index="2">ADIDAS</td>
-                  <td data-field-index="3">스니커즈</td>
-                  <td data-field-index="4">149,000원</td>
-                  <td data-field-index="5">runner88</td>
-                  <td data-field-index="6">우수회원</td>
-                  <td data-field-index="7">2026-08-03</td>
-                  <td data-field-index="8"><span class="badge gray">품절</span></td>
-                  <td class="action-cell">
-                    <button type="button" class="light-btn edit-row">수정</button>
-                    <button type="button" class="light-btn delete-row">삭제</button>
-                  </td>
-              </tr>
-
-              <tr class="data-row">
-                  <td><input type="checkbox" class="row-check" aria-label="항목 선택"></td>
-                  <td data-field-index="0">AS-K14-004</td>
-                  <td data-field-index="1">아식스 젤 카야노 14</td>
-                  <td data-field-index="2">ASICS</td>
-                  <td data-field-index="3">러닝화</td>
-                  <td data-field-index="4">189,000원</td>
-                  <td data-field-index="5">shoe_box</td>
-                  <td data-field-index="6">판매자</td>
-                  <td data-field-index="7">2026-08-02</td>
-                  <td data-field-index="8"><span class="badge green">판매중</span></td>
-                  <td class="action-cell">
-                    <button type="button" class="light-btn edit-row">수정</button>
-                    <button type="button" class="light-btn delete-row">삭제</button>
-                  </td>
-              </tr>
+				<c:forEach var="dto" items="${list}">
+	              <tr class="data-row">
+	                  <td><input type="checkbox" class="row-check" aria-label="항목 선택"></td>
+	                  <td>${dto.thumbnail}</td>
+	                  <td>${dto.productId}</td>
+	                  <td>${dto.prodName}</td>
+	                  <td>${dto.brand}</td>
+	                  <td>${dto.categoryId}</td>
+	                  <td>${dto.inboundPrice}</td>
+	                  <td>${dto.price}</td>
+	                  <td>${dto.heelHeight}</td>
+	                  <td>${dto.minGrade}</td>
+	                  <td>${dto.regDate}</td>
+	                  <td>
+	                  	<c:choose>
+	                  		<c:when test="${dto.status == 'ready'}">
+	                  			<span class="badge blue">판매대기</span>
+	                  		</c:when>
+	                  		<c:when test="${dto.status == 'onSale'}">
+	                  			<span class="badge green">판매중</span>
+	                  		</c:when>
+	                  		<c:when test="${dto.status == 'soldOut'}">
+	                  			<span class="badge gray">품절</span>
+	                  		</c:when>
+	                  		<c:otherwise>
+								<span class="badge">알 수 없음</span>
+	                  		</c:otherwise>
+	                  	</c:choose>
+	                  </td>
+	                  <td class="action-cell">
+	                    <button type="button" class="light-btn stock-row">재고</button>
+	                    <button type="button" class="light-btn edit-row">수정</button>
+	                    <button type="button" class="light-btn delete-row">삭제</button>
+	                  </td>
+	              </tr>
+				</c:forEach>
               </tbody>
             </table>
           </div>
@@ -264,6 +226,49 @@
               <option value="soldOut">품절</option>
             </select>
           </div>
+		  <!-- 상품 이미지 -->
+		  <div class="product-image-section">
+		      <div class="product-image-title">상품 이미지</div>
+		  <div class="image-container">
+		        <div class="main-image-area">
+		            <label class="image-label">
+		                대표 이미지 <span>(필수)</span>
+		            </label>
+		            <div id="mainDropZone" class="main-drop-zone">
+		                <!-- 이미지가 없을 때 -->
+		                <div id="mainGuide" class="main-upload-guide">
+		                    <div class="upload-icon"> 📷 </div>
+		                    <div class="upload-text"> 대표 이미지를 여기에 끌어다 놓으세요 </div>
+		                    <div class="upload-or"> 또는 </div>
+		                    <label for="mainImage" class="upload-button"> 이미지 선택 </label>
+		                    <div class="upload-info">  JPG, PNG, WEBP / 최대 10MB </div>
+		                </div>
+		                <!-- 이미지 선택 후 미리보기 -->
+		                <div id="mainPreviewArea" class="main-preview-area" style="display: none;">
+		                    <img id="mainPreview" src="" alt="대표 이미지">
+		                    <label for="mainImage" class="change-image-button"> 이미지 변경 </label>
+		                </div>
+		                <input type="file" id="thumbnail" name="thumbnail" hidden
+		                       accept="image/jpeg,image/png,image/webp">
+		            </div>
+		        </div>
+		        <div class="additional-image-area">
+		            <label class="image-label">
+		                추가 이미지 <span>(선택)</span>
+		            </label>
+		            <div id="subImageList" class="sub-image-list">
+		                <label for="subImages" class="sub-image-add">
+		                    <div class="plus"> + </div>
+		                    <span> 이미지 추가 </span>
+		                </label>
+		            </div>
+		            <div class="additional-info">최대 10장까지 추가 가능합니다.</div>
+		            <!-- 여러 파일 선택 -->
+		            <input type="file" id="files" name="files" hidden multiple
+		                   accept="image/jpeg,image/png,image/webp">
+		        </div>
+		    </div>
+		</div>        
         </template>
       </section>
 
@@ -445,12 +450,9 @@
   </main>
   
   <script type="text/javascript">
-  	function sendOk() {
-  		const f = document.editForm;
-  		
-  		f.submit();
-  	}
+
   </script>
+
 
   <!-- 등록/수정 모달의 바깥 디자인은 기존 공용 JSP를 그대로 사용합니다. -->
   <jsp:include page="/WEB-INF/views/admin/layout/modal.jsp"/>

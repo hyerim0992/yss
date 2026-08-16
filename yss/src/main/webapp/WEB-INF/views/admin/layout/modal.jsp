@@ -9,7 +9,8 @@
       </div>
       <button type="button" class="modal-close" id="modalClose" aria-label="닫기">×</button>
     </div>
-    <form name="editForm" id="editForm"  method="post" action="${pageContext.request.contextPath}/admin/product/write">
+    <form name="editForm" id="editForm"  method="post" enctype="mutipart/form-data"
+    action="${pageContext.request.contextPath}/admin/product/write">
       <div class="form-grid" id="formFields"></div>
       <div class="modal-actions">
         <button type="button" class="light-btn" id="modalCancel">취소</button>
