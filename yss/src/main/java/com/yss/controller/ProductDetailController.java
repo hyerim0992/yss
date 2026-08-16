@@ -41,7 +41,7 @@ public class ProductDetailController {
     		
     		//쿼리 어떻게 넘어올지 모르겠어서 일단 생략... 상품넘버는 보내주겠지
     		
-    		List<ProductDTO> list = service.productDetails(5L); // 나중에 쿼리로 들어오는 num 넣기
+    		List<ProductDTO> list = service.productDetails(2L); // 나중에 쿼리로 들어오는 num 넣기
     		
     		System.out.println(list.get(0).getDiscRate());
     		

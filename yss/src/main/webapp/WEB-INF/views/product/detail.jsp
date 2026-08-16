@@ -7,7 +7,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>${dto.prodName} | SHOES STORE</title>
+<title>${dto.prodName}| SHOES STORE</title>
 <jsp:include page="/WEB-INF/views/common/head-styles.jsp" />
 
 
@@ -23,8 +23,7 @@
 		<section class="product-hero page-width">
 			<div class="product-gallery">
 				<!-- 대표 상품 사진은 이 파일을 같은 이름으로 교체하면 됩니다. -->
-				<img src="${ctx}${dto.thumbnail}"
-					alt="${dto.prodName}" />
+				<img src="${ctx}${dto.thumbnail}" alt="${dto.prodName}" />
 			</div>
 
 			<div class="product-summary">
@@ -37,8 +36,7 @@
 					<div class="summary-icons">
 						<button type="button"
 							class="icon-button bookmark-button js-interest"
-							aria-label="관심 상품 저장" aria-pressed="false">
-							♡</button>
+							aria-label="관심 상품 저장" aria-pressed="false">♡</button>
 						<button type="button" class="icon-button share-button"
 							aria-label="상품 공유">↗</button>
 					</div>
@@ -53,7 +51,7 @@
 									<del>${dto.price}원</del>
 								</c:if>
 								<strong class="product-sale-price">${dto.price - (dto.price * (dto.discRate/100))}원</strong>
-								<c:if test="${dto.discRate != 0}"> 
+								<c:if test="${dto.discRate != 0}">
 									<span>${dto.discRate}% 할인</span>
 								</c:if>
 							</div>
@@ -64,7 +62,8 @@
 							</div>
 						</div>
 						<div class="product-price-actions">
-							<em>무료 배송</em> <!-- 무료배송/유료배송 -->
+							<em>무료 배송</em>
+							<!-- 무료배송/유료배송 -->
 							<button type="button" id="productCouponOpen">쿠폰 적용</button>
 						</div>
 					</div>
@@ -111,6 +110,7 @@
 						aria-pressed="false">
 						<span class="interest-icon">♡</span> <span><b>관심상품</b><small><span
 								class="interest-count">1,284</span>명이 저장</small></span>
+						<!-- 관심상품 횟수 필요 -->
 					</button>
 					<button type="button" class="secondary-button js-restock"
 						aria-pressed="false">
@@ -143,15 +143,16 @@
 						</div>
 						<div>
 							<dt>상품 가격</dt>
-							<dd>130,000원</dd>
+							<dd>${dto.price}원</dd>
 						</div>
 						<div>
 							<dt>브랜드</dt>
-							<dd>ADIDAS</dd>
+							<dd>${dto.brand}</dd>
 						</div>
 						<div>
 							<dt>카테고리</dt>
 							<dd>스니커즈</dd>
+							<!-- 카테고리 필요 -->
 						</div>
 					</dl>
 				</section>
@@ -196,37 +197,43 @@
 			</nav>
 			<div data-bs-spy="scroll" data-bs-target="#detail-navbar">
 				<div class="tab-panel" id="info">
-					<h2>상품정보</h2>
-					<p>
-						<b>ADIDAS ZX 8000.</b><br />1980년대 러닝화의 감성을 현대적으로 재해석한 데일리
-						스니커즈입니다. 메시와 스웨이드 소재가 조화를 이루며, 그레이와 퍼플 포인트가 다양한 스타일에 자연스럽게 어울립니다.
-					</p>
-					<p class="info-warning">
-						■ 재고 품절 시 상품 수급이 어려울 수 있습니다.<br /> ■ 모니터 해상도와 기기에 따라 실제 색상이 다르게
-						보일 수 있습니다.<br /> ■ 등록된 상품 정보는 판매자가 제공한 내용이며 실제 상품과 차이가 있을 수 있습니다.
-					</p>
-					<dl class="spec-list">
-						<div>
-							<dt>컬러</dt>
-							<dd>Grey / Purple</dd>
-						</div>
-						<div>
-							<dt>스타일코드</dt>
-							<dd>KH6245</dd>
-						</div>
-						<div>
-							<dt>발볼 넓이</dt>
-							<dd>D(보통)</dd>
-						</div>
-						<div>
-							<dt>소재</dt>
-							<dd>메시 / 스웨이드 / 고무</dd>
-						</div>
-					</dl>
-					
-					<button type="button" class="more-button" id="moreButton">더보기</button>
+					<div class="collapsed" id="infoContent">
+						<h2>상품정보</h2>
+						<p>
+							<b>ADIDAS ZX 8000.</b><br />1980년대 러닝화의 감성을 현대적으로 재해석한 데일리
+							스니커즈입니다. 메시와 스웨이드 소재가 조화를 이루며, 그레이와 퍼플 포인트가 다양한 스타일에 자연스럽게 어울립니다.
+						</p>
+						<c:forEach var="list" items="${list}" varStatus="status">
+							<div>
+								<img alt="${list.imageId}" src="${ctx}${list.files}">
+							</div>
+						</c:forEach>
+						<p class="info-warning">
+							■ 재고 품절 시 상품 수급이 어려울 수 있습니다.<br /> ■ 모니터 해상도와 기기에 따라 실제 색상이 다르게
+							보일 수 있습니다.<br /> ■ 등록된 상품 정보는 판매자가 제공한 내용이며 실제 상품과 차이가 있을 수
+							있습니다.
+						</p>
+						<dl class="spec-list">
+							<div>
+								<dt>컬러</dt>
+								<dd>Grey / Purple</dd>
+							</div>
+							<div>
+								<dt>스타일코드</dt>
+								<dd>KH6245</dd>
+							</div>
+							<div>
+								<dt>발볼 넓이</dt>
+								<dd>D(보통)</dd>
+							</div>
+							<div>
+								<dt>소재</dt>
+								<dd>메시 / 스웨이드 / 고무</dd>
+							</div>
+						</dl>
+					</div>
+					<button type="button" class="more-button js-more-toggle" data-target="infoContent">더보기</button>
 				</div>
-
 				<div class="tab-panel" id="review">
 					<div class="tab-heading-row">
 						<div>
@@ -269,8 +276,10 @@
 						<p>가볍고 코디하기 쉬워서 자주 신게 됩니다. 배송과 포장도 깔끔했어요.</p>
 						<small>이**** · 블랙/화이트 · 240mm · 2026. 7. 19.</small>
 					</article>
-					
-					<div><a> 전체 보기 </a></div>
+
+					<div>
+						<a> 전체 보기 </a>
+					</div>
 				</div>
 
 				<div class="tab-panel" id="question">
@@ -303,8 +312,10 @@
 						<li><span class="question-content"><b>재입고</b><span>퍼플
 									260 사이즈 일정이 궁금합니다. 🔒</span></span><small>답변대기</small></li>
 					</ul>
-					
-					<div><a> 전체 보기 </a></div>
+
+					<div>
+						<a> 전체 보기 </a>
+					</div>
 				</div>
 
 				<div class="guide-list">
@@ -330,54 +341,46 @@
 
 		<section class="recommend-section page-width">
 			<h2>이런 상품은 어때요</h2>
-			<div class="product-grid" id="recommendGrid">
+			<div class="product-grid collapsed" id="recommendGrid">
 				<!-- 팀에서 연결할 주소가 정해지면 아래 href만 변경하면 됩니다. -->
 				<a class="product-card" href="${ctx}/product/detail?product=1">
 					<img src="${ctx}/dist/images/product-detail/shoe-1.png"
 					alt="나이키 에어포스 1 로우" /> <b>NIKE</b>
-				<p>나이키 에어포스 1 로우</p>
-					<strong>139,000원</strong>
+					<p>나이키 에어포스 1 로우</p> <strong>139,000원</strong>
 				</a> <a class="product-card" href="${ctx}/product/detail?product=2">
 					<img src="${ctx}/dist/images/product-detail/shoe-2.png"
 					alt="아디다스 삼바 OG" /> <b>ADIDAS</b>
-				<p>아디다스 삼바 OG</p>
-					<strong>149,000원</strong>
+					<p>아디다스 삼바 OG</p> <strong>149,000원</strong>
 				</a> <a class="product-card" href="${ctx}/product/detail?product=3">
 					<img src="${ctx}/dist/images/product-detail/shoe-3.png"
 					alt="뉴발란스 2002R" /> <b>NEW BALANCE</b>
-				<p>뉴발란스 2002R</p>
-					<strong>159,000원</strong>
+					<p>뉴발란스 2002R</p> <strong>159,000원</strong>
 				</a> <a class="product-card" href="${ctx}/product/detail?product=4">
 					<img src="${ctx}/dist/images/product-detail/shoe-4.png"
 					alt="아식스 젤 카야노" /> <b>ASICS</b>
-				<p>아식스 젤 카야노</p>
-					<strong>169,000원</strong>
+					<p>아식스 젤 카야노</p> <strong>169,000원</strong>
 				</a> <a class="product-card" href="${ctx}/product/detail?product=5">
 					<img src="${ctx}/dist/images/product-detail/shoe-5.png"
 					alt="나이키 덩크 로우" /> <b>NIKE</b>
-				<p>나이키 덩크 로우</p>
-					<strong>129,000원</strong>
+					<p>나이키 덩크 로우</p> <strong>129,000원</strong>
 				</a> <a class="product-card extra-card"
 					href="${ctx}/product/detail?product=6"> <img
 					src="${ctx}/dist/images/product-detail/shoe-6.png" alt="푸마 스피드캣" />
 					<b>PUMA</b>
-				<p>푸마 스피드캣</p>
-					<strong>119,000원</strong>
+					<p>푸마 스피드캣</p> <strong>119,000원</strong>
 				</a> <a class="product-card extra-card"
 					href="${ctx}/product/detail?product=7"> <img
 					src="${ctx}/dist/images/product-detail/shoe-7.png" alt="컨버스 척 70" />
 					<b>CONVERSE</b>
-				<p>컨버스 척 70</p>
-					<strong>99,000원</strong>
+					<p>컨버스 척 70</p> <strong>99,000원</strong>
 				</a> <a class="product-card extra-card"
 					href="${ctx}/product/detail?product=8"> <img
 					src="${ctx}/dist/images/product-detail/shoe-8.png" alt="반스 올드스쿨" />
 					<b>VANS</b>
-				<p>반스 올드스쿨</p>
-					<strong>89,000원</strong>
+					<p>반스 올드스쿨</p> <strong>89,000원</strong>
 				</a>
 			</div>
-			<button type="button" class="more-button" id="moreButton">더보기</button>
+			<button type="button" class="more-button js-more-toggle" data-target="recommendGrid">더보기</button>
 		</section>
 	</main>
 

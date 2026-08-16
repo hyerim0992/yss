@@ -438,15 +438,21 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
-  var moreButton = document.getElementById("moreButton");
-  if (moreButton) {
-    moreButton.addEventListener("click", function () {
-      var grid = document.getElementById("recommendGrid");
-      if (!grid) return;
-      grid.classList.toggle("expanded");
-      moreButton.textContent = grid.classList.contains("expanded") ? "접기" : "더보기";
+  document.querySelectorAll(".js-more-toggle").forEach(function (button) {
+    button.addEventListener("click", function () {
+      // 버튼의 data-target 속성에 적힌 아이디(infoContent 또는 recommendGrid)를 가져옵니다.
+      var targetId = button.dataset.target;
+      var targetElement = document.getElementById(targetId);
+
+      if (!targetElement) return;
+
+      // 해당 요소의 collapsed 클래스를 껐다 켭니다.
+      targetElement.classList.toggle("collapsed");
+      
+      // 클래스 유무에 따라 버튼 글자를 바꿔줍니다.
+      button.textContent = targetElement.classList.contains("collapsed") ? "더보기" : "접기";
     });
-  }
+  });
 
   function renderSalesChart(button) {
     var chart = document.getElementById("salesChart");
