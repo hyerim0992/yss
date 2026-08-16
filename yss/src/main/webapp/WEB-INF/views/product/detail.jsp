@@ -1,12 +1,13 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="jakarta.tags.core"%>
 <c:set var="ctx" value="${pageContext.request.contextPath}" />
+<c:set var="dto" value="${list[0]}" />
 <!doctype html>
 <html lang="ko">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>아디다스 ZX 8000 | SHOES STORE</title>
+<title>${dto.prodName} | SHOES STORE</title>
 <jsp:include page="/WEB-INF/views/common/head-styles.jsp" />
 
 
@@ -22,16 +23,16 @@
 		<section class="product-hero page-width">
 			<div class="product-gallery">
 				<!-- 대표 상품 사진은 이 파일을 같은 이름으로 교체하면 됩니다. -->
-				<img src="${ctx}/dist/images/product-detail/main-shoe.png"
-					alt="아디다스 ZX 8000 그레이 투 퍼플" />
+				<img src="${ctx}${dto.thumbnail}"
+					alt="${dto.prodName}" />
 			</div>
 
 			<div class="product-summary">
 				<div class="summary-heading">
 					<div>
-						<strong class="brand">ADIDAS</strong>
-						<h1>아디다스 ZX 8000 그레이 투 퍼플</h1>
-						<p>Adidas ZX 8000 Grey Two Purple</p>
+						<strong class="brand">${dto.brand}</strong>
+						<h1>${dto.prodName}</h1>
+						<p>${dto.prodName}</p>
 					</div>
 					<div class="summary-icons">
 						<button type="button"
@@ -48,9 +49,13 @@
 					<div class="product-price-main">
 						<div class="product-price-stack">
 							<div class="product-sale-line">
-								<del>169,000원</del>
-								<strong class="product-sale-price">130,000원</strong> <span>23%
-									할인</span>
+								<c:if test="${dto.discRate != 0}">
+									<del>${dto.price}원</del>
+								</c:if>
+								<strong class="product-sale-price">${dto.price - (dto.price * (dto.discRate/100))}원</strong>
+								<c:if test="${dto.discRate != 0}"> 
+									<span>${dto.discRate}% 할인</span>
+								</c:if>
 							</div>
 							<div class="product-coupon-price-line"
 								id="productCouponPriceLine" hidden>
@@ -59,7 +64,7 @@
 							</div>
 						</div>
 						<div class="product-price-actions">
-							<em>무료 배송</em>
+							<em>무료 배송</em> <!-- 무료배송/유료배송 -->
 							<button type="button" id="productCouponOpen">쿠폰 적용</button>
 						</div>
 					</div>
