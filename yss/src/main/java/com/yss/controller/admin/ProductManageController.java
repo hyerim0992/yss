@@ -57,10 +57,7 @@ public class ProductManageController {
 			
 			List<ProductDTO> list = service.listProductManage(map);
 			
-			System.out.println("list = " + list);
-			System.out.println("list size = " + list.size());
-			
-			
+					
 			mav.addObject("list", list);
 			mav.addObject("page", page);
 			
