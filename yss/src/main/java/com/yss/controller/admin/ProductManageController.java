@@ -1,6 +1,5 @@
 package com.yss.controller.admin;
 
-import java.awt.Image;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -70,9 +69,9 @@ public class ProductManageController {
 			dto.setDiscRate(req.getParameter("discRate") == null ||req.getParameter("discRate").isBlank() 
 					? 0 : Integer.parseInt(req.getParameter("discRate")));
 			dto.setThumbail(req.getParameter("thumbnail"));
-			
 
 			service.insertProduct(dto, imageList);
+			//aa
 
 		} catch (Exception e) {
 			e.printStackTrace();
