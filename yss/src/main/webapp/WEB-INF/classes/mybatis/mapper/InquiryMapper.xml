@@ -19,8 +19,8 @@
 		       TO_CHAR(createdAt, 'YYYY-MM-DD') AS createdAt
 		FROM inquiry q
 		JOIN MEMBERDETAIL m ON q.memberId = m.memberId
-		WHERE memberId = #{memberId}
-		ORDER BY inquiryId DESC
+		WHERE q.memberId = #{memberId}
+		ORDER BY q.inquiryId DESC
 		OFFSET #{offset} ROWS FETCH FIRST #{size} ROWS ONLY
 	</select>
 	

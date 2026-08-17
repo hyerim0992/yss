@@ -44,7 +44,12 @@
 
           <div class="abc-cs-content">
             <section class="abc-cs-view is-active" aria-labelledby="abcInquiryTitle">
-              <header class="abc-cs-section-head"><div><h2 id="abcInquiryTitle">1:1 문의</h2><p>주문, 결제, 배송 등 해결되지 않은 문의를 남겨주세요.</p></div></header>
+              <header class="abc-cs-section-head">
+                <div>
+                  <h2 id="abcInquiryTitle">1:1 문의</h2>
+                  <p>주문, 결제, 배송 등 해결되지 않은 문의를 남겨주세요.</p>
+                </div>
+              </header>
 
               <div class="abc-cs-subtabs">
                 <button type="button" class="is-active" data-abc-inquiry-tab="history">문의내역 조회</button>
@@ -52,18 +57,45 @@
               </div>
 
               <div class="abc-cs-history" data-abc-inquiry-panel="history">
-                <div class="abc-cs-table-head abc-cs-history-columns"><span>문의유형</span><span>제목</span><span>접수일</span></div>
-                <!-- ★ 연습 포인트: 아래 샘플 3줄을 보고 나중에 직접 목록 반복 출력을 작성하세요. -->
-                <div id="abcInquiryHistoryList">
-                  <div class="abc-cs-history-row"><span>배송</span><strong>오늘 출고 가능한가요?</strong><time>2026.08.05</time></div>
-                  <div class="abc-cs-history-row"><span>회원정보</span><strong>VIP 등급 변경 시점 문의</strong><time>2026.08.05</time></div>
-                  <div class="abc-cs-history-row"><span>교환/반품</span><strong>사이즈 교환 요청</strong><time>2026.08.04</time></div>
+                <div class="abc-cs-table-head abc-cs-history-columns">
+                  <span>문의유형</span>
+                  <span>제목</span>
+                  <span>접수일</span>
                 </div>
-                <div class="abc-cs-empty" id="abcInquiryHistoryEmpty" hidden><strong>등록된 문의가 없습니다.</strong><p>문의 작성 탭에서 새로운 문의를 남겨보세요.</p></div>
+
+                <%-- 1. 등록된 문의글이 없는 경우 --%>
+                <c:choose>
+                  <c:when test="${dataCount == 0}">
+                    <div class="abc-cs-empty" id="abcInquiryHistoryEmpty">
+                      <strong>등록된 문의가 없습니다.</strong>
+                      <p>문의 작성 탭에서 새로운 문의를 남겨보세요.</p>
+                    </div>
+                  </c:when>
+                  
+                  <%-- 2. 등록된 문의글이 있는 경우 (목록 출력) --%>
+                  <c:otherwise>
+                    <div id="abcInquiryHistoryList">
+                      <c:forEach var="dto" items="${list}">
+                        <div class="abc-cs-history-row">
+                          <span>${dto.inquiryType}</span>
+                          <strong>
+                            <a href="${articleUrl}&inquiryId=${dto.inquiryId}" style="color: inherit; text-decoration: none;">
+                              <c:out value="${dto.title}"/>
+                            </a>
+                          </strong>
+                          <time>${dto.createdAt}</time>
+                        </div>
+                      </c:forEach>
+                    </div>
+
+                    <%-- 3. 하단 페이징 영역 --%>
+                    <div class="page-navigation" style="margin-top: 20px; text-align: center;">
+                      ${paging}
+                    </div>
+                  </c:otherwise>
+                </c:choose>
               </div>
 
-              <!-- JS가 새 행의 HTML을 직접 만들지 않도록 행 디자인을 JSP template에 둡니다. -->
-              <template id="abcInquiryHistoryTemplate"><div class="abc-cs-history-row"><span data-history-type></span><strong data-history-title></strong><time data-history-date></time></div></template>
             </section>
           </div>
         </div>
@@ -90,7 +122,7 @@
   <script src="${ctx}/dist/js/vendor/jquery.magnific-popup.js"></script>
   <script src="${ctx}/dist/js/common/plugins.js"></script>
 
-  <script src="${ctx}/dist/js/pages/customer/inquiry.js?v=20260812-jsp"></script>
+ <script src="${ctx}/dist/js/pages/customer/inquiry.js?v=20260812-jsp"></script>
   <script src="${ctx}/dist/js/common/layout.js?v=20260806-0056"></script>
 </body>
 </html>
