@@ -2,8 +2,75 @@
 
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.yss.mapper.NoticeMapper">
+
 	<insert id="insertNotice" parameterType="com.yss.dto.NoticeDTO">
 		INSERT INTO notice (noticeId, memberId, title, content, createDate)
 		VALUES (NOTICE_SEQ.NEXTVAL, #{memberId}, #{title}, #{content}, SYSDATE)
 	</insert>
+	
+	<!-- 검색 종류 -->
+	<sql id="where-list">
+		<if test="schType == 'all' ">
+			(INSTR(title, #{kwd}) &gt; 0 
+				OR DBMS_LOB.INSTR(content, #{kwd}) &gt; 0 )
+		</if>
+		<if test="schType == 'title' ">
+			INSTR(title, #{kwd}) &gt; 0
+		</if>
+		<if test="schType == 'content' ">
+			DBMS_LOB.INSTR(content, #{kwd}) &gt; 0
+		</if>
+		<if test="schType == 'name' ">
+			INSTR(name, #{kwd}) &gt; 0
+		</if>
+	</sql>
+	
+	<!-- 검색된 데이터 개수 가져오기 -->
+	<select id="dataCount" parameterType="map" resultType="Integer">
+		SELECT NVL(COUNT(*), 0)
+		FROM notice n
+		JOIN memberdetail md ON n.memberId = md.memberId
+		<where>
+			<if test="kwd != null and kwd != '' ">
+				AND <include refid="where-list"/>
+			</if>
+		</where>
+	</select>
+	
+	<!-- 한페이지씩 리스트 가져오기 -->
+	<select id="listNotice" parameterType="map" resultType="com.yss.dto.NoticeDTO">
+		SELECT n.noticeId, title, md.name, TO_CHAR(createDate, 'YYYY-MM-DD') AS createDate
+		FROM notice n
+		JOIN memberdetail md ON n.memberId = md.memberId
+		<where>
+			<if test="kwd != null and kwd != '' ">
+				AND <include refid="where-list"/>
+			</if>
+		</where>
+		ORDER BY n.noticeId DESC
+		OFFSET #{offset} ROWS FETCH FIRST #{size} ROWS ONLY
+	</select>
+	
+	<!-- 글보기 -->
+	<select id="findById" parameterType="Long" resultType="com.yss.dto.NoticeDTO">
+		SELECT n.noticeId, n.title, n.content, md.name, TO_CHAR(n.createDate, 'YYYY-MM-DD') AS createDate
+		FROM notice n
+		JOIN memberdetail md ON n.memberId = md.memberId
+		WHERE n.noticeId = #{noticeId}
+	</select>
+	
+	<!-- 글 수정 -->
+	<update id="updateNotice" parameterType="com.yss.dto.NoticeDTO">
+		UPDATE notice
+		SET title = #{title}, content = #{content}
+		WHERE noticeId = #{noticeId}
+	</update>
+	
+	<!-- 글 삭제 -->
+	<delete id="deleteNotice" parameterType="Long">
+		DELETE FROM notice
+		WHERE noticeId = #{noticeId}
+	</delete>
+	
+	
 </mapper>

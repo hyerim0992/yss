@@ -6,6 +6,8 @@ public class NoticeDTO {
 	private String title;
 	private String content;
 	private String createDate;
+	private String name;
+	
 	public Long getNoticeId() {
 		return noticeId;
 	}
@@ -35,6 +37,12 @@ public class NoticeDTO {
 	}
 	public void setCreateDate(String createDate) {
 		this.createDate = createDate;
+	}
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
 	}
 	
 	

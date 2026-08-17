@@ -48,19 +48,31 @@
 				<tr>
 					<th>제목</th> 
 					<td>
-						<input type="text" name="title">
+						<input type="text" name="title" value="${dto.title}">
 				 	</td>
 				</tr>
 				
 				<tr>
 					<th>내 용</th>
 					<td>
-						<textarea name="content"></textarea>
+						<textarea name="content">${dto.content}</textarea>
 					</td>
 				</tr>
 			</table>
 			
-			<button type="button" onclick="sendOk()">등록</button>
+			<button type="button" onclick="sendOk();">
+			${mode=='update'?'수정완료':'등록완료'}
+			</button>
+			<button type="reset">다시입력</button>
+			<button type="button" 
+				onclick="location.href='${pageContext.request.contextPath}/admin/support/notice/list';">
+				${mode=='update'?'수정취소':'등록취소'}
+			</button>
+			
+			<c:if test="${mode=='update'}">
+				<input type="hidden" name="noticeId" value="${dto.noticeId}">
+				<input type="hidden" name="page" value="${page}">
+			</c:if>
 		</form>    
     </article>
     

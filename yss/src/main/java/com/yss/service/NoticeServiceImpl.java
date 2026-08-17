@@ -1,5 +1,8 @@
 package com.yss.service;
 
+import java.util.List;
+import java.util.Map;
+
 import com.yss.dto.NoticeDTO;
 import com.yss.mapper.NoticeMapper;
 import com.yss.mybatis.support.MapperContainer;
@@ -18,5 +21,73 @@ public class NoticeServiceImpl implements NoticeService {
 			throw e;
 		}
 	}
+
+	@Override
+	public int dataCount(Map<String, Object> map) {
+		int result = 0;
+		
+		try {
+			result = mapper.dataCount(map);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return result;
+	}
+
+	@Override
+	public List<NoticeDTO> listNotice(Map<String, Object> map) {
+		List<NoticeDTO> list = null;
+		
+		try {
+			list = mapper.listNotice(map);
+	
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return list;
+	}
+
+	@Override
+	public NoticeDTO findById(long noticeId) {
+		NoticeDTO dto = null;
+		
+		try {
+			dto = mapper.findById(noticeId);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return dto;
+	}
+
+	@Override
+	public void updateNotice(NoticeDTO dto) throws Exception {
+		try {
+			mapper.updateNotice(dto);
+			
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			
+			throw e;
+		}
+		
+	}
+
+	@Override
+	public void deleteNotice(long noticeId) throws Exception {
+		try {
+			mapper.deleteNotice(noticeId);
+		} catch (Exception e) {
+			e.printStackTrace();
+			
+			throw e;
+		}
+	}
+	
+	
+	
+	
 
 }

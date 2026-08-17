@@ -49,13 +49,15 @@
             class="panel search-panel support-search-form">
         <div class="search-row">
           <select name="schType">
-            <option value="all">전체</option>
-            <option value="category">구분</option>
-            <option value="subject">제목</option>
-            <option value="writer">작성자</option>
+            <option value="all" ${schType=="all"?"selected":""}>제목+내용</option>
+            <option value="title" ${schType=="title"?"selected":""}>제목</option>
+            <option value="content" ${schType=="content"?"selected":""}>내용</option>
+            <option value="name" ${schType=="name"?"selected":""}>작성자</option>
           </select>
 
-          <input type="text" name="kwd" placeholder="검색어를 입력하세요">
+          <input type="text" name="kwd" value="${kwd}" placeholder="검색어를 입력하세요">
+          
+          <input type="hidden" name="size" value="${size}">
 
           <button type="submit" class="dark-btn">검색</button>
           <a href="${pageContext.request.contextPath}/admin/support/notice/list" class="light-btn">초기화</a>
@@ -66,26 +68,22 @@
         <div class="panel-title">
           <div>
             <h2>공지사항 목록</h2>
-            <p>검색 결과 <b>3</b>건 · 선택 0건</p>
+            <p>검색 결과 <b>${dataCount}</b>건 · 선택 0건</p>
           </div>
 
           <div>
             <button type="button" class="light-btn danger-btn">선택 삭제</button>
-            <button type="button" class="light-btn">CSV 저장</button>
           </div>
         </div>
         <div class="table-wrap">
           <table>
             <thead>
               <tr>
-                <th><input type="checkbox"></th>
-                <th>공지번호</th>
-                <th>구분</th>
+                <th><input type="checkbox" id="checkAll"></th>
+                <th>공지사항 번호</th>
                 <th>제목</th>
-                <th>공지등록</th>
                 <th>작성자</th>
-                <th>등록일</th>
-                <th>상태</th>
+                <th>작성일시</th>
                 <th>관리</th>
               </tr>
             </thead>
@@ -96,64 +94,45 @@
                 아래 샘플 행을 목록 데이터 반복 출력 코드로 직접 바꿔보세요.
                 공지등록/상태 값에 따라 표시 방법도 직접 정해보세요.
               -->
-              <tr>
-                <td><input type="checkbox" name="nums"></td>
-                <td>NT-0088</td>
-                <td>안내</td>
-                <td><a href="#" class="text-reset">8월 배송 일정 안내</a></td>
-                <td><span class="badge green">상단고정</span></td>
-                <td>관리자</td>
-                <td>2026-08-04</td>
-                <td><span class="badge green">공개</span></td>
-                <td>
-                  <div class="support-actions">
-                    <a href="#" class="light-btn">수정</a>
-                    <button type="button" class="light-btn">삭제</button>
-                  </div>
-                </td>
-              </tr>
-
-              <tr>
-                <td><input type="checkbox" name="nums"></td>
-                <td>NT-0087</td>
-                <td>점검</td>
-                <td><a href="#" class="text-reset">서비스 정기 점검 안내</a></td>
-                <td><span class="badge green">일반</span></td>
-                <td>관리자</td>
-                <td>2026-08-02</td>
-                <td><span class="badge green">공개</span></td>
-                <td>
-                  <div class="support-actions">
-                    <a href="#" class="light-btn">수정</a>
-                    <button type="button" class="light-btn">삭제</button>
-                  </div>
-                </td>
-              </tr>
-
-              <tr>
-                <td><input type="checkbox" name="nums"></td>
-                <td>NT-0086</td>
-                <td>이벤트</td>
-                <td><a href="#" class="text-reset">신규 회원 쿠폰 안내</a></td>
-                <td><span class="badge green">일반</span></td>
-                <td>운영자</td>
-                <td>2026-07-28</td>
-                <td><span class="badge gray">비공개</span></td>
-                <td>
-                  <div class="support-actions">
-                    <a href="#" class="light-btn">수정</a>
-                    <button type="button" class="light-btn">삭제</button>
-                  </div>
-                </td>
-              </tr>
+              <c:forEach var="dto" items="${list}">
+              	<tr>
+              		<td>
+              			<input type="checkbox" name="nums" value="dto.noticeId" class="row-check">
+              		</td>
+              		
+              		<td>${dto.noticeId}</td>
+              		
+              		<td>
+              			<a href="${articleUrl}&noticeId=${dto.noticeId}" class="text-reset">
+              			<c:out value="${dto.title}"/>
+              			</a>
+              		</td>
+              		
+              		<td>${dto.name}</td>
+              		
+              		<td>${dto.createDate}</td>
+              		<td>
+              			<div class="support-actions">
+              				<a href="${pageContext.request.contextPath}/admin/support/notice/update?page=${page}&noticeId=${dto.noticeId}"
+              					class="light-btn">
+              					수정
+              				</a>
+              				
+              				<a href="${pageContext.request.contextPath}/admin/support/notice/delete?noticeId=${dto.noticeId}&page=${page}&size=${size}"
+              					class="light-btn"
+              					onclick="return confirm('공지사항을 삭제하시겠습니까?');">
+              					삭제
+              				</a>
+              			</div>
+              		</td>
+              	</tr>
+              </c:forEach>
             </tbody>
           </table>
         </div>
         <!-- TODO : 실제 페이징 값으로 바꿔보기 -->
         <div class="support-pagination">
-          <span>‹</span>
-          <span class="active">1</span>
-          <span>›</span>
+			${dataCount == 0 ? "등록된 게시물이 없습니다." : paging}
         </div>
       </article>
 
@@ -161,5 +140,23 @@
   </main>
 
   <jsp:include page="/WEB-INF/views/admin/layout/footerResources.jsp"/>
+  
+  <script type="text/javascript">
+	  const checkAll = document.getElementById('checkAll');
+	  const rowChecks = document.querySelectorAll('.row-check');
+	
+	  checkAll.addEventListener('change', function() {
+	    rowChecks.forEach(function(chk) {
+	      chk.checked = checkAll.checked;
+	    });
+	  });
+	
+	  rowChecks.forEach(function(chk) {
+	    chk.addEventListener('change', function() {
+	      checkAll.checked =
+	        document.querySelectorAll('.row-check:checked').length === rowChecks.length;
+	    });
+	  });
+  </script>
 </body>
 </html>
