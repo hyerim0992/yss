@@ -78,12 +78,12 @@
 				</ul>
 
 				<div class="option-select-grid" aria-label="상품 옵션 선택">
-					<button type="button" class="option-select js-open-color">
+					<button type="button" class="option-select js-open-color" id="colorOption">
 						<span> <b>색상</b> <small class="selected-color">색상을
 								선택하세요</small>
 						</span> <span>⌄</span>
 					</button>
-					<button type="button" class="option-select js-open-size">
+					<button type="button" class="option-select js-open-size" id="sizeOption">
 						<span> <b>사이즈</b> <small class="selected-size">사이즈를
 								선택하세요</small>
 						</span> <span>⌄</span>

@@ -12,6 +12,10 @@
 		INNER JOIN productImage pi ON p.productId = pi.productId
 		WHERE p.productId = #{productId}
 	</select>
+	<select id="productRecommend"></select>
+	<update id="updateWishlist"></update>
+	<delete id="deleteWishlist"></delete>
+	
 </mapper>
 
 <!-- 
