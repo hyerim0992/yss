@@ -1,7 +1,6 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="jakarta.tags.core"%>
 <c:set var="ctx" value="${pageContext.request.contextPath}" />
-<c:set var="dto" value="${list[0]}" />
 <!doctype html>
 <html lang="ko">
 <head>
@@ -10,7 +9,8 @@
 <title>${dto.prodName}| SHOES STORE</title>
 <jsp:include page="/WEB-INF/views/common/head-styles.jsp" />
 
-
+<script
+	src="${pageContext.request.contextPath}/dist/jquery/js/jquery.min.js"></script>
 <link rel="stylesheet"
 	href="${pageContext.request.contextPath}/dist/css/pages/product/detail.css?v=20260806-price-coupon-1" />
 <link rel="stylesheet"
@@ -109,7 +109,7 @@
 					<button type="button" class="secondary-button js-interest"
 						aria-pressed="false">
 						<span class="interest-icon">♡</span> <span><b>관심상품</b><small><span
-								class="interest-count">1,284</span>명이 저장</small></span>
+								class="interest-count">${wishlistCount}</span>명이 저장</small></span>
 						<!-- 관심상품 횟수 필요 -->
 					</button>
 					<button type="button" class="secondary-button js-restock"
@@ -203,7 +203,7 @@
 							<b>ADIDAS ZX 8000.</b><br />1980년대 러닝화의 감성을 현대적으로 재해석한 데일리
 							스니커즈입니다. 메시와 스웨이드 소재가 조화를 이루며, 그레이와 퍼플 포인트가 다양한 스타일에 자연스럽게 어울립니다.
 						</p>
-						<c:forEach var="list" items="${list}" varStatus="status">
+						<c:forEach var="list" items="${imgList}" varStatus="status">
 							<div>
 								<img alt="${list.imageId}" src="${ctx}${list.files}">
 							</div>
@@ -389,37 +389,12 @@
 			aria-labelledby="colorTitle">
 
 			<div class="color-grid" id="colorGrid">
-				<button type="button" data-color="그레이 / 퍼플"
-					data-color-key="grey-purple">
-					<span class="color-chip grey-purple"></span><b>그레이 / 퍼플</b><small>재고
-						있음</small>
-				</button>
-				<button type="button" data-color="블랙 / 화이트"
-					data-color-key="black-white">
-					<span class="color-chip black-white"></span><b>블랙 / 화이트</b><small>재고
-						있음</small>
-				</button>
-				<button type="button" data-color="크림 / 그린"
-					data-color-key="cream-green">
-					<span class="color-chip cream-green"></span><b>크림 / 그린</b><small>재고
-						적음</small>
-				</button>
-				<button type="button" data-color="블랙" data-color-key="solid-black">
-					<span class="color-chip solid-black"></span><b>블랙</b><small>재고
-						있음</small>
-				</button>
-				<button type="button" data-color="화이트" data-color-key="solid-white">
-					<span class="color-chip solid-white"></span><b>화이트</b><small>재고
-						있음</small>
-				</button>
-				<button type="button" data-color="그레이" data-color-key="solid-grey">
-					<span class="color-chip solid-grey"></span><b>그레이</b><small>재고
-						있음</small>
-				</button>
-				<button type="button" data-color="퍼플" data-color-key="solid-purple">
-					<span class="color-chip solid-purple"></span><b>퍼플</b><small>재고
-						적음</small>
-				</button>
+				<c:forEach var="list" items="${uniqueColors}" varStatus="status">
+					<button type="button" data-color="${list}" data-prod-id="${dto.productId}"
+						data-color-key="${list}">
+						<span class="color-chip ${list}"></span><b>${list}</b>
+					</button>
+				</c:forEach>
 			</div>
 		</section>
 	</div>
@@ -435,51 +410,6 @@
 				<button type="button" class="modal-close" aria-label="닫기">×</button>
 			</header>
 			<div class="size-grid" id="sizeGrid">
-				<button type="button" data-size="220">
-					220<small>재고 3</small>
-				</button>
-				<button type="button" data-size="225">
-					225<small>재고 5</small>
-				</button>
-				<button type="button" data-size="230">
-					230<small>재고 2</small>
-				</button>
-				<button type="button" data-size="235">
-					235<small>재고 6</small>
-				</button>
-				<button type="button" data-size="240">
-					240<small>재고 4</small>
-				</button>
-				<button type="button" data-size="245">
-					245<small>재고 8</small>
-				</button>
-				<button type="button" data-size="250">
-					250<small>재고 5</small>
-				</button>
-				<button type="button" data-size="255">
-					255<small>재고 7</small>
-				</button>
-				<button type="button" data-size="260">
-					260<small>재고 8</small>
-				</button>
-				<button type="button" data-size="265">
-					265<small>재고 3</small>
-				</button>
-				<button type="button" data-size="270">
-					270<small>재고 4</small>
-				</button>
-				<button type="button" data-size="275" class="soldout" disabled>
-					275<small>품절</small>
-				</button>
-				<button type="button" data-size="280">
-					280<small>재고 2</small>
-				</button>
-				<button type="button" data-size="285" class="soldout" disabled>
-					285<small>품절</small>
-				</button>
-				<button type="button" data-size="290">
-					290<small>재고 1</small>
-				</button>
 			</div>
 		</section>
 	</div>
@@ -543,7 +473,7 @@
 
 	<jsp:include page="/WEB-INF/views/common/footer.jsp" />
 
-
+	<script type="text/javascript" src="${pageContext.request.contextPath}/dist/js/common/util-jquery.js"></script>
 	<script
 		src="${pageContext.request.contextPath}/dist/js/pages/product/detail.js?v=20260806-price-coupon-1"></script>
 	<script

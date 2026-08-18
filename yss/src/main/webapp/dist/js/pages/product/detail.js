@@ -145,7 +145,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
   document.querySelectorAll(".js-open-size").forEach(function (button) {
     button.addEventListener("click", function () {
-      openModal(sizeModal);
+      showToast('색상을 먼저 선택해주세요.');
+	  openModal(colorModal);
     });
   });
 
@@ -165,6 +166,36 @@ document.addEventListener("DOMContentLoaded", function () {
       updateSelectedOption();
       closeModal(colorModal);
       showToast(selectedColor + " 색상을 선택했습니다.");
+	  
+	  var prodId = event.target.closest("button[data-prod-id]").dataset.prodId;
+	  
+  	  const url = "detail/size";
+  	  const params = {color: selectedColor, prodId: prodId};
+	  
+	  console.log(params);
+	  
+  	  const fn = function(data){
+		const sizeModalContainer = document.getElementById("sizeGrid");
+		sizeModalContainer.innerHTML = "";
+		
+		if( ! data|| data.length === 0){
+			sizeModalContainer.innerHTML = "<p>선택 가능한 사이즈가 없습니다.</p>";
+		}else{
+			
+			for (let el of data.sizes)
+			sizeModalContainer.innerHTML += `			
+				<button type="button" data-size="${el}">
+					${el}<small>재고 3</small>
+				</button>
+			`;
+		}
+		
+  		openModal(sizeModal);
+  	  }
+  	
+  	  ajaxRequest(url, 'get', params, 'json', fn);
+  
+  
     });
   }
 

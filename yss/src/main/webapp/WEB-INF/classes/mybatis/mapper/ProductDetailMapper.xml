@@ -4,18 +4,63 @@
 <mapper namespace="com.yss.mapper.ProductDetailMapper">
 	<select id="selectProductDetail" parameterType="Long" resultType="com.yss.dto.ProductDTO">
 		SELECT p.productId, p.categoryId, p.prodName, p.price, p.discRate,
-		       p.thumbnail, p.brand,
-		       po.optionId, po.prodSize, po.color, po.addPrice,
+		       p.thumbnail, p.brand
+		FROM product p
+		WHERE p.productId = #{productId}
+	</select>
+	
+	<select id="selectProductOption" parameterType="Long" resultType="com.yss.dto.ProductDTO">
+		WITH LatestStock AS (
+		    SELECT 
+		        optionId,
+		        changedStock,
+		        changeDate,
+		        ROW_NUMBER() OVER (PARTITION BY optionId ORDER BY changeDate DESC, logId DESC) AS RN
+		    FROM 
+		        stockLog
+		)
+		SELECT 
+		    po.productId,
+		    po.optionId,
+		    po.prodSize,
+		    po.color,
+		    po.addPrice,
+		    NVL(ls.changedStock, 0) AS changedStock
+		FROM 
+		    productOption po
+		LEFT JOIN 
+		    LatestStock ls ON po.optionId = ls.optionId AND ls.RN = 1
+		WHERE 
+		    po.productId = #{productId}
+		
+	</select>
+	<select id="selectProductImage" parameterType="Long" resultType="com.yss.dto.ProductDTO">
+		SELECT p.productId,
 		       pi.imageId, pi.files, pi.sortOrder
 		FROM product p
-		INNER JOIN productOption po ON p.productId = po.productId
 		INNER JOIN productImage pi ON p.productId = pi.productId
 		WHERE p.productId = #{productId}
 	</select>
-	<select id="productRecommend"></select>
-	<update id="updateWishlist"></update>
-	<delete id="deleteWishlist"></delete>
+	<select id="productRecommend">
+		
+	</select>
+	<select id="selectWishlist" parameterType="Long" resultType="int">
+		SELECT count(*)
+		FROM product p
+		INNER JOIN wishlist w ON p.productId = w.productId
+		WHERE p.productId = #{productId} 
+	</select>
+	<update id="updateWishlist" parameterType="map" >
+		INSERT INTO wishlist (wishlistId, createdAt, memberId, productId)
+			   VALUES(wishlistSeq_NEXTVAL, SYSDATE, #{memberId}, #{productId})
+	</update>
+	<delete id="deleteWishlist" parameterType="map" >
+		DELETE FROM wishlist 
+		WHERE memberId = #{memberId} AND productId = #{productId}
+	</delete>
+	<!-- 
 	
+	 -->
 </mapper>
 
 <!-- 
