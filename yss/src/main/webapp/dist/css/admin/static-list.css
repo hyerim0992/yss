@@ -34,14 +34,6 @@
   }
 }
 
-/*
- * 등록/수정 입력폼은 JSP에 직접 작성되어 있습니다.
- * 현재 탭의 입력폼만 보일 때 form-grid의 자식처럼 배치되도록 합니다.
- */
-.section-form-fields:not([hidden]) {
-  display: contents;
-}
-
 /* 페이지 번호를 JS가 만들지 않고 JSP의 1 / 1 표시를 사용합니다. */
 .pagination .page-info {
   display: inline-flex;
@@ -52,4 +44,31 @@
   margin: 2px;
   font-size: 13px;
   vertical-align: top;
+}
+
+/* 상품목록은 Controller에서 계산한 페이지 번호를 JSP 링크로 출력합니다. */
+.server-pagination a,
+.server-pagination span {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 34px;
+  height: 34px;
+  margin: 2px;
+  padding: 0 9px;
+  border-radius: 6px;
+  background: #fff;
+  color: #444;
+  text-decoration: none;
+}
+
+.server-pagination span.active {
+  background: #111;
+  color: #fff;
+}
+
+.server-empty-state {
+  text-align: center;
+  color: #999;
+  padding: 45px;
 }
