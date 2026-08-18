@@ -55,13 +55,13 @@
 				<tr>
 					<th>내 용</th>
 					<td>
-						<textarea name="content">${dto.content}</textarea>
+						<textarea name="content" id="ir1" class="form-control" style="width: 99%; height: 300px;">${dto.content}</textarea>
 					</td>
 				</tr>
 			</table>
 			
-			<button type="button" onclick="sendOk();">
-			${mode=='update'?'수정완료':'등록완료'}
+			<button type="button" onclick="submitContents(this.form);">
+				${mode=='update'?'수정완료':'등록완료'}
 			</button>
 			<button type="reset">다시입력</button>
 			<button type="button" 
@@ -77,23 +77,55 @@
     </article>
     
     <script type="text/javascript">
-    function sendOk() {
+    function check() {
     	const f = document.noticeForm;
     	
     	if(! f.title.value.trim()) {
     		f.title.focus();
-    		return;
-    	} else if( ! f.content.value.trim()) {
-    		f.content.focus();
-    		return;
+    		return false;
+    	} 
+    	
+    	let str = f.content.value.trim();
+    	if( ! str || str === '<p><br></p>' ) {
+    		alert('내용을 입력하세요. ');
+    		return false;
     	}
     	
     	f.action = '${pageContext.request.contextPath}/admin/support/notice/${mode}';
-    	f.submit();
+
+		return true;
     }
     </script>
     
   </main>
+
+<script type="text/javascript" src="${pageContext.request.contextPath}/dist/se2/js/service/HuskyEZCreator.js" charset="utf-8"></script>
+<script type="text/javascript">
+var oEditors = [];
+nhn.husky.EZCreator.createInIFrame({
+	oAppRef: oEditors,
+	elPlaceHolder: 'ir1',
+	sSkinURI: '${pageContext.request.contextPath}/dist/se2/SmartEditor2Skin.html',
+	fCreator: 'createSEditor2',
+	fOnAppLoad: function(){
+		// 로딩 완료 후
+		oEditors.getById['ir1'].setDefaultFont('돋움', 12);
+	},
+});
+
+function submitContents(elClickedObj) {
+	 oEditors.getById['ir1'].exec('UPDATE_CONTENTS_FIELD', []);
+	 try {
+		if(! check()) {
+			return;
+		}
+		
+		elClickedObj.submit();
+		
+	} catch(e) {
+	}
+}
+</script>
 
   <jsp:include page="/WEB-INF/views/admin/layout/footerResources.jsp"/>
 </body>

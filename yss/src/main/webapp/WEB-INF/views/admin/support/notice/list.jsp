@@ -94,13 +94,13 @@
                 아래 샘플 행을 목록 데이터 반복 출력 코드로 직접 바꿔보세요.
                 공지등록/상태 값에 따라 표시 방법도 직접 정해보세요.
               -->
-              <c:forEach var="dto" items="${list}">
+              <c:forEach var="dto" items="${list}" varStatus="status">
               	<tr>
               		<td>
-              			<input type="checkbox" name="nums" value="dto.noticeId" class="row-check">
+              			<input type="checkbox" name="nums" value="${dto.noticeId}" class="row-check">
               		</td>
               		
-              		<td>${dto.noticeId}</td>
+              		<td>${dataCount - (page-1) * size - status.index}</td>
               		
               		<td>
               			<a href="${articleUrl}&noticeId=${dto.noticeId}" class="text-reset">
@@ -118,7 +118,7 @@
               					수정
               				</a>
               				
-              				<a href="${pageContext.request.contextPath}/admin/support/notice/delete?noticeId=${dto.noticeId}&page=${page}&size=${size}"
+              				<a href="${pageContext.request.contextPath}/admin/support/notice/delete?noticeId=${dto.noticeId}&page=${page}ze=${size}"
               					class="light-btn"
               					onclick="return confirm('공지사항을 삭제하시겠습니까?');">
               					삭제

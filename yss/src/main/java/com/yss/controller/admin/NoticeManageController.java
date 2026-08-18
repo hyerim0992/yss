@@ -84,7 +84,7 @@ public class NoticeManageController {
 			mav.addObject("articleUrl", articleUrl);
 			mav.addObject("dataCount", dataCount);
 			mav.addObject("size", size);
-			mav.addObject("current_page", current_page);
+			mav.addObject("page", current_page);
 			mav.addObject("total_page", total_page);
 			mav.addObject("paging", paging);
 			mav.addObject("schType", schType);

@@ -1,5 +1,9 @@
 package com.yss.dto;
 
+import java.util.List;
+
+import com.yss.util.MyMultipartFile;
+
 public class NoticeDTO {
 	private Long noticeId;
 	private Long memberId;
@@ -7,6 +11,11 @@ public class NoticeDTO {
 	private String content;
 	private String createDate;
 	private String name;
+	
+    private List<MyMultipartFile> listFile;
+    private Long fileId;
+	private String files;
+	private String serverfiles;
 	
 	public Long getNoticeId() {
 		return noticeId;
@@ -44,6 +53,29 @@ public class NoticeDTO {
 	public void setName(String name) {
 		this.name = name;
 	}
-	
-	
+	public List<MyMultipartFile> getListFile() {
+		return listFile;
+	}
+	public void setListFile(List<MyMultipartFile> listFile) {
+		this.listFile = listFile;
+	}
+	public Long getFileId() {
+		return fileId;
+	}
+	public void setFileId(Long fileId) {
+		this.fileId = fileId;
+	}
+	public String getFiles() {
+		return files;
+	}
+	public void setFiles(String files) {
+		this.files = files;
+	}
+	public String getServerfiles() {
+		return serverfiles;
+	}
+	public void setServerfiles(String serverfiles) {
+		this.serverfiles = serverfiles;
+	}
+
 }

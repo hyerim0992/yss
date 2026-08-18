@@ -54,7 +54,7 @@
   				<hr>
   				
   				<div>
-  					<c:out value="${dto.content}"/>
+  					${dto.content}
   				</div>
   				
   				<div class="support-actions" style="margin-top: 30px;">
