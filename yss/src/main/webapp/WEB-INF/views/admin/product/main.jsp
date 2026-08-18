@@ -34,274 +34,302 @@
       </div>
 
       <nav class="sub-tabs" aria-label="상품관리 탭">
-        <button type="button" data-section-target="0" class="active" disabled>등록 상품 조회</button>
+        <button type="button" class="active" disabled>등록 상품 조회</button>
       </nav>
 
-      <section class="admin-section-panel active" data-admin-section="0" data-section-name="등록 상품 조회" data-table-title="등록 상품 목록" data-add-label="+ 상품 등록" data-can-add="true">
-        <article class="panel search-panel">
-          <div class="search-row">
-            <select class="js-search-type" aria-label="검색 항목">
-              <option value="all">전체</option>
-              <option value="0">상품번호</option>
-              <option value="1">상품명</option>
-              <option value="2">브랜드</option>
-              <option value="3">카테고리</option>
-              <option value="4">입고가</option>
-              <option value="5">판매가</option>
-              <option value="6">힐높이</option>
-            </select>
-            <input type="search" class="js-search-keyword" placeholder="검색어를 입력하세요">
-            <button type="button" class="dark-btn js-search-button">검색</button>
-            <button type="button" class="light-btn js-reset-button">초기화</button>
-          </div>
-          <div class="filter-row" aria-label="추가 검색 조건">
-          <div class="filter-control range-control" data-filter-type="dateRange" data-filter-column="7">
+      <!-- 검색 영역 : 화면 구조는 JSP에 두고 JS는 입력값을 읽어서 행을 보여주거나 숨기기만 합니다. -->
+      <article class="panel search-panel">
+        <div class="search-row">
+          <select id="searchType" aria-label="검색 항목">
+            <option value="all">전체</option>
+            <option value="productId">상품번호</option>
+            <option value="prodName">상품명</option>
+            <option value="brand">브랜드</option>
+            <option value="categoryId">카테고리</option>
+            <option value="inboundPrice">입고가</option>
+            <option value="price">판매가</option>
+            <option value="heelHeight">힐높이</option>
+          </select>
+          <input type="search" id="searchKeyword" placeholder="검색어를 입력하세요">
+          <button type="button" class="dark-btn" id="searchButton">검색</button>
+          <button type="button" class="light-btn" id="resetButton">초기화</button>
+        </div>
+
+        <div class="filter-row" aria-label="추가 검색 조건">
+          <div class="filter-control range-control">
             <label>등록기간</label>
             <div class="filter-date-range">
-              <input type="date" class="filter-from" aria-label="등록기간 시작일">
+              <input type="date" id="dateFrom" aria-label="등록기간 시작일">
               <span>~</span>
-              <input type="date" class="filter-to" aria-label="등록기간 종료일">
+              <input type="date" id="dateTo" aria-label="등록기간 종료일">
             </div>
           </div>
-          <div class="filter-control" data-filter-type="select" data-filter-column="6">
-            <label>상품 노출등급</label>
-            <select class="extra-filter" id="filter-sellerLevel">
+
+          <div class="filter-control">
+            <label for="gradeFilter">상품 노출등급</label>
+            <select id="gradeFilter">
               <option value="">전체</option>
-              <option value="실버회원">실버회원</option>
-              <option value="골드회원">골드회원</option>
-              <option value="VIP">VIP</option>
-            </select>
-          </div>
-          <div class="filter-control" data-filter-type="select" data-filter-column="8">
-            <label>상품상태</label>
-            <select class="extra-filter" id="filter-productStatus">
-              <option value="ready">판매대기</option>
-              <option value="onSale">판매중</option>
-              <option value="soldOut">품절</option>
-            </select>
-          </div>
-          </div>
-        </article>
-
-        <article class="panel">
-          <div class="panel-title">
-            <div>
-              <h2>등록 상품 목록</h2>
-              <p>검색 결과 <b class="result-count">4</b>건 · 선택 <b class="selected-count">0</b>건</p>
-            </div>
-            <div>
-              <button type="button" class="light-btn danger-btn delete-selected-button">선택 삭제</button>
-              <button type="button" class="light-btn export-button">CSV 저장</button>
-            </div>
-          </div>
-
-          <div class="table-wrap">
-            <table>
-              <thead>
-                <tr>
-                  <th><input type="checkbox" class="check-all" aria-label="현재 페이지 전체 선택"></th>
-                  <th>썸네일</th>
-                  <th>상품번호</th>
-                  <th>상품명</th>
-                  <th>브랜드</th>
-                  <th>카테고리</th>
-                  <th>입고가</th>
-                  <th>판매가</th>
-                  <th>힐높이</th>
-                  <th>노출등급</th>
-                  <th>등록일</th>
-                  <th>상태</th>
-                  <th>관리</th>
-                </tr>
-              </thead>
-              <tbody class="data-body">
-				<c:forEach var="dto" items="${list}">
-	              <tr class="data-row">
-	                  <td><input type="checkbox" class="row-check" aria-label="항목 선택"></td>
-	                  <td>${dto.thumbnail}</td>
-	                  <td>${dto.productId}</td>
-	                  <td>${dto.prodName}</td>
-	                  <td>${dto.brand}</td>
-	                  <td>${dto.categoryId}</td>
-	                  <td>${dto.inboundPrice}</td>
-	                  <td>${dto.price}</td>
-	                  <td>${dto.heelHeight}</td>
-	                  <td>${dto.minGrade}</td>
-	                  <td>${dto.regDate}</td>
-	                  <td>
-	                  	<c:choose>
-	                  		<c:when test="${dto.status == 'ready'}">
-	                  			<span class="badge blue">판매대기</span>
-	                  		</c:when>
-	                  		<c:when test="${dto.status == 'onSale'}">
-	                  			<span class="badge green">판매중</span>
-	                  		</c:when>
-	                  		<c:when test="${dto.status == 'soldOut'}">
-	                  			<span class="badge gray">품절</span>
-	                  		</c:when>
-	                  		<c:otherwise>
-								<span class="badge">알 수 없음</span>
-	                  		</c:otherwise>
-	                  	</c:choose>
-	                  </td>
-	                  <td class="action-cell">
-	                    <button type="button" class="light-btn stock-row">재고</button>
-	                    <button type="button" class="light-btn edit-row">수정</button>
-	                    <button type="button" class="light-btn delete-row">삭제</button>
-	                  </td>
-	              </tr>
-				</c:forEach>
-              </tbody>
-            </table>
-          </div>
-
-          <div class="empty-state">검색 결과가 없습니다.</div>
-          <div class="pagination" aria-label="목록 페이지 이동">
-            <!-- 페이지 버튼의 모양은 JSP에 있고 JS는 이 template을 복제해서 번호만 바꿉니다. -->
-          </div>
-        </article>
-
-         <template class="admin-row-template">
-          <tr class="data-row">
-            <td><input type="checkbox" class="row-check" aria-label="항목 선택"></td>
-              <td data-field-index="0"></td>
-              <td data-field-index="1"></td>
-              <td data-field-index="2"></td>
-              <td data-field-index="3"></td>
-              <td data-field-index="4"></td>
-              <td data-field-index="5"></td>
-              <td data-field-index="6"></td>
-              <td data-field-index="7"></td>
-              <td data-field-index="8"><span class="badge blue"></span></td>
-            <td class="action-cell">
-              <button type="button" class="light-btn edit-row">수정</button>
-              <button type="button" class="light-btn delete-row">삭제</button>
-            </td>
-          </tr>
-        </template>
-
-        <template class="admin-form-template">
-          <div class="form-field">
-            <label>상품명</label>
-            <input type="text" name="prodName" data-field-index="0" data-default="" placeholder="상품명 입력">
-          </div>
-          <div class="form-field">
-            <label>브랜드</label>
-            <input type="text" name="brand" data-field-index="1" data-default="" placeholder="브랜드 입력">
-          </div>
-          <div class="form-field">
-            <label>카테고리</label>
-            <input type="text" name="categoryId" data-field-index="2" data-default="" placeholder="카테고리 입력">
-          </div>
-          <div class="form-field">
-            <label>입고가</label>
-            <input type="text" name="inboundPrice" data-field-index="3" data-default="" placeholder="가격 입력">
-          </div>
-          <div class="form-field">
-            <label>판매가</label>
-            <input type="text" name="price" data-field-index="4" data-default="" placeholder="가격 입력">
-          </div>
-          <div class="form-field">
-            <label>힐높이</label>
-            <input type="text" name="heelHeight" data-field-index="5" data-default="0" placeholder="힐높이 입력">
-          </div>
-          <div class="form-field">
-            <label>할인율</label>
-            <input type="text" name="discRate" data-field-index="6" data-default="0" placeholder="할인율 입력">
-          </div>
-          <div class="form-field">
-            <label>상품노출레벨</label>
-            <select name="minGrade" data-field-index="7" data-default="1">
-              <option value="1" selected>전체</option>
+              <option value="1">전체회원</option>
               <option value="2">실버이상</option>
               <option value="3">골드이상</option>
               <option value="4">VIP</option>
             </select>
           </div>
-          <div class="form-field">
-            <label>상태</label>
-            <select name="status" data-field-index="8" data-default="ready">
-              <option value="ready" selected>판매대기</option>
-              <option value="onSele" >판매중</option>
+
+          <div class="filter-control">
+            <label for="statusFilter">상품상태</label>
+            <select id="statusFilter">
+              <option value="">전체</option>
+              <option value="ready">판매대기</option>
+              <option value="onSale">판매중</option>
               <option value="soldOut">품절</option>
             </select>
           </div>
-		  <!-- 상품 이미지 -->
-		  <div class="product-image-section">
-		      <div class="product-image-title">상품 이미지</div>
-		  <div class="image-container">
-		        <div class="main-image-area">
-		            <label class="image-label">
-		                대표 이미지 <span>(필수)</span>
-		            </label>
-		            <div id="mainDropZone" class="main-drop-zone">
-		                <!-- 이미지가 없을 때 -->
-		                <div id="mainGuide" class="main-upload-guide">
-		                    <div class="upload-icon"> 📷 </div>
-		                    <div class="upload-text"> 대표 이미지를 여기에 끌어다 놓으세요 </div>
-		                    <div class="upload-or"> 또는 </div>
-		                    <label for="mainImage" class="upload-button"> 이미지 선택 </label>
-		                    <div class="upload-info">  JPG, PNG, WEBP / 최대 10MB </div>
-		                </div>
-		                <!-- 이미지 선택 후 미리보기 -->
-		                <div id="mainPreviewArea" class="main-preview-area" style="display: none;">
-		                    <img id="mainPreview" src="" alt="대표 이미지">
-		                    <label for="mainImage" class="change-image-button"> 이미지 변경 </label>
-		                </div>
-		                <input type="file" id="thumbnail" name="thumbnail" hidden
-		                       accept="image/jpeg,image/png,image/webp">
-		            </div>
-		        </div>
-		        <div class="additional-image-area">
-		            <label class="image-label">
-		                추가 이미지 <span>(선택)</span>
-		            </label>
-		            <div id="subImageList" class="sub-image-list">
-		                <label for="subImages" class="sub-image-add">
-		                    <div class="plus"> + </div>
-		                    <span> 이미지 추가 </span>
-		                </label>
-		            </div>
-		            <div class="additional-info">최대 10장까지 추가 가능합니다.</div>
-		            <!-- 여러 파일 선택 -->
-		            <input type="file" id="files" name="files" hidden multiple
-		                   accept="image/jpeg,image/png,image/webp">
-		        </div>
-		    </div>
-		</div>        
-        </template>
-      </section>
+        </div>
+      </article>
 
+      <!-- 상품 목록 : Controller에서 받은 list를 JSP가 직접 출력합니다. -->
+      <article class="panel">
+        <div class="panel-title">
+          <div>
+            <h2>등록 상품 목록</h2>
+            <p>검색 결과 <b id="resultCount">0</b>건 · 선택 <b id="selectedCount">0</b>건</p>
+          </div>
+          <div>
+            <button type="button" class="light-btn danger-btn" id="deleteSelectedButton">선택 삭제</button>
+            <button type="button" class="light-btn" id="exportButton">CSV 저장</button>
+          </div>
+        </div>
 
-      <!-- JS가 버튼 HTML을 문자열로 만들지 않도록 JSP에 페이지 버튼 템플릿을 둡니다. -->
-      <template id="paginationButtonTemplate">
-        <button type="button" class="page-number-button"></button>
-      </template>
+        <div class="table-wrap">
+          <table id="productTable">
+            <thead>
+              <tr>
+                <th><input type="checkbox" id="checkAll" aria-label="현재 페이지 전체 선택"></th>
+                <th>썸네일</th>
+                <th>상품번호</th>
+                <th>상품명</th>
+                <th>브랜드</th>
+                <th>카테고리</th>
+                <th>입고가</th>
+                <th>판매가</th>
+                <th>힐높이</th>
+                <th>노출등급</th>
+                <th>등록일</th>
+                <th>상태</th>
+                <th>관리</th>
+              </tr>
+            </thead>
+            <tbody id="productTableBody">
+              <c:forEach var="dto" items="${list}">
+                <tr class="data-row">
+                  <td><input type="checkbox" class="row-check" aria-label="상품 선택"></td>
+                  <td data-field="thumbnail"><c:out value="${dto.thumbnail}"/></td>
+                  <td data-field="productId"><c:out value="${dto.productId}"/></td>
+                  <td data-field="prodName"><c:out value="${dto.prodName}"/></td>
+                  <td data-field="brand"><c:out value="${dto.brand}"/></td>
+                  <td data-field="categoryId"><c:out value="${dto.categoryId}"/></td>
+                  <td data-field="inboundPrice" data-value="${dto.inboundPrice}">
+                    <fmt:formatNumber value="${dto.inboundPrice}" pattern="#,##0"/>원
+                  </td>
+                  <td data-field="price" data-value="${dto.price}">
+                    <fmt:formatNumber value="${dto.price}" pattern="#,##0"/>원
+                  </td>
+                  <td data-field="heelHeight"><c:out value="${dto.heelHeight}"/></td>
+                  <td data-field="minGrade" data-value="${dto.minGrade}">
+                    <c:choose>
+                      <c:when test="${dto.minGrade == 1}">전체회원</c:when>
+                      <c:when test="${dto.minGrade == 2}">실버이상</c:when>
+                      <c:when test="${dto.minGrade == 3}">골드이상</c:when>
+                      <c:when test="${dto.minGrade == 4}">VIP</c:when>
+                      <c:otherwise><c:out value="${dto.minGrade}"/></c:otherwise>
+                    </c:choose>
+                  </td>
+                  <td data-field="regDate" data-value="${dto.regDate}"><c:out value="${dto.regDate}"/></td>
+                  <td data-field="status" data-value="${dto.status}">
+                    <c:choose>
+                      <c:when test="${dto.status == 'ready'}">
+                        <span class="badge blue">판매대기</span>
+                      </c:when>
+                      <c:when test="${dto.status == 'onSale'}">
+                        <span class="badge green">판매중</span>
+                      </c:when>
+                      <c:when test="${dto.status == 'soldOut'}">
+                        <span class="badge gray">품절</span>
+                      </c:when>
+                      <c:otherwise>
+                        <span class="badge">알 수 없음</span>
+                      </c:otherwise>
+                    </c:choose>
+                  </td>
+                  <td class="action-cell">
+                    <button type="button" class="light-btn stock-row">재고</button>
+                    <button type="button" class="light-btn edit-row">수정</button>
+                    <button type="button" class="light-btn delete-row">삭제</button>
+                  </td>
+                </tr>
+              </c:forEach>
+            </tbody>
+          </table>
+        </div>
 
-      <!-- CSV 저장용 링크도 JSP에 미리 둡니다. JS는 주소와 파일명만 설정합니다. -->
+        <div class="empty-state" id="emptyState">검색 결과가 없습니다.</div>
+
+        <!-- 페이지 버튼의 HTML도 JSP에 둡니다. JS는 disabled와 페이지 숫자만 바꿉니다. -->
+        <div class="pagination" aria-label="목록 페이지 이동">
+          <button type="button" id="prevPage" aria-label="이전 페이지">‹</button>
+          <span id="pageInfo">1 / 1</span>
+          <button type="button" id="nextPage" aria-label="다음 페이지">›</button>
+        </div>
+      </article>
+
+      <!-- CSV 다운로드에 사용하는 숨은 링크. 모양이 필요한 요소이므로 JSP에 미리 둡니다. -->
       <a id="adminCsvDownloadLink" hidden aria-hidden="true"></a>
     </section>
   </main>
-  
-  <script type="text/javascript">
-  function sendOk() {
-		const f = document.editForm;
-		
-		f.submit();
-	}
 
-	document.querySelector('#thumbnail').addEventListener('click', uploadFile);
+  <!-- 상품 등록/수정 모달 : 입력 항목을 JS template으로 만들지 않고 JSP에 직접 작성합니다. -->
+  <div class="modal-backdrop" id="productModal" aria-hidden="true" hidden>
+    <section class="admin-modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <div class="modal-head">
+        <div>
+          <p id="modalGuide">상품 정보를 입력합니다.</p>
+          <h2 id="modalTitle">상품 등록</h2>
+        </div>
+        <button type="button" class="modal-close" id="modalClose" aria-label="닫기">×</button>
+      </div>
 
-	function uploadFile() {
-		
-	}
+      <form name="productForm" id="productForm" method="post" enctype="multipart/form-data"
+            action="${pageContext.request.contextPath}/admin/product/write">
+        <input type="hidden" name="productId" id="productId">
+        <!-- 현재 Controller가 요구하는 값이라 숨은 입력으로 둡니다. -->
+        <input type="hidden" name="imageId" value="0">
+        <input type="hidden" name="sortOrder" value="1">
 
-  </script>
+        <div class="form-grid">
+          <div class="form-field">
+            <label for="prodName">상품명</label>
+            <input type="text" id="prodName" name="prodName" data-form-field="prodName"
+                   placeholder="상품명 입력" required>
+          </div>
 
+          <div class="form-field">
+            <label for="brand">브랜드</label>
+            <input type="text" id="brand" name="brand" data-form-field="brand"
+                   placeholder="브랜드 입력" required>
+          </div>
 
-  <!-- 등록/수정 모달의 바깥 디자인은 기존 공용 JSP를 그대로 사용합니다. -->
-  <jsp:include page="/WEB-INF/views/admin/layout/modal.jsp"/>
+          <div class="form-field">
+            <label for="categoryId">카테고리</label>
+            <input type="number" id="categoryId" name="categoryId" data-form-field="categoryId"
+                   min="1" placeholder="카테고리 번호 입력" required>
+          </div>
+
+          <div class="form-field">
+            <label for="inboundPrice">입고가</label>
+            <input type="number" id="inboundPrice" name="inboundPrice" data-form-field="inboundPrice"
+                   min="0" placeholder="입고가 입력" required>
+          </div>
+
+          <div class="form-field">
+            <label for="price">판매가</label>
+            <input type="number" id="price" name="price" data-form-field="price"
+                   min="0" placeholder="판매가 입력" required>
+          </div>
+
+          <div class="form-field">
+            <label for="heelHeight">힐높이</label>
+            <input type="number" id="heelHeight" name="heelHeight" data-form-field="heelHeight"
+                   min="0" value="0" placeholder="힐높이 입력">
+          </div>
+
+          <div class="form-field">
+            <label for="discRate">할인율</label>
+            <input type="number" id="discRate" name="discRate" min="0" max="100" value="0"
+                   placeholder="할인율 입력">
+          </div>
+
+          <div class="form-field">
+            <label for="minGrade">상품 노출등급</label>
+            <select id="minGrade" name="minGrade" data-form-field="minGrade">
+              <option value="1">전체회원</option>
+              <option value="2">실버이상</option>
+              <option value="3">골드이상</option>
+              <option value="4">VIP</option>
+            </select>
+          </div>
+
+          <div class="form-field">
+            <label for="status">상태</label>
+            <select id="status" name="status" data-form-field="status">
+              <option value="ready">판매대기</option>
+              <option value="onSale">판매중</option>
+              <option value="soldOut">품절</option>
+            </select>
+          </div>
+
+          <!-- 상품 이미지 영역도 JSP에서 직접 확인할 수 있도록 그대로 작성합니다. -->
+          <div class="product-image-section">
+            <div class="product-image-title">상품 이미지</div>
+            <div class="image-container">
+              <div class="main-image-area">
+                <label class="image-label" for="thumbnail">
+                  대표 이미지 <span>(필수)</span>
+                </label>
+
+                <div id="mainDropZone" class="main-drop-zone">
+                  <div id="mainGuide" class="main-upload-guide">
+                    <div class="upload-icon">📷</div>
+                    <div class="upload-text">대표 이미지를 여기에 끌어다 놓으세요</div>
+                    <div class="upload-or">또는</div>
+                    <label for="thumbnail" class="upload-button">이미지 선택</label>
+                    <div class="upload-info">JPG, PNG, WEBP / 최대 10MB</div>
+                  </div>
+
+                  <div id="mainPreviewArea" class="main-preview-area" hidden>
+                    <img id="mainPreview" src="" alt="대표 이미지 미리보기">
+                    <label for="thumbnail" class="change-image-button">이미지 변경</label>
+                  </div>
+
+                  <input type="file" id="thumbnail" name="thumbnail" hidden
+                         accept="image/jpeg,image/png,image/webp">
+                </div>
+              </div>
+
+              <div class="additional-image-area">
+                <label class="image-label" for="files">
+                  추가 이미지 <span>(선택)</span>
+                </label>
+
+                <div class="sub-image-list">
+                  <label for="files" class="sub-image-add">
+                    <span class="plus">+</span>
+                    <span>이미지 추가</span>
+                  </label>
+                </div>
+
+                <div class="additional-info">
+                  최대 10장까지 선택 가능합니다. <span id="subImageCount">선택 0장</span>
+                </div>
+                <input type="file" id="files" name="files" hidden multiple
+                       accept="image/jpeg,image/png,image/webp">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" class="light-btn" id="modalCancel">취소</button>
+          <button type="submit" class="primary-btn" id="modalSave">저장</button>
+        </div>
+      </form>
+    </section>
+  </div>
+
+  <div class="toast" id="toast">처리되었습니다.</div>
+
   <jsp:include page="/WEB-INF/views/admin/layout/footerResources.jsp"/>
-  <script src="${pageContext.request.contextPath}/dist/js/admin/list.js?v=20260813"></script>
+  <!-- 공용 list.js 대신 상품관리에서 필요한 동작만 담은 전용 JS를 사용합니다. -->
+  <script src="${pageContext.request.contextPath}/dist/js/admin/product.js?v=20260818"></script>
 </body>
 </html>

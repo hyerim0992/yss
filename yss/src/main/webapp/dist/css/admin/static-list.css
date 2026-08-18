@@ -33,3 +33,23 @@
     min-width: 120px;
   }
 }
+
+/*
+ * 등록/수정 입력폼은 JSP에 직접 작성되어 있습니다.
+ * 현재 탭의 입력폼만 보일 때 form-grid의 자식처럼 배치되도록 합니다.
+ */
+.section-form-fields:not([hidden]) {
+  display: contents;
+}
+
+/* 페이지 번호를 JS가 만들지 않고 JSP의 1 / 1 표시를 사용합니다. */
+.pagination .page-info {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 64px;
+  height: 34px;
+  margin: 2px;
+  font-size: 13px;
+  vertical-align: top;
+}

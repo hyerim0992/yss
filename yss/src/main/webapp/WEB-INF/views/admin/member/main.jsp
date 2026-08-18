@@ -199,7 +199,9 @@
 
           <div class="empty-state">검색 결과가 없습니다.</div>
           <div class="pagination" aria-label="목록 페이지 이동">
-            <!-- 페이지 버튼의 모양은 JSP에 있고 JS는 이 template을 복제해서 번호만 바꿉니다. -->
+            <button type="button" class="page-prev" aria-label="이전 페이지">‹</button>
+            <span class="page-info">1 / 1</span>
+            <button type="button" class="page-next" aria-label="다음 페이지">›</button>
           </div>
         </article>
 
@@ -221,56 +223,8 @@
             </td>
           </tr>
         </template>
+        <!-- 등록/수정 입력폼은 파일 아래쪽의 JSP 모달 영역에 직접 작성되어 있습니다. -->
 
-        <template class="admin-form-template">
-          <div class="form-field">
-            <label>회원번호</label>
-            <input type="text" data-field-index="0" data-default="" placeholder="회원번호 입력">
-          </div>
-          <div class="form-field">
-            <label>이름</label>
-            <input type="text" data-field-index="1" data-default="" placeholder="이름 입력">
-          </div>
-          <div class="form-field">
-            <label>아이디</label>
-            <input type="text" data-field-index="2" data-default="" placeholder="아이디 입력">
-          </div>
-          <div class="form-field">
-            <label>휴대폰</label>
-            <input type="text" data-field-index="3" data-default="" placeholder="휴대폰 입력">
-          </div>
-          <div class="form-field">
-            <label>이메일</label>
-            <input type="text" data-field-index="4" data-default="" placeholder="이메일 입력">
-          </div>
-          <div class="form-field">
-            <label>회원레벨</label>
-            <select data-field-index="5" data-default="">
-              <option value="">선택해 주세요</option>
-              <option value="회원">회원</option>
-              <option value="우수회원">우수회원</option>
-              <option value="VIP">VIP</option>
-              <option value="판매자">판매자</option>
-              <option value="관리자">관리자</option>
-            </select>
-          </div>
-          <div class="form-field">
-            <label>상태</label>
-            <select data-field-index="6" data-default="일반">
-              <option value="">선택해 주세요</option>
-              <option value="일반" selected>일반</option>
-              <option value="접속불가">접속불가</option>
-            </select>
-          </div>
-          <div class="form-field">
-            <label>가입일</label>
-            <input type="text" data-field-index="7" data-default="" placeholder="가입일 입력">
-          </div>
-          <div class="form-field">
-            <label>최근접속</label>
-            <input type="text" data-field-index="8" data-default="" placeholder="최근접속 입력">
-          </div>
-        </template>
       </section>
 
       <section class="admin-section-panel" data-admin-section="1" data-section-name="회원 레벨 관리" data-table-title="회원 레벨 목록" data-add-label="+ 레벨 등록" data-can-add="true" hidden>
@@ -409,7 +363,9 @@
 
           <div class="empty-state">검색 결과가 없습니다.</div>
           <div class="pagination" aria-label="목록 페이지 이동">
-            <!-- 페이지 버튼의 모양은 JSP에 있고 JS는 이 template을 복제해서 번호만 바꿉니다. -->
+            <button type="button" class="page-prev" aria-label="이전 페이지">‹</button>
+            <span class="page-info">1 / 1</span>
+            <button type="button" class="page-next" aria-label="다음 페이지">›</button>
           </div>
         </article>
 
@@ -429,37 +385,8 @@
             </td>
           </tr>
         </template>
+        <!-- 등록/수정 입력폼은 파일 아래쪽의 JSP 모달 영역에 직접 작성되어 있습니다. -->
 
-        <template class="admin-form-template">
-          <div class="form-field">
-            <label>레벨코드</label>
-            <input type="text" data-field-index="0" data-default="" placeholder="레벨코드 입력">
-          </div>
-          <div class="form-field">
-            <label>레벨명</label>
-            <input type="text" data-field-index="1" data-default="" placeholder="레벨명 입력">
-          </div>
-          <div class="form-field">
-            <label>적용대상</label>
-            <input type="text" data-field-index="2" data-default="" placeholder="적용대상 입력">
-          </div>
-          <div class="form-field">
-            <label>포인트적립률</label>
-            <input type="text" data-field-index="3" data-default="" placeholder="포인트적립률 입력">
-          </div>
-          <div class="form-field">
-            <label>주요혜택</label>
-            <input type="text" data-field-index="4" data-default="" placeholder="주요혜택 입력">
-          </div>
-          <div class="form-field">
-            <label>회원수</label>
-            <input type="text" data-field-index="5" data-default="" placeholder="회원수 입력">
-          </div>
-          <div class="form-field">
-            <label>수정일</label>
-            <input type="text" data-field-index="6" data-default="" placeholder="수정일 입력">
-          </div>
-        </template>
       </section>
 
       <section class="admin-section-panel" data-admin-section="2" data-section-name="회원 제재 목록" data-table-title="회원 제재 목록" data-add-label="+ 제재 등록" data-can-add="true" hidden>
@@ -576,7 +503,9 @@
 
           <div class="empty-state">검색 결과가 없습니다.</div>
           <div class="pagination" aria-label="목록 페이지 이동">
-            <!-- 페이지 버튼의 모양은 JSP에 있고 JS는 이 template을 복제해서 번호만 바꿉니다. -->
+            <button type="button" class="page-prev" aria-label="이전 페이지">‹</button>
+            <span class="page-info">1 / 1</span>
+            <button type="button" class="page-next" aria-label="다음 페이지">›</button>
           </div>
         </article>
 
@@ -596,42 +525,8 @@
             </td>
           </tr>
         </template>
+        <!-- 등록/수정 입력폼은 파일 아래쪽의 JSP 모달 영역에 직접 작성되어 있습니다. -->
 
-        <template class="admin-form-template">
-          <div class="form-field">
-            <label>제재번호</label>
-            <input type="text" data-field-index="0" data-default="" placeholder="제재번호 입력">
-          </div>
-          <div class="form-field">
-            <label>회원아이디</label>
-            <input type="text" data-field-index="1" data-default="" placeholder="회원아이디 입력">
-          </div>
-          <div class="form-field">
-            <label>회원명</label>
-            <input type="text" data-field-index="2" data-default="" placeholder="회원명 입력">
-          </div>
-          <div class="form-field">
-            <label>제재사유</label>
-            <input type="text" data-field-index="3" data-default="" placeholder="제재사유 입력">
-          </div>
-          <div class="form-field">
-            <label>시작일</label>
-            <input type="text" data-field-index="4" data-default="" placeholder="시작일 입력">
-          </div>
-          <div class="form-field">
-            <label>종료일</label>
-            <input type="text" data-field-index="5" data-default="" placeholder="종료일 입력">
-          </div>
-          <div class="form-field">
-            <label>상태</label>
-            <select data-field-index="6" data-default="진행중">
-              <option value="">선택해 주세요</option>
-              <option value="진행중" selected>진행중</option>
-              <option value="해제">해제</option>
-              <option value="만료">만료</option>
-            </select>
-          </div>
-        </template>
       </section>
 
       <section class="admin-section-panel" data-admin-section="3" data-section-name="포인트 관리" data-table-title="회원별 포인트 목록" data-add-label="+ 포인트 추가" data-can-add="true" hidden>
@@ -740,7 +635,9 @@
 
           <div class="empty-state">검색 결과가 없습니다.</div>
           <div class="pagination" aria-label="목록 페이지 이동">
-            <!-- 페이지 버튼의 모양은 JSP에 있고 JS는 이 template을 복제해서 번호만 바꿉니다. -->
+            <button type="button" class="page-prev" aria-label="이전 페이지">‹</button>
+            <span class="page-info">1 / 1</span>
+            <button type="button" class="page-next" aria-label="다음 페이지">›</button>
           </div>
         </article>
 
@@ -760,37 +657,8 @@
             </td>
           </tr>
         </template>
+        <!-- 등록/수정 입력폼은 파일 아래쪽의 JSP 모달 영역에 직접 작성되어 있습니다. -->
 
-        <template class="admin-form-template">
-          <div class="form-field">
-            <label>회원번호</label>
-            <input type="text" data-field-index="0" data-default="" placeholder="회원번호 입력">
-          </div>
-          <div class="form-field">
-            <label>회원명</label>
-            <input type="text" data-field-index="1" data-default="" placeholder="회원명 입력">
-          </div>
-          <div class="form-field">
-            <label>아이디</label>
-            <input type="text" data-field-index="2" data-default="" placeholder="아이디 입력">
-          </div>
-          <div class="form-field">
-            <label>보유포인트</label>
-            <input type="text" data-field-index="3" data-default="" placeholder="보유포인트 입력">
-          </div>
-          <div class="form-field">
-            <label>누적적립</label>
-            <input type="text" data-field-index="4" data-default="" placeholder="누적적립 입력">
-          </div>
-          <div class="form-field">
-            <label>누적사용</label>
-            <input type="text" data-field-index="5" data-default="" placeholder="누적사용 입력">
-          </div>
-          <div class="form-field">
-            <label>최종변경일</label>
-            <input type="text" data-field-index="6" data-default="" placeholder="최종변경일 입력">
-          </div>
-        </template>
       </section>
 
       <section class="admin-section-panel" data-admin-section="4" data-section-name="쿠폰 관리" data-table-title="회원별 쿠폰 목록" data-add-label="+ 쿠폰 발급" data-can-add="true" hidden>
@@ -907,7 +775,9 @@
 
           <div class="empty-state">검색 결과가 없습니다.</div>
           <div class="pagination" aria-label="목록 페이지 이동">
-            <!-- 페이지 버튼의 모양은 JSP에 있고 JS는 이 template을 복제해서 번호만 바꿉니다. -->
+            <button type="button" class="page-prev" aria-label="이전 페이지">‹</button>
+            <span class="page-info">1 / 1</span>
+            <button type="button" class="page-next" aria-label="다음 페이지">›</button>
           </div>
         </article>
 
@@ -927,8 +797,190 @@
             </td>
           </tr>
         </template>
+        <!-- 등록/수정 입력폼은 파일 아래쪽의 JSP 모달 영역에 직접 작성되어 있습니다. -->
 
-        <template class="admin-form-template">
+      </section>
+<!-- CSV 저장용 링크도 JSP에 미리 둡니다. JS는 주소와 파일명만 설정합니다. -->
+      <a id="adminCsvDownloadLink" hidden aria-hidden="true"></a>
+    </section>
+  </main>
+
+
+  <!--
+    등록/수정 모달
+    디자인과 입력 항목은 JSP에 직접 작성하고,
+    member.js는 이 화면의 클릭·검색·페이징·모달 동작만 담당합니다.
+  -->
+  <div class="modal-backdrop" id="editModal" aria-hidden="true" hidden>
+    <section class="admin-modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <div class="modal-head">
+        <div>
+          <p id="modalGuide">정보를 입력합니다.</p>
+          <h2 id="modalTitle">신규 등록</h2>
+        </div>
+        <button type="button" class="modal-close" id="modalClose" aria-label="닫기">×</button>
+      </div>
+
+      <form id="editForm">
+        <div class="form-grid" id="formFields">
+        <!-- 회원 등록 / 검색 입력 항목 -->
+        <div class="section-form-fields" data-form-section="0" hidden>
+          <div class="form-field">
+            <label>회원번호</label>
+            <input type="text" data-field-index="0" data-default="" placeholder="회원번호 입력">
+          </div>
+          <div class="form-field">
+            <label>이름</label>
+            <input type="text" data-field-index="1" data-default="" placeholder="이름 입력">
+          </div>
+          <div class="form-field">
+            <label>아이디</label>
+            <input type="text" data-field-index="2" data-default="" placeholder="아이디 입력">
+          </div>
+          <div class="form-field">
+            <label>휴대폰</label>
+            <input type="text" data-field-index="3" data-default="" placeholder="휴대폰 입력">
+          </div>
+          <div class="form-field">
+            <label>이메일</label>
+            <input type="text" data-field-index="4" data-default="" placeholder="이메일 입력">
+          </div>
+          <div class="form-field">
+            <label>회원레벨</label>
+            <select data-field-index="5" data-default="">
+              <option value="">선택해 주세요</option>
+              <option value="회원">회원</option>
+              <option value="우수회원">우수회원</option>
+              <option value="VIP">VIP</option>
+              <option value="판매자">판매자</option>
+              <option value="관리자">관리자</option>
+            </select>
+          </div>
+          <div class="form-field">
+            <label>상태</label>
+            <select data-field-index="6" data-default="일반">
+              <option value="">선택해 주세요</option>
+              <option value="일반" selected>일반</option>
+              <option value="접속불가">접속불가</option>
+            </select>
+          </div>
+          <div class="form-field">
+            <label>가입일</label>
+            <input type="text" data-field-index="7" data-default="" placeholder="가입일 입력">
+          </div>
+          <div class="form-field">
+            <label>최근접속</label>
+            <input type="text" data-field-index="8" data-default="" placeholder="최근접속 입력">
+          </div>
+        
+        </div>
+
+        <!-- 회원 레벨 관리 입력 항목 -->
+        <div class="section-form-fields" data-form-section="1" hidden>
+          <div class="form-field">
+            <label>레벨코드</label>
+            <input type="text" data-field-index="0" data-default="" placeholder="레벨코드 입력">
+          </div>
+          <div class="form-field">
+            <label>레벨명</label>
+            <input type="text" data-field-index="1" data-default="" placeholder="레벨명 입력">
+          </div>
+          <div class="form-field">
+            <label>적용대상</label>
+            <input type="text" data-field-index="2" data-default="" placeholder="적용대상 입력">
+          </div>
+          <div class="form-field">
+            <label>포인트적립률</label>
+            <input type="text" data-field-index="3" data-default="" placeholder="포인트적립률 입력">
+          </div>
+          <div class="form-field">
+            <label>주요혜택</label>
+            <input type="text" data-field-index="4" data-default="" placeholder="주요혜택 입력">
+          </div>
+          <div class="form-field">
+            <label>회원수</label>
+            <input type="text" data-field-index="5" data-default="" placeholder="회원수 입력">
+          </div>
+          <div class="form-field">
+            <label>수정일</label>
+            <input type="text" data-field-index="6" data-default="" placeholder="수정일 입력">
+          </div>
+        
+        </div>
+
+        <!-- 회원 제재 목록 입력 항목 -->
+        <div class="section-form-fields" data-form-section="2" hidden>
+          <div class="form-field">
+            <label>제재번호</label>
+            <input type="text" data-field-index="0" data-default="" placeholder="제재번호 입력">
+          </div>
+          <div class="form-field">
+            <label>회원아이디</label>
+            <input type="text" data-field-index="1" data-default="" placeholder="회원아이디 입력">
+          </div>
+          <div class="form-field">
+            <label>회원명</label>
+            <input type="text" data-field-index="2" data-default="" placeholder="회원명 입력">
+          </div>
+          <div class="form-field">
+            <label>제재사유</label>
+            <input type="text" data-field-index="3" data-default="" placeholder="제재사유 입력">
+          </div>
+          <div class="form-field">
+            <label>시작일</label>
+            <input type="text" data-field-index="4" data-default="" placeholder="시작일 입력">
+          </div>
+          <div class="form-field">
+            <label>종료일</label>
+            <input type="text" data-field-index="5" data-default="" placeholder="종료일 입력">
+          </div>
+          <div class="form-field">
+            <label>상태</label>
+            <select data-field-index="6" data-default="진행중">
+              <option value="">선택해 주세요</option>
+              <option value="진행중" selected>진행중</option>
+              <option value="해제">해제</option>
+              <option value="만료">만료</option>
+            </select>
+          </div>
+        
+        </div>
+
+        <!-- 포인트 관리 입력 항목 -->
+        <div class="section-form-fields" data-form-section="3" hidden>
+          <div class="form-field">
+            <label>회원번호</label>
+            <input type="text" data-field-index="0" data-default="" placeholder="회원번호 입력">
+          </div>
+          <div class="form-field">
+            <label>회원명</label>
+            <input type="text" data-field-index="1" data-default="" placeholder="회원명 입력">
+          </div>
+          <div class="form-field">
+            <label>아이디</label>
+            <input type="text" data-field-index="2" data-default="" placeholder="아이디 입력">
+          </div>
+          <div class="form-field">
+            <label>보유포인트</label>
+            <input type="text" data-field-index="3" data-default="" placeholder="보유포인트 입력">
+          </div>
+          <div class="form-field">
+            <label>누적적립</label>
+            <input type="text" data-field-index="4" data-default="" placeholder="누적적립 입력">
+          </div>
+          <div class="form-field">
+            <label>누적사용</label>
+            <input type="text" data-field-index="5" data-default="" placeholder="누적사용 입력">
+          </div>
+          <div class="form-field">
+            <label>최종변경일</label>
+            <input type="text" data-field-index="6" data-default="" placeholder="최종변경일 입력">
+          </div>
+        
+        </div>
+
+        <!-- 쿠폰 관리 입력 항목 -->
+        <div class="section-form-fields" data-form-section="4" hidden>
           <div class="form-field">
             <label>쿠폰번호</label>
             <input type="text" data-field-index="0" data-default="" placeholder="쿠폰번호 입력">
@@ -962,22 +1014,34 @@
               <option value="만료">만료</option>
             </select>
           </div>
-        </template>
-      </section>
-
-      <!-- JS가 버튼 HTML을 문자열로 만들지 않도록 JSP에 페이지 버튼 템플릿을 둡니다. -->
-      <template id="paginationButtonTemplate">
-        <button type="button" class="page-number-button"></button>
-      </template>
-
-      <!-- CSV 저장용 링크도 JSP에 미리 둡니다. JS는 주소와 파일명만 설정합니다. -->
-      <a id="adminCsvDownloadLink" hidden aria-hidden="true"></a>
+        
+        </div>
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="light-btn" id="modalCancel">취소</button>
+          <button type="button" class="primary-btn" id="modalSave">저장</button>
+        </div>
+      </form>
     </section>
-  </main>
+  </div>
 
-  <!-- 등록/수정 모달의 바깥 디자인은 기존 공용 JSP를 그대로 사용합니다. -->
-  <jsp:include page="/WEB-INF/views/admin/layout/modal.jsp"/>
+  <!-- 삭제 확인창도 JSP에 직접 둡니다. -->
+  <div class="confirm-backdrop" id="confirmBox" aria-hidden="true" hidden>
+    <section class="confirm-box" role="alertdialog" aria-modal="true" aria-labelledby="confirmTitle">
+      <h3 id="confirmTitle">선택한 항목을 삭제할까요?</h3>
+      <p id="confirmText">화면의 예시 데이터에서 삭제됩니다.</p>
+      <div>
+        <button type="button" class="light-btn" id="confirmCancel">취소</button>
+        <button type="button" class="dark-btn danger-solid" id="confirmOk">삭제</button>
+      </div>
+    </section>
+  </div>
+
+  <!-- 간단한 안내 메시지 -->
+  <div class="toast" id="toast">처리되었습니다.</div>
+
   <jsp:include page="/WEB-INF/views/admin/layout/footerResources.jsp"/>
-  <script src="${pageContext.request.contextPath}/dist/js/admin/list.js?v=20260813"></script>
+  <!-- 화면 HTML은 이 JSP에 있고, 아래 전용 JS에는 동작만 있습니다. -->
+  <script src="${pageContext.request.contextPath}/dist/js/admin/member.js?v=20260818"></script>
 </body>
 </html>

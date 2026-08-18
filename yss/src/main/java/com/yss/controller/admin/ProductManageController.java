@@ -115,7 +115,7 @@ public class ProductManageController {
 			e.printStackTrace();
 		}
 		
-		return new ModelAndView("redirect:/admin/product/list");
+		return new ModelAndView("redirect:/admin/product");
 	}
 	
 

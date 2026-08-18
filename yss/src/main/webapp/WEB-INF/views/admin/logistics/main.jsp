@@ -158,7 +158,9 @@
 
           <div class="empty-state">검색 결과가 없습니다.</div>
           <div class="pagination" aria-label="목록 페이지 이동">
-            <!-- 페이지 버튼의 모양은 JSP에 있고 JS는 이 template을 복제해서 번호만 바꿉니다. -->
+            <button type="button" class="page-prev" aria-label="이전 페이지">‹</button>
+            <span class="page-info">1 / 1</span>
+            <button type="button" class="page-next" aria-label="다음 페이지">›</button>
           </div>
         </article>
 
@@ -179,46 +181,8 @@
             </td>
           </tr>
         </template>
+        <!-- 등록/수정 입력폼은 파일 아래쪽의 JSP 모달 영역에 직접 작성되어 있습니다. -->
 
-        <template class="admin-form-template">
-          <div class="form-field">
-            <label>입고번호</label>
-            <input type="text" data-field-index="0" data-default="" placeholder="입고번호 입력">
-          </div>
-          <div class="form-field">
-            <label>물품번호</label>
-            <input type="text" data-field-index="1" data-default="" placeholder="물품번호 입력">
-          </div>
-          <div class="form-field">
-            <label>상품명</label>
-            <input type="text" data-field-index="2" data-default="" placeholder="상품명 입력">
-          </div>
-          <div class="form-field">
-            <label>구매가격</label>
-            <input type="text" data-field-index="3" data-default="" placeholder="구매가격 입력">
-          </div>
-          <div class="form-field">
-            <label>컨테이너위치</label>
-            <input type="text" data-field-index="4" data-default="" placeholder="컨테이너위치 입력">
-          </div>
-          <div class="form-field">
-            <label>수량</label>
-            <input type="text" data-field-index="5" data-default="" placeholder="수량 입력">
-          </div>
-          <div class="form-field">
-            <label>상태</label>
-            <select data-field-index="6" data-default="입고완료">
-              <option value="">선택해 주세요</option>
-              <option value="입고완료" selected>입고완료</option>
-              <option value="입고대기">입고대기</option>
-              <option value="재고부족">재고부족</option>
-            </select>
-          </div>
-          <div class="form-field">
-            <label>입고일</label>
-            <input type="text" data-field-index="7" data-default="" placeholder="입고일 입력">
-          </div>
-        </template>
       </section>
 
       <section class="admin-section-panel" data-admin-section="1" data-section-name="주문 및 출고 관리" data-table-title="결제 확인 및 출고 목록" data-add-label="+ 신규 등록" data-can-add="false" hidden>
@@ -350,7 +314,9 @@
 
           <div class="empty-state">검색 결과가 없습니다.</div>
           <div class="pagination" aria-label="목록 페이지 이동">
-            <!-- 페이지 버튼의 모양은 JSP에 있고 JS는 이 template을 복제해서 번호만 바꿉니다. -->
+            <button type="button" class="page-prev" aria-label="이전 페이지">‹</button>
+            <span class="page-info">1 / 1</span>
+            <button type="button" class="page-next" aria-label="다음 페이지">›</button>
           </div>
         </article>
 
@@ -371,52 +337,8 @@
             </td>
           </tr>
         </template>
+        <!-- 등록/수정 입력폼은 파일 아래쪽의 JSP 모달 영역에 직접 작성되어 있습니다. -->
 
-        <template class="admin-form-template">
-          <div class="form-field">
-            <label>주문번호</label>
-            <input type="text" data-field-index="0" data-default="" placeholder="주문번호 입력">
-          </div>
-          <div class="form-field">
-            <label>결제상태</label>
-            <select data-field-index="1" data-default="">
-              <option value="">선택해 주세요</option>
-              <option value="결제완료">결제완료</option>
-              <option value="결제대기">결제대기</option>
-              <option value="결제취소">결제취소</option>
-            </select>
-          </div>
-          <div class="form-field">
-            <label>상품명</label>
-            <input type="text" data-field-index="2" data-default="" placeholder="상품명 입력">
-          </div>
-          <div class="form-field">
-            <label>구매자</label>
-            <input type="text" data-field-index="3" data-default="" placeholder="구매자 입력">
-          </div>
-          <div class="form-field">
-            <label>연락처</label>
-            <input type="text" data-field-index="4" data-default="" placeholder="연락처 입력">
-          </div>
-          <div class="form-field">
-            <label>배송지</label>
-            <input type="text" data-field-index="5" data-default="" placeholder="배송지 입력">
-          </div>
-          <div class="form-field">
-            <label>출고상태</label>
-            <select data-field-index="6" data-default="">
-              <option value="">선택해 주세요</option>
-              <option value="출고대기">출고대기</option>
-              <option value="배송준비">배송준비</option>
-              <option value="배송중">배송중</option>
-              <option value="배송완료">배송완료</option>
-            </select>
-          </div>
-          <div class="form-field">
-            <label>택배사</label>
-            <input type="text" data-field-index="7" data-default="" placeholder="택배사 입력">
-          </div>
-        </template>
       </section>
 
       <section class="admin-section-panel" data-admin-section="2" data-section-name="반품 / 교환 관리" data-table-title="반품·교환 접수 목록" data-add-label="+ 신규 등록" data-can-add="false" hidden>
@@ -547,7 +469,9 @@
 
           <div class="empty-state">검색 결과가 없습니다.</div>
           <div class="pagination" aria-label="목록 페이지 이동">
-            <!-- 페이지 버튼의 모양은 JSP에 있고 JS는 이 template을 복제해서 번호만 바꿉니다. -->
+            <button type="button" class="page-prev" aria-label="이전 페이지">‹</button>
+            <span class="page-info">1 / 1</span>
+            <button type="button" class="page-next" aria-label="다음 페이지">›</button>
           </div>
         </article>
 
@@ -568,51 +492,8 @@
             </td>
           </tr>
         </template>
+        <!-- 등록/수정 입력폼은 파일 아래쪽의 JSP 모달 영역에 직접 작성되어 있습니다. -->
 
-        <template class="admin-form-template">
-          <div class="form-field">
-            <label>접수번호</label>
-            <input type="text" data-field-index="0" data-default="" placeholder="접수번호 입력">
-          </div>
-          <div class="form-field">
-            <label>주문번호</label>
-            <input type="text" data-field-index="1" data-default="" placeholder="주문번호 입력">
-          </div>
-          <div class="form-field">
-            <label>상품명</label>
-            <input type="text" data-field-index="2" data-default="" placeholder="상품명 입력">
-          </div>
-          <div class="form-field">
-            <label>요청유형</label>
-            <select data-field-index="3" data-default="">
-              <option value="">선택해 주세요</option>
-              <option value="반품">반품</option>
-              <option value="교환">교환</option>
-            </select>
-          </div>
-          <div class="form-field">
-            <label>요청사유</label>
-            <input type="text" data-field-index="4" data-default="" placeholder="요청사유 입력">
-          </div>
-          <div class="form-field">
-            <label>검수정보대조</label>
-            <input type="text" data-field-index="5" data-default="" placeholder="검수정보대조 입력">
-          </div>
-          <div class="form-field">
-            <label>책임소재</label>
-            <input type="text" data-field-index="6" data-default="" placeholder="책임소재 입력">
-          </div>
-          <div class="form-field">
-            <label>처리상태</label>
-            <select data-field-index="7" data-default="">
-              <option value="">선택해 주세요</option>
-              <option value="접수">접수</option>
-              <option value="확인중">확인중</option>
-              <option value="처리완료">처리완료</option>
-              <option value="반려">반려</option>
-            </select>
-          </div>
-        </template>
       </section>
 
       <section class="admin-section-panel" data-admin-section="3" data-section-name="실시간 배송조회" data-table-title="배송 API 조회 목록" data-add-label="+ 신규 등록" data-can-add="false" hidden>
@@ -730,7 +611,9 @@
 
           <div class="empty-state">검색 결과가 없습니다.</div>
           <div class="pagination" aria-label="목록 페이지 이동">
-            <!-- 페이지 버튼의 모양은 JSP에 있고 JS는 이 template을 복제해서 번호만 바꿉니다. -->
+            <button type="button" class="page-prev" aria-label="이전 페이지">‹</button>
+            <span class="page-info">1 / 1</span>
+            <button type="button" class="page-next" aria-label="다음 페이지">›</button>
           </div>
         </article>
 
@@ -750,8 +633,171 @@
             </td>
           </tr>
         </template>
+        <!-- 등록/수정 입력폼은 파일 아래쪽의 JSP 모달 영역에 직접 작성되어 있습니다. -->
 
-        <template class="admin-form-template">
+      </section>
+<!-- CSV 저장용 링크도 JSP에 미리 둡니다. JS는 주소와 파일명만 설정합니다. -->
+      <a id="adminCsvDownloadLink" hidden aria-hidden="true"></a>
+    </section>
+  </main>
+
+
+  <!--
+    등록/수정 모달
+    디자인과 입력 항목은 JSP에 직접 작성하고,
+    logistics.js는 이 화면의 클릭·검색·페이징·모달 동작만 담당합니다.
+  -->
+  <div class="modal-backdrop" id="editModal" aria-hidden="true" hidden>
+    <section class="admin-modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <div class="modal-head">
+        <div>
+          <p id="modalGuide">정보를 입력합니다.</p>
+          <h2 id="modalTitle">신규 등록</h2>
+        </div>
+        <button type="button" class="modal-close" id="modalClose" aria-label="닫기">×</button>
+      </div>
+
+      <form id="editForm">
+        <div class="form-grid" id="formFields">
+        <!-- 재고 관리 입력 항목 -->
+        <div class="section-form-fields" data-form-section="0" hidden>
+          <div class="form-field">
+            <label>입고번호</label>
+            <input type="text" data-field-index="0" data-default="" placeholder="입고번호 입력">
+          </div>
+          <div class="form-field">
+            <label>물품번호</label>
+            <input type="text" data-field-index="1" data-default="" placeholder="물품번호 입력">
+          </div>
+          <div class="form-field">
+            <label>상품명</label>
+            <input type="text" data-field-index="2" data-default="" placeholder="상품명 입력">
+          </div>
+          <div class="form-field">
+            <label>구매가격</label>
+            <input type="text" data-field-index="3" data-default="" placeholder="구매가격 입력">
+          </div>
+          <div class="form-field">
+            <label>컨테이너위치</label>
+            <input type="text" data-field-index="4" data-default="" placeholder="컨테이너위치 입력">
+          </div>
+          <div class="form-field">
+            <label>수량</label>
+            <input type="text" data-field-index="5" data-default="" placeholder="수량 입력">
+          </div>
+          <div class="form-field">
+            <label>상태</label>
+            <select data-field-index="6" data-default="입고완료">
+              <option value="">선택해 주세요</option>
+              <option value="입고완료" selected>입고완료</option>
+              <option value="입고대기">입고대기</option>
+              <option value="재고부족">재고부족</option>
+            </select>
+          </div>
+          <div class="form-field">
+            <label>입고일</label>
+            <input type="text" data-field-index="7" data-default="" placeholder="입고일 입력">
+          </div>
+        
+        </div>
+
+        <!-- 주문 및 출고 관리 입력 항목 -->
+        <div class="section-form-fields" data-form-section="1" hidden>
+          <div class="form-field">
+            <label>주문번호</label>
+            <input type="text" data-field-index="0" data-default="" placeholder="주문번호 입력">
+          </div>
+          <div class="form-field">
+            <label>결제상태</label>
+            <select data-field-index="1" data-default="">
+              <option value="">선택해 주세요</option>
+              <option value="결제완료">결제완료</option>
+              <option value="결제대기">결제대기</option>
+              <option value="결제취소">결제취소</option>
+            </select>
+          </div>
+          <div class="form-field">
+            <label>상품명</label>
+            <input type="text" data-field-index="2" data-default="" placeholder="상품명 입력">
+          </div>
+          <div class="form-field">
+            <label>구매자</label>
+            <input type="text" data-field-index="3" data-default="" placeholder="구매자 입력">
+          </div>
+          <div class="form-field">
+            <label>연락처</label>
+            <input type="text" data-field-index="4" data-default="" placeholder="연락처 입력">
+          </div>
+          <div class="form-field">
+            <label>배송지</label>
+            <input type="text" data-field-index="5" data-default="" placeholder="배송지 입력">
+          </div>
+          <div class="form-field">
+            <label>출고상태</label>
+            <select data-field-index="6" data-default="">
+              <option value="">선택해 주세요</option>
+              <option value="출고대기">출고대기</option>
+              <option value="배송준비">배송준비</option>
+              <option value="배송중">배송중</option>
+              <option value="배송완료">배송완료</option>
+            </select>
+          </div>
+          <div class="form-field">
+            <label>택배사</label>
+            <input type="text" data-field-index="7" data-default="" placeholder="택배사 입력">
+          </div>
+        
+        </div>
+
+        <!-- 반품 / 교환 관리 입력 항목 -->
+        <div class="section-form-fields" data-form-section="2" hidden>
+          <div class="form-field">
+            <label>접수번호</label>
+            <input type="text" data-field-index="0" data-default="" placeholder="접수번호 입력">
+          </div>
+          <div class="form-field">
+            <label>주문번호</label>
+            <input type="text" data-field-index="1" data-default="" placeholder="주문번호 입력">
+          </div>
+          <div class="form-field">
+            <label>상품명</label>
+            <input type="text" data-field-index="2" data-default="" placeholder="상품명 입력">
+          </div>
+          <div class="form-field">
+            <label>요청유형</label>
+            <select data-field-index="3" data-default="">
+              <option value="">선택해 주세요</option>
+              <option value="반품">반품</option>
+              <option value="교환">교환</option>
+            </select>
+          </div>
+          <div class="form-field">
+            <label>요청사유</label>
+            <input type="text" data-field-index="4" data-default="" placeholder="요청사유 입력">
+          </div>
+          <div class="form-field">
+            <label>검수정보대조</label>
+            <input type="text" data-field-index="5" data-default="" placeholder="검수정보대조 입력">
+          </div>
+          <div class="form-field">
+            <label>책임소재</label>
+            <input type="text" data-field-index="6" data-default="" placeholder="책임소재 입력">
+          </div>
+          <div class="form-field">
+            <label>처리상태</label>
+            <select data-field-index="7" data-default="">
+              <option value="">선택해 주세요</option>
+              <option value="접수">접수</option>
+              <option value="확인중">확인중</option>
+              <option value="처리완료">처리완료</option>
+              <option value="반려">반려</option>
+            </select>
+          </div>
+        
+        </div>
+
+        <!-- 실시간 배송조회 입력 항목 -->
+        <div class="section-form-fields" data-form-section="3" hidden>
           <div class="form-field">
             <label>송장번호</label>
             <input type="text" data-field-index="0" data-default="" placeholder="송장번호 입력">
@@ -786,22 +832,34 @@
             <label>최종갱신</label>
             <input type="text" data-field-index="6" data-default="" placeholder="최종갱신 입력">
           </div>
-        </template>
-      </section>
-
-      <!-- JS가 버튼 HTML을 문자열로 만들지 않도록 JSP에 페이지 버튼 템플릿을 둡니다. -->
-      <template id="paginationButtonTemplate">
-        <button type="button" class="page-number-button"></button>
-      </template>
-
-      <!-- CSV 저장용 링크도 JSP에 미리 둡니다. JS는 주소와 파일명만 설정합니다. -->
-      <a id="adminCsvDownloadLink" hidden aria-hidden="true"></a>
+        
+        </div>
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="light-btn" id="modalCancel">취소</button>
+          <button type="button" class="primary-btn" id="modalSave">저장</button>
+        </div>
+      </form>
     </section>
-  </main>
+  </div>
 
-  <!-- 등록/수정 모달의 바깥 디자인은 기존 공용 JSP를 그대로 사용합니다. -->
-  <jsp:include page="/WEB-INF/views/admin/layout/modal.jsp"/>
+  <!-- 삭제 확인창도 JSP에 직접 둡니다. -->
+  <div class="confirm-backdrop" id="confirmBox" aria-hidden="true" hidden>
+    <section class="confirm-box" role="alertdialog" aria-modal="true" aria-labelledby="confirmTitle">
+      <h3 id="confirmTitle">선택한 항목을 삭제할까요?</h3>
+      <p id="confirmText">화면의 예시 데이터에서 삭제됩니다.</p>
+      <div>
+        <button type="button" class="light-btn" id="confirmCancel">취소</button>
+        <button type="button" class="dark-btn danger-solid" id="confirmOk">삭제</button>
+      </div>
+    </section>
+  </div>
+
+  <!-- 간단한 안내 메시지 -->
+  <div class="toast" id="toast">처리되었습니다.</div>
+
   <jsp:include page="/WEB-INF/views/admin/layout/footerResources.jsp"/>
-  <script src="${pageContext.request.contextPath}/dist/js/admin/list.js?v=20260813"></script>
+  <!-- 화면 HTML은 이 JSP에 있고, 아래 전용 JS에는 동작만 있습니다. -->
+  <script src="${pageContext.request.contextPath}/dist/js/admin/logistics.js?v=20260818"></script>
 </body>
 </html>

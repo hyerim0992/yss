@@ -150,7 +150,9 @@
 
           <div class="empty-state">검색 결과가 없습니다.</div>
           <div class="pagination" aria-label="목록 페이지 이동">
-            <!-- 페이지 버튼의 모양은 JSP에 있고 JS는 이 template을 복제해서 번호만 바꿉니다. -->
+            <button type="button" class="page-prev" aria-label="이전 페이지">‹</button>
+            <span class="page-info">1 / 1</span>
+            <button type="button" class="page-next" aria-label="다음 페이지">›</button>
           </div>
         </article>
 
@@ -170,37 +172,8 @@
             </td>
           </tr>
         </template>
+        <!-- 등록/수정 입력폼은 파일 아래쪽의 JSP 모달 영역에 직접 작성되어 있습니다. -->
 
-        <template class="admin-form-template">
-          <div class="form-field">
-            <label>날짜</label>
-            <input type="text" data-field-index="0" data-default="" placeholder="날짜 입력">
-          </div>
-          <div class="form-field">
-            <label>방문자수</label>
-            <input type="text" data-field-index="1" data-default="" placeholder="방문자수 입력">
-          </div>
-          <div class="form-field">
-            <label>로그인회원</label>
-            <input type="text" data-field-index="2" data-default="" placeholder="로그인회원 입력">
-          </div>
-          <div class="form-field">
-            <label>비회원</label>
-            <input type="text" data-field-index="3" data-default="" placeholder="비회원 입력">
-          </div>
-          <div class="form-field">
-            <label>평균접속시간</label>
-            <input type="text" data-field-index="4" data-default="" placeholder="평균접속시간 입력">
-          </div>
-          <div class="form-field">
-            <label>최고접속시간대</label>
-            <input type="text" data-field-index="5" data-default="" placeholder="최고접속시간대 입력">
-          </div>
-          <div class="form-field">
-            <label>전일대비</label>
-            <input type="text" data-field-index="6" data-default="" placeholder="전일대비 입력">
-          </div>
-        </template>
       </section>
 
       <section class="admin-section-panel" data-admin-section="1" data-section-name="매출 현황" data-table-title="기간별 매출 통계" data-add-label="+ 신규 등록" data-can-add="false" hidden>
@@ -309,7 +282,9 @@
 
           <div class="empty-state">검색 결과가 없습니다.</div>
           <div class="pagination" aria-label="목록 페이지 이동">
-            <!-- 페이지 버튼의 모양은 JSP에 있고 JS는 이 template을 복제해서 번호만 바꿉니다. -->
+            <button type="button" class="page-prev" aria-label="이전 페이지">‹</button>
+            <span class="page-info">1 / 1</span>
+            <button type="button" class="page-next" aria-label="다음 페이지">›</button>
           </div>
         </article>
 
@@ -329,8 +304,67 @@
             </td>
           </tr>
         </template>
+        <!-- 등록/수정 입력폼은 파일 아래쪽의 JSP 모달 영역에 직접 작성되어 있습니다. -->
 
-        <template class="admin-form-template">
+      </section>
+<!-- CSV 저장용 링크도 JSP에 미리 둡니다. JS는 주소와 파일명만 설정합니다. -->
+      <a id="adminCsvDownloadLink" hidden aria-hidden="true"></a>
+    </section>
+  </main>
+
+
+  <!--
+    등록/수정 모달
+    디자인과 입력 항목은 JSP에 직접 작성하고,
+    status.js는 이 화면의 클릭·검색·페이징·모달 동작만 담당합니다.
+  -->
+  <div class="modal-backdrop" id="editModal" aria-hidden="true" hidden>
+    <section class="admin-modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <div class="modal-head">
+        <div>
+          <p id="modalGuide">정보를 입력합니다.</p>
+          <h2 id="modalTitle">신규 등록</h2>
+        </div>
+        <button type="button" class="modal-close" id="modalClose" aria-label="닫기">×</button>
+      </div>
+
+      <form id="editForm">
+        <div class="form-grid" id="formFields">
+        <!-- 접속자 현황 입력 항목 -->
+        <div class="section-form-fields" data-form-section="0" hidden>
+          <div class="form-field">
+            <label>날짜</label>
+            <input type="text" data-field-index="0" data-default="" placeholder="날짜 입력">
+          </div>
+          <div class="form-field">
+            <label>방문자수</label>
+            <input type="text" data-field-index="1" data-default="" placeholder="방문자수 입력">
+          </div>
+          <div class="form-field">
+            <label>로그인회원</label>
+            <input type="text" data-field-index="2" data-default="" placeholder="로그인회원 입력">
+          </div>
+          <div class="form-field">
+            <label>비회원</label>
+            <input type="text" data-field-index="3" data-default="" placeholder="비회원 입력">
+          </div>
+          <div class="form-field">
+            <label>평균접속시간</label>
+            <input type="text" data-field-index="4" data-default="" placeholder="평균접속시간 입력">
+          </div>
+          <div class="form-field">
+            <label>최고접속시간대</label>
+            <input type="text" data-field-index="5" data-default="" placeholder="최고접속시간대 입력">
+          </div>
+          <div class="form-field">
+            <label>전일대비</label>
+            <input type="text" data-field-index="6" data-default="" placeholder="전일대비 입력">
+          </div>
+        
+        </div>
+
+        <!-- 매출 현황 입력 항목 -->
+        <div class="section-form-fields" data-form-section="1" hidden>
           <div class="form-field">
             <label>기간</label>
             <input type="text" data-field-index="0" data-default="" placeholder="기간 입력">
@@ -359,22 +393,34 @@
             <label>순거래액</label>
             <input type="text" data-field-index="6" data-default="" placeholder="순거래액 입력">
           </div>
-        </template>
-      </section>
-
-      <!-- JS가 버튼 HTML을 문자열로 만들지 않도록 JSP에 페이지 버튼 템플릿을 둡니다. -->
-      <template id="paginationButtonTemplate">
-        <button type="button" class="page-number-button"></button>
-      </template>
-
-      <!-- CSV 저장용 링크도 JSP에 미리 둡니다. JS는 주소와 파일명만 설정합니다. -->
-      <a id="adminCsvDownloadLink" hidden aria-hidden="true"></a>
+        
+        </div>
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="light-btn" id="modalCancel">취소</button>
+          <button type="button" class="primary-btn" id="modalSave">저장</button>
+        </div>
+      </form>
     </section>
-  </main>
+  </div>
 
-  <!-- 등록/수정 모달의 바깥 디자인은 기존 공용 JSP를 그대로 사용합니다. -->
-  <jsp:include page="/WEB-INF/views/admin/layout/modal.jsp"/>
+  <!-- 삭제 확인창도 JSP에 직접 둡니다. -->
+  <div class="confirm-backdrop" id="confirmBox" aria-hidden="true" hidden>
+    <section class="confirm-box" role="alertdialog" aria-modal="true" aria-labelledby="confirmTitle">
+      <h3 id="confirmTitle">선택한 항목을 삭제할까요?</h3>
+      <p id="confirmText">화면의 예시 데이터에서 삭제됩니다.</p>
+      <div>
+        <button type="button" class="light-btn" id="confirmCancel">취소</button>
+        <button type="button" class="dark-btn danger-solid" id="confirmOk">삭제</button>
+      </div>
+    </section>
+  </div>
+
+  <!-- 간단한 안내 메시지 -->
+  <div class="toast" id="toast">처리되었습니다.</div>
+
   <jsp:include page="/WEB-INF/views/admin/layout/footerResources.jsp"/>
-  <script src="${pageContext.request.contextPath}/dist/js/admin/list.js?v=20260813"></script>
+  <!-- 화면 HTML은 이 JSP에 있고, 아래 전용 JS에는 동작만 있습니다. -->
+  <script src="${pageContext.request.contextPath}/dist/js/admin/status.js?v=20260818"></script>
 </body>
 </html>
