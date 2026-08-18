@@ -7,6 +7,28 @@ public class InquiryAnswerDTO {
 	private String content;
 	private String createdAt;
 	
+	private long fileId;
+    private String files;
+    private String serverfiles;
+	
+	public long getFileId() {
+		return fileId;
+	}
+	public void setFileId(long fileId) {
+		this.fileId = fileId;
+	}
+	public String getFiles() {
+		return files;
+	}
+	public void setFiles(String files) {
+		this.files = files;
+	}
+	public String getServerfiles() {
+		return serverfiles;
+	}
+	public void setServerfiles(String serverfiles) {
+		this.serverfiles = serverfiles;
+	}
 	public long getAnswerId() {
 		return answerId;
 	}

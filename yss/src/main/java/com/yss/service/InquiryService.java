@@ -8,9 +8,12 @@ import com.yss.dto.InquiryDTO;
 public interface InquiryService {
 	public void insertInquiry(InquiryDTO dto) throws Exception;
 	public void updateInquiry(InquiryDTO dto) throws Exception;
-	public void deleteInquiry(Map<String, Object> map);
+	public void deleteInquiry(Map<String, Object> map) throws Exception;
 	
 	public int dataCount(Map<String, Object> map);	
 	public List<InquiryDTO> listInquiry(Map<String, Object> map);
+	public InquiryDTO findById(long inquiryId);
+	public InquiryDTO findByPrev(Map<String, Object> map);
+	public InquiryDTO findByNext(Map<String, Object> map);
 		
 }

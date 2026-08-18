@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yss.mapper.InquiryAnswerMapper">
+
+	<!-- 검색 -->
+	<sql id="where-list">
+		<if test="schType == 'all'">
+			(INSTR(q.title, #{kwd}) &gt; 0 
+				OR DBMS_LOB.INSTR(q.content, #{kwd}) &gt; 0)
+		</if>
+		<if test="schType == 'title'">
+			INSTR(q.title, #{kwd}) &gt; 0
+		</if>
+		<if test="schType == 'content'">
+			DBMS_LOB.INSTR(q.content, #{kwd}) &gt; 0
+		</if>
+		<if test="schType == 'inquiryType'">
+			INSTR(q.inquiryType, #{kwd}) &gt; 0
+		</if>
+		<if test="schType == 'name'">
+			INSTR(md.name, #{kwd}) &gt; 0
+		</if>
+	</sql>
+
+	<!-- 1. 검색된 데이터 개수 가져오기 -->
+	<select id="dataCount" parameterType="map" resultType="Integer">
+		SELECT NVL(COUNT(*), 0)
+		FROM inquiry q
+		JOIN MEMBERDETAIL md ON q.memberId = md.memberId
+		<where>
+			<if test="kwd != null and kwd != ''">
+				AND <include refid="where-list"/>
+			</if>
+		</where>
+	</select>
+
+	<!-- 2. 한페이지씩 관리자용 문의 목록 가져오기 -->
+	<select id="listInquiry" parameterType="map" resultType="com.yss.dto.InquiryDTO">
+		SELECT q.inquiryId, q.memberId, md.name, q.inquiryType, q.title, q.status,
+		       TO_CHAR(q.createdAt, 'YYYY-MM-DD') AS createdAt
+		FROM inquiry q
+		JOIN MEMBERDETAIL md ON q.memberId = md.memberId
+		<where>
+			<if test="kwd != null and kwd != ''">
+				AND <include refid="where-list"/>
+			</if>
+		</where>
+		ORDER BY q.inquiryId DESC
+		OFFSET #{offset} ROWS FETCH FIRST #{size} ROWS ONLY
+	</select>
+
+	<!-- 3. 등록된 답변 조회 -->
+	<select id="findById" parameterType="Long" resultType="com.yss.dto.InquiryAnswerDTO">
+		SELECT answerId, inquiryId, answerer, content,
+		       TO_CHAR(createdAt, 'YYYY-MM-DD HH24:MI:SS') AS createdAt
+		FROM inquiryAnswer
+		WHERE inquiryId = #{inquiryId}
+	</select>
+
+	<!-- 4. 답변 등록 -->
+	<insert id="insertAnswer" parameterType="com.yss.dto.InquiryAnswerDTO">
+		INSERT INTO inquiryAnswer (answerId, inquiryId, answerer, content, createdAt)
+		VALUES (inquiryAnswer_seq.NEXTVAL, #{inquiryId}, #{answerer}, #{content}, SYSDATE)
+	</insert>
+
+	<!-- 5. 답변 수정 -->
+	<update id="updateAnswer" parameterType="com.yss.dto.InquiryAnswerDTO">
+		UPDATE inquiryAnswer
+		SET content = #{content}
+		WHERE inquiryId = #{inquiryId}
+	</update>
+
+	<!-- 6. 답변 삭제 -->
+	<delete id="deleteAnswer" parameterType="Long">
+		DELETE FROM inquiryAnswer
+		WHERE inquiryId = #{inquiryId}
+	</delete>
+
+</mapper>

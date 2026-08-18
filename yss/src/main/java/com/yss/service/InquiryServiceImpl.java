@@ -24,13 +24,25 @@ public class InquiryServiceImpl implements InquiryService {
 
 	@Override
 	public void updateInquiry(InquiryDTO dto) throws Exception {
-		
+		try {
+			mapper.updateInquiry(dto);
+		} catch (Exception e) {
+			e.printStackTrace();
+			
+			throw e;
+		}
 	}
 
-	@Override
-	public void deleteInquiry(Map<String, Object> map) {
-		
-	}
+	 @Override
+	 public void deleteInquiry(Map<String, Object> map) throws Exception {
+		 try {
+			 mapper.deleteInquiry(map);
+		 } catch (Exception e) {
+			 e.printStackTrace();
+	
+		   	 throw e;
+	 }
+}
 
 	@Override
 	public int dataCount(Map<String, Object> map) {
@@ -56,6 +68,39 @@ public class InquiryServiceImpl implements InquiryService {
 		 
 		 return list;
 	}
-
 	
+	@Override
+	public InquiryDTO findById(long inquiryId) {
+		InquiryDTO dto = null;
+		try {
+			dto = mapper.findById(inquiryId);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return dto;
+	}
+
+	@Override
+	public InquiryDTO findByPrev(Map<String, Object> map) {
+		InquiryDTO dto = null;
+		try {
+			dto = mapper.findByPrev(map);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return dto;
+	}
+
+	@Override
+	public InquiryDTO findByNext(Map<String, Object> map) {
+		InquiryDTO dto = null;
+		try {
+			dto = mapper.findByNext(map);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return dto;
+	}
 }
+	
+
