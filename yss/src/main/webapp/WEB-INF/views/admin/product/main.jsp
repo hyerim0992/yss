@@ -272,172 +272,6 @@
         </template>
       </section>
 
-      <section class="admin-section-panel" data-admin-section="1" data-section-name="브랜드 관리" data-table-title="브랜드 목록" data-add-label="+ 브랜드 등록" data-can-add="true" hidden>
-        <article class="panel search-panel">
-          <div class="search-row">
-            <select class="js-search-type" aria-label="검색 항목">
-              <option value="all">전체</option>
-              <option value="0">브랜드코드</option>
-              <option value="1">브랜드명</option>
-              <option value="2">영문명</option>
-              <option value="3">등록상품수</option>
-              <option value="4">등록일</option>
-              <option value="5">상태</option>
-            </select>
-            <input type="search" class="js-search-keyword" placeholder="검색어를 입력하세요">
-            <button type="button" class="dark-btn js-search-button">검색</button>
-            <button type="button" class="light-btn js-reset-button">초기화</button>
-          </div>
-          <div class="filter-row is-hidden" aria-label="추가 검색 조건">
-            <!-- 이 탭은 추가 검색 조건이 없습니다. -->
-          </div>
-        </article>
-
-        <article class="panel">
-          <div class="panel-title">
-            <div>
-              <h2>브랜드 목록</h2>
-              <p>검색 결과 <b class="result-count">4</b>건 · 선택 <b class="selected-count">0</b>건</p>
-            </div>
-            <div>
-              <button type="button" class="light-btn danger-btn delete-selected-button">선택 삭제</button>
-              <button type="button" class="light-btn export-button">CSV 저장</button>
-            </div>
-          </div>
-
-          <div class="table-wrap">
-            <table>
-              <thead>
-                <tr>
-                  <th><input type="checkbox" class="check-all" aria-label="현재 페이지 전체 선택"></th>
-                  <th>브랜드코드</th>
-                  <th>브랜드명</th>
-                  <th>영문명</th>
-                  <th>등록상품수</th>
-                  <th>등록일</th>
-                  <th>상태</th>
-                  <th>관리</th>
-                </tr>
-              </thead>
-              <tbody class="data-body">
-                <!--
-                  ★ 연습 포인트
-                  아래 샘플 행을 보고 나중에 Controller에서 List를 받아
-                  직접 c:forEach / DTO 출력 코드로 바꿔보세요.
-                  지금은 연습할 수 있도록 샘플 HTML을 그대로 둔 상태입니다.
-                -->
-              <tr class="data-row">
-                  <td><input type="checkbox" class="row-check" aria-label="항목 선택"></td>
-                  <td data-field-index="0">BR-NK</td>
-                  <td data-field-index="1">나이키</td>
-                  <td data-field-index="2">NIKE</td>
-                  <td data-field-index="3">128개</td>
-                  <td data-field-index="4">2026-05-10</td>
-                  <td data-field-index="5"><span class="badge green">사용중</span></td>
-                  <td class="action-cell">
-                    <button type="button" class="light-btn edit-row">수정</button>
-                    <button type="button" class="light-btn delete-row">삭제</button>
-                  </td>
-              </tr>
-
-              <tr class="data-row">
-                  <td><input type="checkbox" class="row-check" aria-label="항목 선택"></td>
-                  <td data-field-index="0">BR-NB</td>
-                  <td data-field-index="1">뉴발란스</td>
-                  <td data-field-index="2">NEW BALANCE</td>
-                  <td data-field-index="3">76개</td>
-                  <td data-field-index="4">2026-05-10</td>
-                  <td data-field-index="5"><span class="badge green">사용중</span></td>
-                  <td class="action-cell">
-                    <button type="button" class="light-btn edit-row">수정</button>
-                    <button type="button" class="light-btn delete-row">삭제</button>
-                  </td>
-              </tr>
-
-              <tr class="data-row">
-                  <td><input type="checkbox" class="row-check" aria-label="항목 선택"></td>
-                  <td data-field-index="0">BR-AD</td>
-                  <td data-field-index="1">아디다스</td>
-                  <td data-field-index="2">ADIDAS</td>
-                  <td data-field-index="3">94개</td>
-                  <td data-field-index="4">2026-05-11</td>
-                  <td data-field-index="5"><span class="badge green">사용중</span></td>
-                  <td class="action-cell">
-                    <button type="button" class="light-btn edit-row">수정</button>
-                    <button type="button" class="light-btn delete-row">삭제</button>
-                  </td>
-              </tr>
-
-              <tr class="data-row">
-                  <td><input type="checkbox" class="row-check" aria-label="항목 선택"></td>
-                  <td data-field-index="0">BR-AS</td>
-                  <td data-field-index="1">아식스</td>
-                  <td data-field-index="2">ASICS</td>
-                  <td data-field-index="3">42개</td>
-                  <td data-field-index="4">2026-05-15</td>
-                  <td data-field-index="5"><span class="badge green">사용중</span></td>
-                  <td class="action-cell">
-                    <button type="button" class="light-btn edit-row">수정</button>
-                    <button type="button" class="light-btn delete-row">삭제</button>
-                  </td>
-              </tr>
-              </tbody>
-            </table>
-          </div>
-
-          <div class="empty-state">검색 결과가 없습니다.</div>
-          <div class="pagination" aria-label="목록 페이지 이동">
-            <!-- 페이지 버튼의 모양은 JSP에 있고 JS는 이 template을 복제해서 번호만 바꿉니다. -->
-          </div>
-        </article>
-
-                <template class="admin-row-template">
-          <tr class="data-row">
-            <td><input type="checkbox" class="row-check" aria-label="항목 선택"></td>
-              <td data-field-index="0"></td>
-              <td data-field-index="1"></td>
-              <td data-field-index="2"></td>
-              <td data-field-index="3"></td>
-              <td data-field-index="4"></td>
-              <td data-field-index="5"><span class="badge blue"></span></td>
-            <td class="action-cell">
-              <button type="button" class="light-btn edit-row">수정</button>
-              <button type="button" class="light-btn delete-row">삭제</button>
-            </td>
-          </tr>
-        </template>
-
-        <template class="admin-form-template">
-          <div class="form-field">
-            <label>브랜드코드</label>
-            <input type="text" data-field-index="0" data-default="" placeholder="브랜드코드 입력">
-          </div>
-          <div class="form-field">
-            <label>브랜드명</label>
-            <input type="text" data-field-index="1" data-default="" placeholder="브랜드명 입력">
-          </div>
-          <div class="form-field">
-            <label>영문명</label>
-            <input type="text" data-field-index="2" data-default="" placeholder="영문명 입력">
-          </div>
-          <div class="form-field">
-            <label>등록상품수</label>
-            <input type="text" data-field-index="3" data-default="" placeholder="등록상품수 입력">
-          </div>
-          <div class="form-field">
-            <label>등록일</label>
-            <input type="text" data-field-index="4" data-default="" placeholder="등록일 입력">
-          </div>
-          <div class="form-field">
-            <label>상태</label>
-            <select data-field-index="5" data-default="사용중">
-              <option value="">선택해 주세요</option>
-              <option value="사용중" selected>사용중</option>
-              <option value="사용중지">사용중지</option>
-            </select>
-          </div>
-        </template>
-      </section>
 
       <!-- JS가 버튼 HTML을 문자열로 만들지 않도록 JSP에 페이지 버튼 템플릿을 둡니다. -->
       <template id="paginationButtonTemplate">
@@ -450,6 +284,17 @@
   </main>
   
   <script type="text/javascript">
+  function sendOk() {
+		const f = document.editForm;
+		
+		f.submit();
+	}
+
+	document.querySelector('#thumbnail').addEventListener('click', uploadFile);
+
+	function uploadFile() {
+		
+	}
 
   </script>
 

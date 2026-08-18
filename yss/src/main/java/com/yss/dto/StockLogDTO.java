@@ -1,46 +1,21 @@
 package com.yss.dto;
 
-public class LogDTO {
+public class StockLogDTO {
 	// erd 황색 테이블
 	
-	private long inboundId;
-	private int inboundQuantity;
-	private int unitPrice; // 입고단가
-	private String inboundDate;
-	
 	private long logId;
+	private long optionId;
+	private long orderItemId;
 	private String changeType; // 변동유형
-	private int changeQuantity;
-	private String changeDate;
+	
+	private int changeQuantity; // 변동 수량
+	private int changedStock; // 변동 후 수량
+	private String changeDate; // 변동 일시
 	
 	private long containerId;
 	private String zone;
 	
 	
-	public long getInboundId() {
-		return inboundId;
-	}
-	public void setInboundId(long inboundId) {
-		this.inboundId = inboundId;
-	}
-	public int getInboundQuantity() {
-		return inboundQuantity;
-	}
-	public void setInboundQuantity(int inboundQuantity) {
-		this.inboundQuantity = inboundQuantity;
-	}
-	public int getUnitPrice() {
-		return unitPrice;
-	}
-	public void setUnitPrice(int unitPrice) {
-		this.unitPrice = unitPrice;
-	}
-	public String getInboundDate() {
-		return inboundDate;
-	}
-	public void setInboundDate(String inboundDate) {
-		this.inboundDate = inboundDate;
-	}
 	public long getLogId() {
 		return logId;
 	}
@@ -77,7 +52,24 @@ public class LogDTO {
 	public void setZone(String zone) {
 		this.zone = zone;
 	}
-	
+	public long getOptionId() {
+		return optionId;
+	}
+	public void setOptionId(long optionId) {
+		this.optionId = optionId;
+	}
+	public long getOrderItemId() {
+		return orderItemId;
+	}
+	public void setOrderItemId(long orderItemId) {
+		this.orderItemId = orderItemId;
+	}
+	public int getChangedStock() {
+		return changedStock;
+	}
+	public void setChangedStock(int changedStock) {
+		this.changedStock = changedStock;
+	}
 	
 	
 }
