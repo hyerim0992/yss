@@ -46,30 +46,49 @@
             <section class="abc-cs-view is-active" aria-labelledby="abcNoticeTitle">
               <header class="abc-cs-section-head"><div><h2 id="abcNoticeTitle">공지사항</h2><p>서비스 운영과 이벤트 관련 주요 안내를 확인하세요.</p></div></header>
 
-              <form class="abc-cs-search" id="abcNoticeSearchForm" method="get" action="${ctx}/customer/notice/list">
+              <form class="abc-cs-search" id="abcNoticeSearchForm" method="get" action="${pageContext.request.contextPath}/customer/notice/list">
                 <i class="fas fa-search" aria-hidden="true"></i>
+                <input type="hidden" name="schType" value="title">
                 <input id="abcNoticeSearchInput" name="kwd" type="search" placeholder="공지사항 제목을 검색해 주세요." autocomplete="off" />
                 <button type="submit">검색</button>
               </form>
-
-              <div class="abc-cs-category-grid abc-cs-category-grid--notice" aria-label="공지사항 분류">
-                <button type="button" class="is-active" data-abc-notice-category="전체">전체</button>
-                <button type="button" data-abc-notice-category="공지">공지</button>
-                <button type="button" data-abc-notice-category="이벤트">이벤트</button>
-                <button type="button" data-abc-notice-category="서비스 안내">서비스 안내</button>
-              </div>
+				
+			  <br>
 
               <div class="abc-cs-table-head abc-cs-notice-columns"><span>번호</span><span>제목</span><span>작성일</span></div>
               <!-- ★ 연습 포인트: 아래 샘플 버튼들을 나중에 직접 반복 출력 구조로 바꿔보세요. -->
-              <div class="abc-cs-notice-list" id="abcNoticeList">
-                <button type="button" class="abc-cs-notice-row is-pinned" data-category="공지" data-title="개인정보처리방침 개정 안내" data-date="2026.08.04" data-body="서비스 이용에 적용되는 개인정보처리방침이 개정됩니다. 변경된 주요 내용을 확인해 주세요."><span class="abc-cs-notice-number">중요</span><strong>개인정보처리방침 개정 안내</strong><time>2026.08.04</time></button>
-                <button type="button" class="abc-cs-notice-row is-pinned" data-category="서비스 안내" data-title="택배 없는 날 배송 및 정산 일정 안내" data-date="2026.08.03" data-body="택배 없는 날 전후로 배송과 정산 일정이 일부 조정됩니다."><span class="abc-cs-notice-number">중요</span><strong>택배 없는 날 배송 및 정산 일정 안내</strong><time>2026.08.03</time></button>
-                <button type="button" class="abc-cs-notice-row" data-category="이벤트" data-title="신규 회원 웰컴 쿠폰 이벤트" data-date="2026.07.29" data-body="신규 가입 회원을 위한 웰컴 쿠폰 이벤트가 진행됩니다."><span class="abc-cs-notice-number">126</span><strong>[이벤트] 신규 회원 웰컴 쿠폰 안내</strong><time>2026.07.29</time></button>
-                <button type="button" class="abc-cs-notice-row" data-category="공지" data-title="상품 심의 접수 절차 안내" data-date="2026.07.28" data-body="상품 상태 확인이 필요한 경우 1:1 문의를 통해 심의를 신청할 수 있습니다."><span class="abc-cs-notice-number">125</span><strong>상품 심의 접수 절차 안내</strong><time>2026.07.28</time></button>
-                <button type="button" class="abc-cs-notice-row" data-category="이벤트" data-title="여름 시즌 래플 당첨자 발표" data-date="2026.07.24" data-body="여름 시즌 래플 이벤트 당첨자를 발표합니다."><span class="abc-cs-notice-number">124</span><strong>[이벤트 발표] 여름 시즌 래플 당첨자 안내</strong><time>2026.07.24</time></button>
-                <button type="button" class="abc-cs-notice-row" data-category="서비스 안내" data-title="고객센터 운영시간 변경 안내" data-date="2026.07.20" data-body="고객센터 운영시간이 평일 오전 9시부터 오후 6시까지로 변경됩니다."><span class="abc-cs-notice-number">123</span><strong>고객센터 운영시간 변경 안내</strong><time>2026.07.20</time></button>
+              <div class="abc-cs-notice-list">
+              	<c:forEach var="dto" items="${list}" varStatus="status">
+              		<div class="abc-cs-notice-row">
+              			<div class="notice-number">
+              				${dataCount - (page - 1) * size - status.index}
+              			</div>
+              			
+              			<div class="notice-title">
+              				<a href="${articleUrl}&noticeId=${dto.noticeId}">
+              					<c:out value="${dto.title}"/>
+              				</a>
+              			</div>
+              			
+              			<div class="notice-date">
+              				<c:out value="${dto.createDate}"/>
+              			</div>
+              		</div>
+              	</c:forEach>
               </div>
-              <div class="abc-cs-empty" id="abcNoticeEmpty" hidden><strong>검색 결과가 없습니다.</strong><p>다른 검색어 또는 분류를 선택해 보세요.</p></div>
+              
+              <div class="page-navigation" style="text-align: center;">
+              	<c:choose>
+              		<c:when test="${dataCount == 0}">
+              			<strong>검색 결과가 없습니다.</strong>
+              			<p>다른 검색어 또는 분류를 선택해 보세요.</p>
+              		</c:when>
+              		
+              		<c:otherwise>
+              			${paging}
+              		</c:otherwise>
+              	</c:choose>
+              </div>
 
               <!-- 상세 화면의 모양도 JSP에 미리 둡니다. JS는 글자만 채우고 숨김/표시만 합니다. -->
               <article class="abc-cs-notice-detail" id="abcNoticeDetail" hidden>
@@ -97,7 +116,6 @@
   <script src="${ctx}/dist/js/vendor/jquery.magnific-popup.js"></script>
   <script src="${ctx}/dist/js/common/plugins.js"></script>
   <script src="${ctx}/dist/js/common/main.js"></script>
-  <script src="${ctx}/dist/js/pages/customer/notice.js?v=20260812-jsp"></script>
   <script src="${ctx}/dist/js/common/layout.js?v=20260806-0056"></script>
 </body>
 </html>

@@ -17,7 +17,7 @@
   <link rel="stylesheet" href="${pageContext.request.contextPath}/dist/css/admin/list.css?v=20260812">
   <link rel="stylesheet" href="${pageContext.request.contextPath}/dist/css/admin/support.css?v=20260812">
 </head>
-<body>
+<body data-context-path="${pageContext.request.contextPath}">
   <jsp:include page="/WEB-INF/views/common/page-loader.jsp"/>
   <jsp:include page="/WEB-INF/views/admin/layout/header.jsp"/>
   <jsp:include page="/WEB-INF/views/admin/layout/left.jsp"/>
@@ -118,7 +118,7 @@
               					수정
               				</a>
               				
-              				<a href="${pageContext.request.contextPath}/admin/support/notice/delete?noticeId=${dto.noticeId}&page=${page}ze=${size}"
+              				<a href="${pageContext.request.contextPath}/admin/support/notice/delete?noticeId=${dto.noticeId}&page=${page}&size=${size}"
               					class="light-btn"
               					onclick="return confirm('공지사항을 삭제하시겠습니까?');">
               					삭제

@@ -6,6 +6,7 @@ import java.util.Map;
 import com.yss.dto.NoticeDTO;
 import com.yss.mapper.NoticeMapper;
 import com.yss.mybatis.support.MapperContainer;
+import com.yss.util.MyMultipartFile;
 
 public class NoticeServiceImpl implements NoticeService {
 	private NoticeMapper mapper = MapperContainer.get(NoticeMapper.class);
@@ -14,7 +15,22 @@ public class NoticeServiceImpl implements NoticeService {
 	public void insertNotice(NoticeDTO dto) throws Exception {
 		
 		try {
+			// 게시물번호(시퀀스)
+			dto.setNoticeId(mapper.noticeSeq());
+			
+			// 게시글 등록
 			mapper.insertNotice(dto);
+			
+			// 퍼일 저장
+			if (dto.getListFile().size() != 0) {
+				for (MyMultipartFile mf: dto.getListFile()) {
+					dto.setServerFiles(mf.getSaveFilename());
+					dto.setFiles(mf.getOriginalFilename());
+					
+					mapper.insertNoticeFile(dto);
+				}
+			}			
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 			
@@ -85,9 +101,42 @@ public class NoticeServiceImpl implements NoticeService {
 			throw e;
 		}
 	}
-	
-	
-	
-	
+
+	@Override
+	public List<NoticeDTO> listNoticeFile(long noticeId) {
+		List<NoticeDTO> list = null;
+		
+		try {
+			list = mapper.listNoticeFile(noticeId);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+
+	@Override
+	public NoticeDTO findByFileId(long fileId) {
+		NoticeDTO dto = null;
+		
+		try {
+			dto = mapper.findByFileId(fileId);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return dto;
+	}
+
+	@Override
+	public void deleteNoticeFile(Map<String, Object> map) throws Exception {
+		try {
+			mapper.deleteNoticeFile(map);
+		} catch (Exception e) {
+			e.printStackTrace();
+			
+			throw e;
+		}
+	}
+
 
 }

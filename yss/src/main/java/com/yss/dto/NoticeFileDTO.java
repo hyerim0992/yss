@@ -4,7 +4,7 @@ public class NoticeFileDTO {
 	private Long fileId;
 	private Long noticeId;
 	private String files;
-	private String serverfiles;
+	private String serverFiles;
 	public Long getFileId() {
 		return fileId;
 	}
@@ -23,12 +23,10 @@ public class NoticeFileDTO {
 	public void setFiles(String files) {
 		this.files = files;
 	}
-	public String getServerfiles() {
-		return serverfiles;
+	public String getServerFiles() {
+		return serverFiles;
 	}
-	public void setServerfiles(String serverfiles) {
-		this.serverfiles = serverfiles;
+	public void setServerFiles(String serverFiles) {
+		this.serverFiles = serverFiles;
 	}
-	
-	
 }

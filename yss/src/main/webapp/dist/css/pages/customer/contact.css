@@ -981,3 +981,29 @@
   color: #999ca1;
   text-align: center;
 }
+
+.notice-item {
+	display: flex;
+	align-items: center;
+	padding: 15px 0;
+	border-bottom: 1px solid #ddd;
+}
+
+.notice-number {
+	width: 10%;
+	text-align: center;
+}
+
+.notice-title {
+	width: 55%;
+}
+
+.notice-writer {
+	width: 15%;
+	text-align: center;
+}
+
+.notice-date {
+	width: 20%;
+	text-align: center;
+}

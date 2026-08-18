@@ -15,8 +15,7 @@ public class NoticeDTO {
     private List<MyMultipartFile> listFile;
     private Long fileId;
 	private String files;
-	private String serverfiles;
-	
+	private String serverFiles;
 	public Long getNoticeId() {
 		return noticeId;
 	}
@@ -71,11 +70,11 @@ public class NoticeDTO {
 	public void setFiles(String files) {
 		this.files = files;
 	}
-	public String getServerfiles() {
-		return serverfiles;
+	public String getServerFiles() {
+		return serverFiles;
 	}
-	public void setServerfiles(String serverfiles) {
-		this.serverfiles = serverfiles;
+	public void setServerFiles(String serverFiles) {
+		this.serverFiles = serverFiles;
 	}
 
 }

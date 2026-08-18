@@ -2,10 +2,13 @@
 
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.yss.mapper.NoticeMapper">
+	<select id="noticeSeq" resultType="Long">
+		SELECT notice_seq.NEXTVAL FROM dual
+	</select>
 
 	<insert id="insertNotice" parameterType="com.yss.dto.NoticeDTO">
 		INSERT INTO notice (noticeId, memberId, title, content, createDate)
-		VALUES (NOTICE_SEQ.NEXTVAL, #{memberId}, #{title}, #{content}, SYSDATE)
+		VALUES (#{noticeId}, #{memberId}, #{title}, #{content}, SYSDATE)
 	</insert>
 	
 	<!-- 검색 종류 -->
@@ -70,6 +73,32 @@
 	<delete id="deleteNotice" parameterType="Long">
 		DELETE FROM notice
 		WHERE noticeId = #{noticeId}
+	</delete>
+	
+	<!-- 파일 -->
+	<insert id="insertNoticeFile" parameterType="com.yss.dto.NoticeDTO">
+		INSERT INTO noticeFile(fileId, noticeId, files, serverFiles)
+		VALUES (notice_file_seq.NEXTVAL, #{noticeId}, #{files}, #{serverFiles})
+	</insert>
+	
+	<!-- 파일목록조회 -->
+	<select id="listNoticeFile" parameterType="Long" resultType="com.yss.dto.NoticeDTO">
+		SELECT fileId, noticeId, files, serverFiles
+		FROM noticeFile
+		WHERE noticeId = #{noticeId}
+	</select>
+	
+	<!-- 특정파일조회 -->
+	<select id="findByFileId" parameterType="Long" resultType="com.yss.dto.NoticeDTO">
+		SELECT fileId, noticeId, files, serverFiles
+		FROM noticeFile
+		WHERE fileId = #{fileId}
+	</select>
+	
+	<!-- 파일삭제 -->
+	<delete id="deleteNoticeFile" parameterType="map">
+		DELETE FROM noticeFile
+		WHERE ${field} = #{noticeId}
 	</delete>
 	
 	

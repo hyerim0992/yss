@@ -1,6 +1,8 @@
 package com.yss.controller.admin;
 
+import java.io.File;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -14,6 +16,8 @@ import com.yss.mvc.annotation.RequestMapping;
 import com.yss.mvc.view.ModelAndView;
 import com.yss.service.NoticeService;
 import com.yss.service.NoticeServiceImpl;
+import com.yss.util.FileManager;
+import com.yss.util.MyMultipartFile;
 import com.yss.util.MyUtil;
 import com.yss.util.PaginateUtil;
 
@@ -28,6 +32,7 @@ public class NoticeManageController {
 	private NoticeService service = new NoticeServiceImpl();
 	private MyUtil util = new MyUtil();
 	private PaginateUtil paginateUtil = new PaginateUtil();
+	private FileManager fileManager = new FileManager();
 	
     @GetMapping("list")
     public ModelAndView list(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -134,7 +139,34 @@ public class NoticeManageController {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-    	return new ModelAndView("redirect:/admin/support/notice/lsit" + query);
+    	return new ModelAndView("redirect:/admin/support/notice/list" + query);
+    }
+    
+    @GetMapping("download")
+    public void download(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    	HttpSession session = req.getSession();
+    	
+    	String root = session.getServletContext().getRealPath("/");
+		String pathname = root + "uploads" + File.separator + "notice";
+		
+		boolean b = false;
+		
+		try {
+			long fileId = Long.parseLong(req.getParameter("fileId"));
+			
+			NoticeDTO dto = service.findByFileId(fileId);
+			if(dto != null) {
+				b = fileManager.doFiledownload(dto.getServerFiles(), dto.getFiles(), pathname, resp);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		if(!b) {
+			resp.setContentType("text/html; charset=utf-8");
+			PrintWriter out = resp.getWriter();
+			out.print("<script>alert('파일다운로드가 실패 했습니다.'); history.back();</script>");
+		}
     }
     
     @GetMapping("write")
@@ -153,7 +185,9 @@ public class NoticeManageController {
     	HttpSession session = req.getSession();
     	SessionInfo info = (SessionInfo)session.getAttribute("member");
     	
-    	
+		String root = session.getServletContext().getRealPath("/");
+		String pathname = root + "uploads" + File.separator + "notice";
+		
     	try {
 			NoticeDTO dto = new NoticeDTO();
 			
@@ -161,6 +195,10 @@ public class NoticeManageController {
 			
 			dto.setTitle(req.getParameter("title"));
 			dto.setContent(req.getParameter("content"));
+			
+			// 파일 업로드
+			List<MyMultipartFile> listFile = fileManager.doFileUpload(req.getParts(), pathname);
+			dto.setListFile(listFile);
 			
 			service.insertNotice(dto);
 		} catch (Exception e) {

@@ -17,7 +17,7 @@
   <link rel="stylesheet" href="${pageContext.request.contextPath}/dist/css/admin/list.css?v=20260812">
   <link rel="stylesheet" href="${pageContext.request.contextPath}/dist/css/admin/support.css?v=20260812">
 </head>
-<body>
+<body data-context-path="${pageContext.request.contextPath}">
   <jsp:include page="/WEB-INF/views/common/page-loader.jsp"/>
   <jsp:include page="/WEB-INF/views/admin/layout/header.jsp"/>
   <jsp:include page="/WEB-INF/views/admin/layout/left.jsp"/>
@@ -42,7 +42,7 @@
     </section>
     
     <article class="panel">
-		<form name="noticeForm"  method="post">
+		<form name="noticeForm"  method="post" enctype="multipart/form-data">
 				
 			<table>
 				<tr>
@@ -58,6 +58,13 @@
 						<textarea name="content" id="ir1" class="form-control" style="width: 99%; height: 300px;">${dto.content}</textarea>
 					</td>
 				</tr>
+				
+				<tr>
+					<th>파일</th> 
+					<td>
+						<input type="file" name="selectFile" multiple>
+				 	</td>
+				</tr>				
 			</table>
 			
 			<button type="button" onclick="submitContents(this.form);">

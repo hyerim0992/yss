@@ -22,7 +22,7 @@
         href="${pageContext.request.contextPath}/dist/css/admin/support.css?v=20260812">
 </head>
 
-<body>
+<body data-context-path="${pageContext.request.contextPath}">
 	<jsp:include page="/WEB-INF/views/admin/layout/header.jsp"/>
   	<jsp:include page="/WEB-INF/views/admin/layout/left.jsp"/>
   	
@@ -56,6 +56,18 @@
   				<div>
   					${dto.content}
   				</div>
+  				
+  				<!-- 첨부파일 -->
+  				<c:if test="${not empty listFile}">
+  					<div class="support-file" style="margin-top: 20px;">
+  						<i class="bi bi-folder2-open"></i>
+  						<c:forEach var="vo" items="${listFile}" varStatus="status">
+  							<a href="${pageContext.request.contextPath}/admin/support/notice/download?fileId=${vo.fileId}"
+  								class="text-reset">${vo.files}</a>
+  								<c:if test="${not status.last}"> | </c:if>
+  						</c:forEach>
+  					</div>
+  				</c:if>
   				
   				<div class="support-actions" style="margin-top: 30px;">
   					<a href="${pageContext.request.contextPath}/admin/support/notice/list?${query}"
