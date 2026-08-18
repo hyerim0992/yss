@@ -16,6 +16,7 @@
   <link rel="stylesheet" href="${pageContext.request.contextPath}/dist/css/admin/list.css?v=20260813">
   <link rel="stylesheet" href="${pageContext.request.contextPath}/dist/css/admin/modal.css?v=20260813">
   <link rel="stylesheet" href="${pageContext.request.contextPath}/dist/css/admin/static-list.css?v=20260813">
+  <link rel="stylesheet" href="${pageContext.request.contextPath}/dist/css/admin/paginate.css" type="text/css">
 </head>
 <body data-context-path="${pageContext.request.contextPath}">
   <jsp:include page="/WEB-INF/views/common/page-loader.jsp"/>
@@ -40,17 +41,16 @@
       <!-- 검색 영역 : 화면 구조는 JSP에 두고 JS는 입력값을 읽어서 행을 보여주거나 숨기기만 합니다. -->
       <article class="panel search-panel">
         <div class="search-row">
-          <select id="searchType" aria-label="검색 항목">
+          <select id="schType" aria-label="검색 항목">
             <option value="all">전체</option>
-            <option value="productId">상품번호</option>
             <option value="prodName">상품명</option>
             <option value="brand">브랜드</option>
-            <option value="categoryId">카테고리</option>
+            <option value="ctgName">카테고리</option>
             <option value="inboundPrice">입고가</option>
             <option value="price">판매가</option>
             <option value="heelHeight">힐높이</option>
           </select>
-          <input type="search" id="searchKeyword" placeholder="검색어를 입력하세요">
+          <input type="search" id="kwd" placeholder="검색어를 입력하세요">
           <button type="button" class="dark-btn" id="searchButton">검색</button>
           <button type="button" class="light-btn" id="resetButton">초기화</button>
         </div>
@@ -69,7 +69,6 @@
             <label for="gradeFilter">상품 노출등급</label>
             <select id="gradeFilter">
               <option value="">전체</option>
-              <option value="1">전체회원</option>
               <option value="2">실버이상</option>
               <option value="3">골드이상</option>
               <option value="4">VIP</option>
@@ -174,13 +173,9 @@
         </div>
 
         <div class="empty-state" id="emptyState">검색 결과가 없습니다.</div>
-
-        <!-- 페이지 버튼의 HTML도 JSP에 둡니다. JS는 disabled와 페이지 숫자만 바꿉니다. -->
-        <div class="pagination" aria-label="목록 페이지 이동">
-          <button type="button" id="prevPage" aria-label="이전 페이지">‹</button>
-          <span id="pageInfo">1 / 1</span>
-          <button type="button" id="nextPage" aria-label="다음 페이지">›</button>
-        </div>
+	    <div class="page-navigation">
+			${dataCount == 0 ? "등록된 게시물이 없습니다." : paging}
+		</div>
       </article>
 
       <!-- CSV 다운로드에 사용하는 숨은 링크. 모양이 필요한 요소이므로 JSP에 미리 둡니다. -->

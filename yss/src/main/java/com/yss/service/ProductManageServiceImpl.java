@@ -43,4 +43,11 @@ public class ProductManageServiceImpl implements ProductManageService {
 	}
 
 
+	@Override
+	public int countProductManage(Map<String, Object> map) {
+		int result = mapper.countProductManage(map);
+		return result;
+	}
+
+
 }

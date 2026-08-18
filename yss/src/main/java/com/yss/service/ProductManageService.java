@@ -10,6 +10,7 @@ public interface ProductManageService {
 	
 	public List<ProductDTO> listProductManage(Map<String, Object> map) throws Exception;
 	public void insertProduct(ProductDTO dto) throws Exception;
+	public int countProductManage(Map<String, Object> map);
 	
 	
 	

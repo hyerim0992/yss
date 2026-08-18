@@ -43,6 +43,8 @@ public class ProductManageController {
 			Map<String, Object> map = new HashMap<String, Object>();
 			
 			int page = 1;
+			int totalCount = 0;
+			int totalPage = 0;
 			
 			String pageNo = req.getParameter("page");
 			if(pageNo != null && ! pageNo.isBlank()) {
@@ -51,15 +53,58 @@ public class ProductManageController {
 			
 			int size = 10;
 			int offset = (page - 1) * size;
+			if(offset < 0) offset = 0;
 			
 			map.put("size", size);
 			map.put("offset", offset);
 			
+			String schType = req.getParameter("schType");
+			String kwd = req.getParameter("kwd");
+			String dateFrom = req.getParameter("dateFrom");
+			String dateTo = req.getParameter("dateTo");
+			String minGrade = req.getParameter("minGrade");
+			String status = req.getParameter("status");
+			if(schType == null) {
+				schType = "all";
+				kwd = "";
+			}
+			
+			kwd = util.decodeUrl(kwd);
+			
+			map.put("schType", schType);
+			map.put("kwd", kwd);
+			map.put("dateFrom", dateFrom);
+			map.put("dateTo", dateTo);
+			map.put("minGrade", minGrade);
+			map.put("status", status);
+
+			
+			totalCount = service.countProductManage(map);
+			totalPage = paginateUtil.pageCount(totalCount, size);
+			page = Math.min(page, totalPage);
+			
 			List<ProductDTO> list = service.listProductManage(map);
+			
+			// 페이징
+			String query;
+			String cp = req.getContextPath();
+			String listUrl = cp + "/admin/product";
+			if(! kwd.isBlank()) {
+				query = "schType=" + schType + "kwd=" + util.encodeUrl(kwd);
+				listUrl += "?" + query; 
+			}
+			
+			
+			String paging = paginateUtil.paging(page, totalPage, listUrl);
+			
 			
 					
 			mav.addObject("list", list);
 			mav.addObject("page", page);
+			mav.addObject("totalPage", totalPage);
+			mav.addObject("totalCount", totalCount);
+			mav.addObject("size", size);
+			mav.addObject("paging", paging);
 			
 
 		} catch (Exception e) {

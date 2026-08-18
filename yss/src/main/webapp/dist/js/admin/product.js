@@ -5,13 +5,12 @@
 // 이 파일에는 검색, 선택, 모달, 이미지 미리보기 같은 동작만 둡니다.
 // Eclipse에서도 읽기 쉽도록 var / function / if 중심으로 작성했습니다.
 
-var PAGE_SIZE = 10;
-var currentPage = 1;
+
 var editingRow = null;
 var previewUrl = "";
 
-var searchType = document.querySelector("#searchType");
-var searchKeyword = document.querySelector("#searchKeyword");
+var schType = document.querySelector("#schType");
+var kwd = document.querySelector("#kwd");
 var dateFrom = document.querySelector("#dateFrom");
 var dateTo = document.querySelector("#dateTo");
 var gradeFilter = document.querySelector("#gradeFilter");
@@ -44,7 +43,7 @@ function cellValue(row, name) {
 
 // 검색 조건에 맞는 상품 행만 모으기
 function filteredRows() {
-    var keyword = searchKeyword.value.trim().toLowerCase();
+    var keyword = schType.value.trim().toLowerCase();
     var allRows = rows();
     var result = [];
 
@@ -52,10 +51,10 @@ function filteredRows() {
         var row = allRows[i];
         var target = "";
 
-        if (searchType.value === "all") {
+        if (schType.value === "all") {
             target = row.textContent;
         } else {
-            target = cellValue(row, searchType.value);
+            target = cellValue(row, schType.value);
         }
 
         var regDate = cellValue(row, "regDate").slice(0, 10);
@@ -76,11 +75,7 @@ function filteredRows() {
 // 한 페이지에 10개씩 표시
 function renderList() {
     var matched = filteredRows();
-    var totalPages = Math.max(1, Math.ceil(matched.length / PAGE_SIZE));
 
-    if (currentPage > totalPages) {
-        currentPage = totalPages;
-    }
 
     var allRows = rows();
     var i;
@@ -89,18 +84,6 @@ function renderList() {
         allRows[i].hidden = true;
     }
 
-    var start = (currentPage - 1) * PAGE_SIZE;
-    var end = Math.min(start + PAGE_SIZE, matched.length);
-
-    for (i = start; i < end; i++) {
-        matched[i].hidden = false;
-    }
-
-    document.querySelector("#resultCount").textContent = matched.length;
-    document.querySelector("#pageInfo").textContent = currentPage + " / " + totalPages;
-    document.querySelector("#prevPage").disabled = currentPage === 1;
-    document.querySelector("#nextPage").disabled = currentPage === totalPages;
-    document.querySelector("#emptyState").classList.toggle("show", matched.length === 0);
 
     checkAll.checked = false;
     checkAll.indeterminate = false;
@@ -148,13 +131,12 @@ function showToast(message) {
 }
 
 function resetSearch() {
-    searchType.value = "all";
-    searchKeyword.value = "";
+    schType.value = "all";
+    kwd.value = "";
     dateFrom.value = "";
     dateTo.value = "";
     gradeFilter.value = "";
     statusFilter.value = "";
-    currentPage = 1;
     renderList();
 }
 
@@ -345,15 +327,11 @@ function initProduct() {
     }
 
     document.querySelector("#searchButton").addEventListener("click", function () {
-        currentPage = 1;
-        renderList();
     });
 
-    searchKeyword.addEventListener("keydown", function (event) {
+    schType.addEventListener("keydown", function (event) {
         if (event.key === "Enter" || event.keyCode === 13) {
             event.preventDefault();
-            currentPage = 1;
-            renderList();
         }
     });
 
@@ -362,26 +340,10 @@ function initProduct() {
     var filters = [dateFrom, dateTo, gradeFilter, statusFilter];
     for (i = 0; i < filters.length; i++) {
         filters[i].addEventListener("change", function () {
-            currentPage = 1;
-            renderList();
         });
     }
 
-    document.querySelector("#prevPage").addEventListener("click", function () {
-        if (currentPage > 1) {
-            currentPage--;
-            renderList();
-        }
-    });
 
-    document.querySelector("#nextPage").addEventListener("click", function () {
-        var totalPages = Math.max(1, Math.ceil(filteredRows().length / PAGE_SIZE));
-
-        if (currentPage < totalPages) {
-            currentPage++;
-            renderList();
-        }
-    });
 
     checkAll.addEventListener("change", function () {
         var visibleChecks = toArray(document.querySelectorAll(".data-row:not([hidden]) .row-check"));
