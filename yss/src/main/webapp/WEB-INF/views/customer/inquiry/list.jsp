@@ -61,6 +61,7 @@
                   <span>문의유형</span>
                   <span>제목</span>
                   <span>접수일</span>
+                  <span>상태</span>
                 </div>
 
                 <%-- 1. 등록된 문의글이 없는 경우 --%>
@@ -84,6 +85,7 @@
                             </a>
                           </strong>
                           <time>${dto.createdAt}</time>
+                          <span>${dto.status==0?"대기중":"답변완료"}</span>
                         </div>
                       </c:forEach>
                     </div>

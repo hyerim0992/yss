@@ -15,6 +15,8 @@ import com.yss.mvc.annotation.RequestMapping;
 import com.yss.mvc.view.ModelAndView;
 import com.yss.service.InquiryAnswerService;
 import com.yss.service.InquiryAnswerServiceImpl;
+import com.yss.service.InquiryService;
+import com.yss.service.InquiryServiceImpl;
 import com.yss.util.MyUtil;
 import com.yss.util.PaginateUtil;
 
@@ -26,8 +28,8 @@ import jakarta.servlet.http.HttpSession;
 @Controller
 @RequestMapping("/admin/support/inquiry/*")
 public class InquiryManageController {
-    
-	private InquiryAnswerService service = new InquiryAnswerServiceImpl();
+	private InquiryService service = new InquiryServiceImpl();
+	private InquiryAnswerService answerService = new InquiryAnswerServiceImpl();
     private MyUtil util = new MyUtil();
     private PaginateUtil paginateUtil = new PaginateUtil();
 
@@ -46,7 +48,7 @@ public class InquiryManageController {
             // 검색 및 상태 필터
             String schType = req.getParameter("schType");
             String kwd = req.getParameter("kwd");
-            String status = req.getParameter("status"); // 답변상태 필터 추가
+            String status = req.getParameter("status");
 
             if (schType == null) {
                 schType = "all";
@@ -68,7 +70,7 @@ public class InquiryManageController {
             map.put("status", status);
 
             // 전체 데이터 개수
-            dataCount = service.dataCount(map);
+            dataCount = answerService.dataCount(map);
 
             total_page = paginateUtil.pageCount(dataCount, size);
             current_page = Math.min(current_page, total_page);
@@ -80,7 +82,7 @@ public class InquiryManageController {
             map.put("offset", offset);
             map.put("size", size);
 
-            List<InquiryDTO> list = service.listInquiry(map);
+            List<InquiryDTO> list = answerService.listInquiry(map);
 
             // 페이징 처리 및 URL 생성
             String query = "";
@@ -128,7 +130,7 @@ public class InquiryManageController {
         return mav;
     }
     
- // 답변 작성/수정 폼
+	 // 답변 작성/수정
     @GetMapping("write")
     public ModelAndView writeForm(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         ModelAndView mav = new ModelAndView("admin/support/inquiry/write");
@@ -137,11 +139,17 @@ public class InquiryManageController {
             long inquiryId = Long.parseLong(req.getParameter("inquiryId"));
             String page = req.getParameter("page");
 
-            // 기존 서비스 메서드 그대로 사용
-            InquiryAnswerDTO answerDto = service.findById(inquiryId);
+            // 고객 문의 원글 조회
+            InquiryDTO inquiryDto = service.findById(inquiryId);
+            if (inquiryDto != null && inquiryDto.getContent() != null) {
+                inquiryDto.setContent(util.htmlSymbols(inquiryDto.getContent()));
+            }
 
+            // 기존 답변 조회
+            InquiryAnswerDTO answerDto = answerService.findByAnswerId(inquiryId);
             String mode = (answerDto != null && answerDto.getContent() != null) ? "update" : "write";
 
+            mav.addObject("inquiryDto", inquiryDto);
             mav.addObject("answerDto", answerDto);
             mav.addObject("inquiryId", inquiryId);
             mav.addObject("mode", mode);
@@ -153,35 +161,98 @@ public class InquiryManageController {
 
         return mav;
     }
+	
+	    // 답변 저장/수정
+	    @PostMapping("write")
+	    public ModelAndView writeSubmit(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+	        HttpSession session = req.getSession();
+	        SessionInfo info = (SessionInfo) session.getAttribute("member");
+	
+	        String page = req.getParameter("page");
+	
+	        try {
+	            long inquiryId = Long.parseLong(req.getParameter("inquiryId"));
+	            String content = req.getParameter("content");
+	            String mode = req.getParameter("mode");
+	
+	            InquiryAnswerDTO dto = new InquiryAnswerDTO();
+	            dto.setInquiryId(inquiryId);
+	            dto.setContent(content);
+	            dto.setAnswerer(info.getName());
+	
+	            if ("update".equals(mode)) {
+	            	answerService.updateAnswer(dto);
+	            } else {
+	            	answerService.insertAnswer(dto);
+	            }
+	
+	        } catch (Exception e) {
+	            e.printStackTrace();
+	        }
+	
+	        return new ModelAndView("redirect:/admin/support/inquiry/list?page=" + page);
+	    }
+	    
+	    // 1:1 문의
+	    @GetMapping("article")
+	    public ModelAndView article(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+	        String page = req.getParameter("page");
+	        if (page == null || page.isBlank()) {
+	            page = "1";
+	        }
+	        String query = "page=" + page;
 
-    // 답변 저장/수정 처리
-    @PostMapping("write")
-    public ModelAndView writeSubmit(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        HttpSession session = req.getSession();
-        SessionInfo info = (SessionInfo) session.getAttribute("member");
+	        try {
+	            long inquiryId = Long.parseLong(req.getParameter("inquiryId"));
+	            String schType = req.getParameter("schType");
+	            String kwd = req.getParameter("kwd");
+	            String status = req.getParameter("status");
 
-        String page = req.getParameter("page");
+	            if (schType == null) schType = "all";
+	            if (status == null) status = "all";
+	            
+	            if (kwd == null) {
+	                kwd = "";
+	            }
+	            
+	            kwd = util.decodeUrl(kwd);
 
-        try {
-            long inquiryId = Long.parseLong(req.getParameter("inquiryId"));
-            String content = req.getParameter("content");
-            String mode = req.getParameter("mode");
+	            if (!kwd.isBlank()) {
+	                query += "&schType=" + schType + "&kwd=" + util.encodeUrl(kwd);
+	            }
+	            if (!status.equals("all")) {
+	                query += "&status=" + status;
+	            }
 
-            InquiryAnswerDTO dto = new InquiryAnswerDTO();
-            dto.setInquiryId(inquiryId);
-            dto.setContent(content);
-            dto.setAnswerer(String.valueOf(info.getMemberId()));
+	            // 고객 문의 조회
+	            InquiryDTO dto = service.findById(inquiryId);
+	            if (dto == null) {
+	                return new ModelAndView("redirect:/admin/support/inquiry/list?" + query);
+	            }
+	            if (dto.getContent() != null) {
+	                dto.setContent(util.htmlSymbols(dto.getContent()));
+	            }
+	            
+	            // 관리자 답변 조회
+	            InquiryAnswerDTO answerDto = answerService.findByAnswerId(inquiryId);
+	            if (answerDto != null && answerDto.getContent() != null) {
+	                answerDto.setContent(util.htmlSymbols(answerDto.getContent()));
+	            }
 
-            if ("update".equals(mode)) {
-                service.updateAnswer(dto);
-            } else {
-                service.insertAnswer(dto);
-            }
+	            ModelAndView mav = new ModelAndView("admin/support/inquiry/article");
+	            mav.addObject("dto", dto);
+	            mav.addObject("answerDto", answerDto);
+	            mav.addObject("page", page);
+	            mav.addObject("query", query);
+	            mav.addObject("inquiryId", inquiryId);
 
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+	            return mav;
 
-        return new ModelAndView("redirect:/admin/support/inquiry/list?page=" + page);
-    }
+	        } catch (Exception e) {
+	            e.printStackTrace();
+	        }
+
+	        return new ModelAndView("redirect:/admin/support/inquiry/list?" + query);
+	    }
+
 }

@@ -1,40 +1,18 @@
 package com.yss.dto;
 
+import java.util.List;
+
+import com.yss.util.MyMultipartFile;
+
 public class InquiryAnswerDTO {
-	private long answerId;        //PK
-	private long inquiryId;      //FK
+	private long inquiryId;      // PK, FK
 	private String answerer;
 	private String content;
 	private String createdAt;
 	
 	private long fileId;
     private String files;
-    private String serverfiles;
-	
-	public long getFileId() {
-		return fileId;
-	}
-	public void setFileId(long fileId) {
-		this.fileId = fileId;
-	}
-	public String getFiles() {
-		return files;
-	}
-	public void setFiles(String files) {
-		this.files = files;
-	}
-	public String getServerfiles() {
-		return serverfiles;
-	}
-	public void setServerfiles(String serverfiles) {
-		this.serverfiles = serverfiles;
-	}
-	public long getAnswerId() {
-		return answerId;
-	}
-	public void setAnswerId(long answerId) {
-		this.answerId = answerId;
-	}
+	private List<MyMultipartFile> listFile;
 	public long getInquiryId() {
 		return inquiryId;
 	}
@@ -58,6 +36,24 @@ public class InquiryAnswerDTO {
 	}
 	public void setCreatedAt(String createdAt) {
 		this.createdAt = createdAt;
+	}
+	public long getFileId() {
+		return fileId;
+	}
+	public void setFileId(long fileId) {
+		this.fileId = fileId;
+	}
+	public String getFiles() {
+		return files;
+	}
+	public void setFiles(String files) {
+		this.files = files;
+	}
+	public List<MyMultipartFile> getListFile() {
+		return listFile;
+	}
+	public void setListFile(List<MyMultipartFile> listFile) {
+		this.listFile = listFile;
 	}
 	
 }

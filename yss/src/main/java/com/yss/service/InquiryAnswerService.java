@@ -14,5 +14,5 @@ public interface InquiryAnswerService {
     
     public int dataCount(Map<String, Object> map);
     public List<InquiryDTO> listInquiry(Map<String, Object> map);    
-	public InquiryAnswerDTO findById(long inquiryId) throws SQLException;
+	public InquiryAnswerDTO findByAnswerId(long inquiryId) throws SQLException;
 }

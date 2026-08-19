@@ -6,7 +6,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>1:1 문의 처리 | Yongsinsa 관리자</title>
+  <title>1:1 문의 상세보기 | Yongsinsa 관리자</title>
 
   <script>
     document.documentElement.classList.add("ys-page-loading");
@@ -16,18 +16,6 @@
   <jsp:include page="/WEB-INF/views/admin/layout/headerResources.jsp"/>
   <link rel="stylesheet" href="${pageContext.request.contextPath}/dist/css/admin/list.css?v=20260812">
   <link rel="stylesheet" href="${pageContext.request.contextPath}/dist/css/admin/support.css?v=20260812">
-  
-  <script type="text/javascript">
-    function sendAnswer() {
-        const f = document.answerForm;
-        if (!f.content.value.trim()) {
-            alert("답변 내용을 입력해 주세요.");
-            f.content.focus();
-            return;
-        }
-        f.submit();
-    }
-  </script>
 </head>
 <body>
   <jsp:include page="/WEB-INF/views/common/page-loader.jsp"/>
@@ -39,8 +27,8 @@
       <div class="page-heading">
         <div>
           <p>관리자 페이지 / 고객 지원 / 1:1 문의 상세</p>
-          <h1>1:1 문의 처리</h1>
-          <span>고객의 문의 내용을 확인하고 바로 답변을 작성·수정합니다.</span>
+          <h1>1:1 문의 상세보기</h1>
+          <span>고객이 접수한 1:1 문의의 상세 내용과 답변을 확인합니다.</span>
         </div>
       </div>
 
@@ -54,7 +42,7 @@
       <article class="panel">
         <div class="panel-title">
           <div>
-            <h2>문의 번호 #${inquiryId}</h2>
+            <h2>문의 번호 : ${inquiryId}</h2>
           </div>
           <div>
             <c:choose>
@@ -68,7 +56,7 @@
           </div>
         </div>
 
-        <!-- 고객 문의 상세 내용 -->
+        <!-- 고객 문의 내용 -->
         <div class="table-wrap">
           <table>
             <tbody>
@@ -92,44 +80,38 @@
                 <th>고객 문의 내용</th>
                 <td colspan="3">${dto.content}</td>
               </tr>
+
+              <!-- 관리자 답변 내용 존재 -->
+              <c:if test="${not empty answerDto}">
+                <tr>
+                  <th>관리자 답변</th>
+                  <td colspan="3">
+                    <div><b>작성자: ${answerDto.answerer}</b> (${answerDto.createdAt})</div>
+                    <div>${answerDto.content}</div>
+                  </td>
+                </tr>
+              </c:if>
             </tbody>
           </table>
         </div>
 
-        <!-- 관리자 답변 작성/수정 -->
-        <form name="answerForm" method="post" action="${pageContext.request.contextPath}/admin/support/inquiry/write">
-          <input type="hidden" name="inquiryId" value="${inquiryId}">
-          <input type="hidden" name="page" value="${page}">
-          <input type="hidden" name="mode" value="${not empty answerDto ? 'update' : 'write'}">
-
-          <div class="panel-title">
-            <h2>관리자 답변 ${not empty answerDto ? '수정' : '작성'}</h2>
-            <c:if test="${not empty answerDto}">
-              <span>기존 답변 작성자: ${answerDto.answerer} (${answerDto.createdAt})</span>
-            </c:if>
+        <!-- 하단 버튼 영역 -->
+        <div class="support-actions">
+          <div>
+            <c:choose>
+              <c:when test="${not empty answerDto}">
+                <a href="${pageContext.request.contextPath}/admin/support/inquiry/write?inquiryId=${inquiryId}&page=${page}" class="dark-btn">답변 수정</a>
+              </c:when>
+              <c:otherwise>
+                <a href="${pageContext.request.contextPath}/admin/support/inquiry/write?inquiryId=${inquiryId}&page=${page}" class="dark-btn">답변 등록</a>
+              </c:otherwise>
+            </c:choose>
           </div>
 
-          <div class="table-wrap">
-            <table>
-              <tbody>
-                <tr>
-                  <th>답변 내용</th>
-                  <td colspan="3">
-                    <textarea name="content" placeholder="답변 내용을 입력하세요.">${answerDto.content}</textarea>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-
-          <!-- 하단 버튼 -->
-          <div class="support-actions">
-            <button type="button" class="dark-btn" onclick="sendAnswer();">
-              ${not empty answerDto ? '답변 수정 완료' : '답변 등록 완료'}
-            </button>
+          <div>
             <button type="button" class="light-btn" onclick="location.href='${pageContext.request.contextPath}/admin/support/inquiry/list?${query}';">목록으로</button>
           </div>
-        </form>
+        </div>
 
       </article>
     </section>

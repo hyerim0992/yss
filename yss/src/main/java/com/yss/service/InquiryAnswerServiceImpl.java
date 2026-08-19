@@ -69,18 +69,17 @@ public class InquiryAnswerServiceImpl implements InquiryAnswerService {
 	}
 
 	@Override
-	public InquiryAnswerDTO findById(long inquiryId) throws SQLException {
+	public InquiryAnswerDTO findByAnswerId(long inquiryId) throws SQLException {
 		InquiryAnswerDTO dto = null;
 		
 		try {
 			InquiryAnswerMapper mapper = MapperContainer.get(InquiryAnswerMapper.class);
-			dto = mapper.findById(inquiryId);
+			dto = mapper.findByAnswerId(inquiryId);
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw e;
 		}
 		return dto;
 	}
-
 
 }

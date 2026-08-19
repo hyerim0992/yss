@@ -123,6 +123,8 @@ public class InquiryController {
     
     @GetMapping("article")
     public ModelAndView article(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    	HttpSession session = req.getSession();
+    	SessionInfo info = (SessionInfo) session.getAttribute("member"); 
     	
     	// 글보기
         String page = req.getParameter("page");
@@ -133,16 +135,13 @@ public class InquiryController {
             
         // 게시물 가져오기
         InquiryDTO dto = service.findById(inquiryId);
-        if (dto == null) { // 게시물이 없으면 다시 리스트로
+        if (dto == null || dto.getMemberId() != info.getMemberId()) { // 게시물이 없으면 다시 리스트로
             return new ModelAndView("redirect:/customer/inquiry/list?" + query);
         }
         
         dto.setContent(util.htmlSymbols(dto.getContent()));
         
         // 이전글 다음글
-        HttpSession session = req.getSession();
-        SessionInfo info = (SessionInfo) session.getAttribute("member");
-        
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("num", inquiryId);
         map.put("inquiryId", inquiryId);
@@ -168,8 +167,6 @@ public class InquiryController {
     }
     
     return new ModelAndView("redirect:/customer/inquiry/list?" + query);
-    	
-    	
     }
     
     @GetMapping("update")
