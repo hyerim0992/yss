@@ -11,7 +11,7 @@
 
     button.addEventListener("click", function () {
       if (window.confirm("관리자 화면에서 나가 쇼핑몰 메인으로 이동할까요?")) {
-        window.location.href = contextPath() + "/main";
+        window.location.href = contextPath() + "/member/logout";
       }
     });
   }

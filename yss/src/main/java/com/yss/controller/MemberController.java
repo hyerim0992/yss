@@ -60,8 +60,17 @@ public class MemberController {
 
 				return mav;
 			}
+			
+			// ★ 접속불가 계정 확인
+			if ("접속불가".equals(dto.getStatus())) {
+			    ModelAndView mav = new ModelAndView("member/login");
+
+			    String msg = "접속이 제한된 계정입니다.";
+			    mav.addObject("message", msg);
+
+			    return mav;
+			}
 			// 로그인 성공 : 로그인정보를 서버에 저장
-			// 세션의 유지시간을 20분설정(기본 30분)
 			session.setMaxInactiveInterval(20 * 60);
 
 			// 세션에 저장할 내용
@@ -88,17 +97,16 @@ public class MemberController {
 	}
 
 	@GetMapping("logout")
-	public ModelAndView logout(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		// 로그아웃
-		HttpSession session = req.getSession();
+	public ModelAndView logout(HttpServletRequest req, HttpServletResponse resp)
+	        throws ServletException, IOException {
 
-		// 세션에 저장된 정보를 지운다.
-		session.removeAttribute("member");
+	    HttpSession session = req.getSession(false);
 
-		// 세션에 저장된 모든 정보를 지우고 세션을 초기화 한다.
-		session.invalidate();
+	    if (session != null) {
+	        session.invalidate();
+	    }
 
-		return new ModelAndView("redirect:/");
+	    return new ModelAndView("redirect:/");
 	}
 
 	@ResponseBody

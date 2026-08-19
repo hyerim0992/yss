@@ -123,20 +123,24 @@
             passwordHelp.textContent = "변경할 때만 입력하세요.";
         }
 
-        modal.hidden = false;
-        modal.setAttribute("aria-hidden", "false");
+		modal.hidden = false;
+		modal.classList.add("show");
+		modal.setAttribute("aria-hidden", "false");
+		document.body.classList.add("admin-modal-open");
     }
 
-    function closeMemberModal() {
-        var modal = element("memberModal");
+	function closeMemberModal() {
+	    var modal = element("memberModal");
 
-        if (!modal) {
-            return;
-        }
+	    if (!modal) {
+	        return;
+	    }
 
-        modal.hidden = true;
-        modal.setAttribute("aria-hidden", "true");
-    }
+	    modal.classList.remove("show");
+	    modal.hidden = true;
+	    modal.setAttribute("aria-hidden", "true");
+	    document.body.classList.remove("admin-modal-open");
+	}
 
     function bindCrud() {
         // 회원 등록 버튼
@@ -166,14 +170,20 @@
             });
         }
 
-        // 회원 수정 버튼
-        var editButtons = document.querySelectorAll(".edit-member");
+		// 회원 수정 버튼
+		document.addEventListener("click", function(e) {
+		    var editButton = e.target.closest(".edit-member");
 
-        for (var i = 0;i < editButtons.length;i++) {
-            editButtons[i].addEventListener("click", function() {
-                openMemberModal(this);
-            });
-        }
+		    if (!editButton) {
+		        return;
+		    }
+
+		    e.preventDefault();
+
+		    console.log("수정 버튼 클릭", editButton.dataset.memberId);
+
+		    openMemberModal(editButton);
+		});
 
         // 회원 삭제 버튼
         var deleteButtons = document.querySelectorAll(".delete-member");

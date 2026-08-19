@@ -6,14 +6,23 @@
 	<!-- 로그인: 삭제되지 않았고 상태가 일반인 회원만 로그인 가능 -->
 	<select id="loginMember" parameterType="map"
 		resultType="com.yss.dto.MemberDTO">
-		SELECT m.MEMBERID, d.USERID, d.PASSWORD, d.NAME, m.ROLE
+
+		SELECT
+		m.MEMBERID,
+		d.USERID,
+		d.PASSWORD,
+		d.NAME,
+		m.ROLE,
+		m.STATUS
+
 		FROM MEMBER m
-		JOIN MEMBERDETAIL d ON m.MEMBERID = d.MEMBERID
-		WHERE
-		d.USERID = #{userId}
+		JOIN MEMBERDETAIL d
+		ON m.MEMBERID = d.MEMBERID
+
+		WHERE d.USERID = #{userId}
 		AND d.PASSWORD = #{password}
-		AND m.STATUS = '일반'
 		AND m.DELETEDAT IS NULL
+
 	</select>
 
 	<select id="memberSeq" resultType="Long">
@@ -31,9 +40,11 @@
 	<insert id="insertMemberDetail"
 		parameterType="com.yss.dto.MemberDTO">
 		INSERT INTO MEMBERDETAIL (
-		MEMBERID, USERID, PASSWORD, EMAIL, PHONE, BIRTH, NAME,
+		MEMBERID, USERID, PASSWORD, EMAIL, PHONE,
+		BIRTH, NAME,
 		UPDATEDAT, REFUNDACCOUNT, BANKNAME, ACCOUNTHOLDER
-		) VALUES (
+		) VALUES
+		(
 		#{memberId}, #{userId}, #{password}, #{email}, #{phone},
 		TO_DATE(#{birth}, 'YYYY-MM-DD'), #{name}, SYSDATE,
 		<choose>
@@ -54,7 +65,8 @@
 		) VALUES (
 		ADDRESS_SEQ.NEXTVAL, #{memberId}, #{name},
 		TO_NUMBER(REPLACE(#{phone}, '-', '')),
-		#{addr1}, #{addr2,jdbcType=VARCHAR}, #{zip}, 'yes'
+		#{addr1},
+		#{addr2,jdbcType=VARCHAR}, #{zip}, 'yes'
 		)
 	</insert>
 
@@ -119,18 +131,23 @@
 				<when test="schType == 'status'">
 					AND (
 					INSTR(m.STATUS, #{kwd}) &gt; 0
-					OR (m.DELETEDAT IS NOT NULL AND INSTR('삭제', #{kwd}) &gt; 0)
+					OR (m.DELETEDAT
+					IS NOT NULL AND INSTR('삭제', #{kwd}) &gt; 0)
 					)
 				</when>
 				<otherwise>
 					AND (
 					TO_CHAR(m.MEMBERID) LIKE '%' || #{kwd} || '%'
-					OR INSTR(d.NAME, #{kwd}) &gt; 0
+					OR
+					INSTR(d.NAME, #{kwd}) &gt; 0
 					OR INSTR(d.USERID, #{kwd}) &gt; 0
-					OR INSTR(d.PHONE, #{kwd}) &gt; 0
+					OR
+					INSTR(d.PHONE, #{kwd}) &gt; 0
 					OR INSTR(d.EMAIL, #{kwd}) &gt; 0
-					OR INSTR(m.STATUS, #{kwd}) &gt; 0
-					OR (m.DELETEDAT IS NOT NULL AND INSTR('삭제', #{kwd}) &gt; 0)
+					OR
+					INSTR(m.STATUS, #{kwd}) &gt; 0
+					OR (m.DELETEDAT IS NOT NULL AND
+					INSTR('삭제', #{kwd}) &gt; 0)
 					)
 				</otherwise>
 			</choose>
@@ -143,13 +160,15 @@
 		m.MEMBERID,
 		m.ROLE,
 		m.STATUS,
-		TO_CHAR(m.CREATEDAT, 'YYYY-MM-DD') AS createAt,
+		TO_CHAR(m.CREATEDAT, 'YYYY-MM-DD') AS
+		createAt,
 		TO_CHAR(m.DELETEDAT, 'YYYY-MM-DD HH24:MI') AS deleteAt,
 		d.USERID,
 		d.NAME,
 		d.EMAIL,
 		d.PHONE,
-		TO_CHAR(d.BIRTH, 'YYYY-MM-DD') AS birth,
+		TO_CHAR(d.BIRTH, 'YYYY-MM-DD') AS
+		birth,
 		TO_CHAR(d.UPDATEDAT, 'YYYY-MM-DD HH24:MI') AS updateAt,
 		d.REFUNDACCOUNT,
 		d.BANKNAME,
@@ -162,9 +181,11 @@
 		LEFT JOIN
 		ADDRESS a ON a.ADDRESSID = (
 		SELECT MIN(a2.ADDRESSID)
-		FROM ADDRESS a2
+		FROM
+		ADDRESS a2
 		WHERE a2.MEMBERID = m.MEMBERID
-		AND LOWER(a2.ISDEFAULT) = 'yes'
+		AND LOWER(a2.ISDEFAULT) =
+		'yes'
 		)
 		<include refid="adminMemberWhere" />
 		ORDER BY m.MEMBERID DESC
@@ -202,7 +223,8 @@
 		UPDATE MEMBERDETAIL
 		SET USERID = #{userId},
 		EMAIL = #{email},
-		PHONE = #{phone},
+		PHONE =
+		#{phone},
 		BIRTH = TO_DATE(#{birth}, 'YYYY-MM-DD'),
 		NAME = #{name},
 		UPDATEDAT = SYSDATE,
@@ -215,7 +237,8 @@
 		</choose>
 		,
 		BANKNAME = #{bankName,jdbcType=VARCHAR},
-		ACCOUNTHOLDER = #{accountHolder,jdbcType=VARCHAR}
+		ACCOUNTHOLDER =
+		#{accountHolder,jdbcType=VARCHAR}
 		<if test="password != null and password != ''">
 			, PASSWORD = #{password}
 		</if>
@@ -231,18 +254,24 @@
 		LOWER(a.ISDEFAULT) = 'yes')
 		WHEN MATCHED THEN
 		UPDATE SET
-		a.RECEIVER = #{name},
+		a.RECEIVER =
+		#{name},
 		a.RECEIVERNO = TO_NUMBER(REPLACE(#{phone}, '-', '')),
-		a.ADDR1 = #{addr1},
+		a.ADDR1 =
+		#{addr1},
 		a.ADDR2 = #{addr2,jdbcType=VARCHAR},
 		a.ZIPCODE = #{zip}
-		WHEN NOT MATCHED THEN
-		INSERT (ADDRESSID, MEMBERID, RECEIVER, RECEIVERNO, ADDR1, ADDR2, ZIPCODE,
+		WHEN
+		NOT MATCHED THEN
+		INSERT (ADDRESSID, MEMBERID, RECEIVER, RECEIVERNO,
+		ADDR1, ADDR2, ZIPCODE,
 		ISDEFAULT)
 		VALUES (
-		ADDRESS_SEQ.NEXTVAL, #{memberId}, #{name},
+		ADDRESS_SEQ.NEXTVAL,
+		#{memberId}, #{name},
 		TO_NUMBER(REPLACE(#{phone}, '-', '')),
-		#{addr1}, #{addr2,jdbcType=VARCHAR}, #{zip}, 'yes'
+		#{addr1},
+		#{addr2,jdbcType=VARCHAR}, #{zip}, 'yes'
 		)
 	</update>
 

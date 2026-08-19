@@ -948,6 +948,6 @@
 	<script
 		src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 	<script
-		src="${pageContext.request.contextPath}/dist/js/admin/member.js?v=20260819"></script>
+    src="${pageContext.request.contextPath}/dist/js/admin/member.js?v=20260819-2"></script>
 </body>
 </html>
