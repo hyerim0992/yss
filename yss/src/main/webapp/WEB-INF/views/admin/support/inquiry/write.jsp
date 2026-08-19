@@ -6,7 +6,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>고객지원 | Yongsinsa 관리자</title>
+  <title>1:1 문의 답변 작성 | Yongsinsa 관리자</title>
 
   <script>
     document.documentElement.classList.add("ys-page-loading");
@@ -16,6 +16,18 @@
   <jsp:include page="/WEB-INF/views/admin/layout/headerResources.jsp"/>
   <link rel="stylesheet" href="${pageContext.request.contextPath}/dist/css/admin/list.css?v=20260812">
   <link rel="stylesheet" href="${pageContext.request.contextPath}/dist/css/admin/support.css?v=20260812">
+  
+  <script type="text/javascript">
+    function sendAnswer() {
+        const f = document.answerForm;
+        if (!f.content.value.trim()) {
+            alert("답변 내용을 입력해 주세요.");
+            f.content.focus();
+            return;
+        }
+        f.submit();
+    }
+  </script>
 </head>
 <body>
   <jsp:include page="/WEB-INF/views/common/page-loader.jsp"/>
@@ -26,9 +38,9 @@
     <section class="page active">
       <div class="page-heading">
         <div>
-          <p>관리자 페이지 / 고객 지원 / 관리</p>
-          <h1>고객 지원 / 관리</h1>
-          <span>1:1 문의, FAQ, 공지사항과 상품문의 답변을 관리합니다.</span>
+          <p>관리자 페이지 / 고객 지원 / 답변 작성</p>
+          <h1>1:1 문의 답변 ${mode == 'update' ? '수정' : '작성'}</h1>
+          <span>고객의 문의 내용을 참고하여 답변을 작성합니다.</span>
         </div>
       </div>
 
@@ -40,72 +52,82 @@
       </nav>
 
       <article class="panel">
+        <!-- 고객 문의 내역 -->
         <div class="panel-title">
           <div>
-            <h2><i class="bi bi-app"></i> 1:1 문의 답변 ${mode=='update'?'수정':'등록'}</h2>
-            <p>문의 번호 <b>${inquiryId}</b>번에 대한 답변을 작성합니다.</p>
+            <h2>고객 문의 내용</h2>
           </div>
         </div>
 
-        <div class="body-main">
-          <form name="boardForm" method="post">
-            <table class="table mt-3 write-form">
+        <div class="table-wrap">
+          <table>
+            <tbody>
               <tr>
-                <td class="bg-light col-sm-2" scope="row">답변 작성자</td>
-                <td>
-                  <p class="form-control-plaintext">${sessionScope.member.memberId}</p>
-                </td>
+                <th>문의 번호</th>
+                <td><b>${inquiryId}</b></td>
+                <th>문의 유형</th>
+                <td><span class="badge light">${inquiryDto.inquiryType}</span></td>
               </tr>
-
               <tr>
-                <td class="bg-light col-sm-2" scope="row">답변 내용</td>
-                <td>
-                  <textarea name="content" class="form-control" rows="10" placeholder="답변 내용을 입력하세요.">${answerDto.content}</textarea>
-                </td>
+                <th>작성자 ID</th>
+                <td>${inquiryDto.memberId}</td>
+                <th>등록일시</th>
+                <td>${empty inquiryDto.createdAt ? '-' : inquiryDto.createdAt}</td>
               </tr>
-            </table>
-
-            <!-- 숨김 -->
-            <input type="hidden" name="inquiryId" value="${inquiryId}">
-            <input type="hidden" name="page" value="${page}">
-            <input type="hidden" name="mode" value="${mode}">
-
-            <table class="table table-borderless">
               <tr>
-                <td class="text-center">
-                  <button type="button" class="btn btn-dark" onclick="sendOk();">
-                    ${mode=='update'?'수정완료':'등록완료'}&nbsp;<i class="bi bi-check2"></i>
-                  </button>
-                  <button type="reset" class="btn btn-light">다시입력</button>
-                  <button type="button" class="btn btn-light" onclick="location.href='${pageContext.request.contextPath}/admin/support/inquiry/list?page=${page}';">
-                    ${mode=='update'?'수정취소':'등록취소'}&nbsp;<i class="bi bi-x"></i>
-                  </button>
-                </td>
+                <th>문의 제목</th>
+                <td colspan="3">${inquiryDto.title}</td>
               </tr>
-            </table>
-          </form>
+              <tr>
+                <th>문의 내용</th>
+                <td colspan="3">${inquiryDto.content}</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
-      </article>
 
+        <!-- 답변 작성 -->
+        <form name="answerForm" method="post" action="${pageContext.request.contextPath}/admin/support/inquiry/write">
+          <input type="hidden" name="inquiryId" value="${inquiryId}">
+          <input type="hidden" name="page" value="${page}">
+          <input type="hidden" name="mode" value="${mode}">
+
+          <div class="panel-title">
+            <div>
+              <h2>관리자 답변 입력</h2>
+            </div>
+          </div>
+
+          <div class="table-wrap">
+            <table>
+              <tbody>
+                <tr>
+                  <th>답변 내용</th>
+                  <td colspan="3">
+                    <textarea name="content" placeholder="고객에게 전달할 답변 내용을 입력하세요.">${answerDto.content}</textarea>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- 버튼 영역 -->
+          <div class="support-actions">
+            <div>
+              <button type="button" class="dark-btn" onclick="sendAnswer();">
+                ${mode == 'update' ? '답변 수정 완료' : '답변 등록 완료'}
+              </button>
+            </div>
+
+            <div>
+              <button type="button" class="light-btn" onclick="history.back();">취소</button>
+            </div>
+          </div>
+        </form>
+
+      </article>
     </section>
   </main>
-
-  <script type="text/javascript">
-  function sendOk() {
-      const f = document.boardForm;
-      let str;
-
-      str = f.content.value.trim();
-      if( ! str ) {
-          alert('답변 내용을 입력하세요.');
-          f.content.focus();
-          return;
-      }
-
-      f.action = '${pageContext.request.contextPath}/admin/support/inquiry/write';
-      f.submit();
-  }
-  </script>
 
   <jsp:include page="/WEB-INF/views/admin/layout/footerResources.jsp"/>
 </body>

@@ -4,8 +4,8 @@
 
 	<!-- 문의글 등록 -->
 	<insert id="insertInquiry" parameterType="com.yss.dto.InquiryDTO">
-		INSERT INTO inquiry(inquiryId, memberId, inquiryType, title, content, status, createdAt)
-		VALUES (inquiry_SEQ.NEXTVAL, #{memberId}, #{inquiryType}, #{title}, #{content}, '대기중', SYSDATE)
+		INSERT INTO inquiry(inquiryId, memberId, inquiryType, title, content, createdAt)
+		VALUES (inquiry_SEQ.NEXTVAL, #{memberId}, #{inquiryType}, #{title}, #{content}, SYSDATE)
 	</insert>
 	
 	<!-- 전체 문의글 개수 -->
@@ -18,10 +18,12 @@
 	
 	<!-- 문의글 목록 -->
 	<select id="listInquiry" parameterType="map" resultType="com.yss.dto.InquiryDTO">
-		SELECT q.inquiryId, q.memberId, m.name, q.inquiryType, q.title, q.status,
-		       TO_CHAR(q.createdAt, 'YYYY-MM-DD') AS createdAt
+		SELECT q.inquiryId, q.memberId, m.name, q.inquiryType, q.title, 
+		       TO_CHAR(q.createdAt, 'YYYY-MM-DD') AS createdAt,
+		       CASE WHEN ia.answerer IS NULL THEN 0 ELSE 1 END status
 		FROM inquiry q
 		JOIN memberdetail m ON q.memberId = m.memberId
+		LEFT OUTER JOIN inquiryAnswer ia ON q.inquiryId = ia.inquiryId 		
 		WHERE q.memberId = #{memberId}
 		ORDER BY q.inquiryId DESC
 		OFFSET #{offset} ROWS FETCH FIRST #{size} ROWS ONLY
@@ -29,36 +31,36 @@
 	
 	<!-- 내 작성 글보기 -->
 	<select id="findById" parameterType="Long" resultType="com.yss.dto.InquiryDTO">
-		SELECT q.inquiryId, q.memberId, m.name, q.inquiryType, q.title, q.content, q.status,
-			TO_CHAR(q.createdAt, 'YYYY-MM-DD HH24:MI:SS') AS createdAt
+		SELECT q.inquiryId, q.memberId, m.name, q.inquiryType, q.title, q.content,
+			TO_CHAR(q.createdAt, 'YYYY-MM-DD HH24:MI:SS') AS createdAt,
+			CASE WHEN ia.answerer IS NULL THEN 0 ELSE 1 END status
 		FROM inquiry q
 		JOIN memberdetail m ON q.memberId = m.memberId
+		LEFT OUTER JOIN inquiryAnswer ia ON q.inquiryId = ia.inquiryId 		
 		WHERE q.inquiryId = #{inquiryId}
 	</select>
 	
 	<!-- 내 작성 이전글 -->
 	<select id="findByPrev" parameterType="map" resultType="com.yss.dto.InquiryDTO">
-	    SELECT q.inquiryId, q.title
-	    FROM inquiry q
-	    JOIN memberdetail m ON q.memberId = m.memberId
+	    SELECT inquiryId, title
+	    FROM inquiry
 	    <where>
-	        q.memberId = #{memberId}
-	        AND (q.inquiryId &gt; #{inquiryId})
+	        memberId = #{memberId}
+	        AND (inquiryId &gt; #{inquiryId})
 	    </where>
-	    ORDER BY q.inquiryId ASC
+	    ORDER BY inquiryId ASC
 	    FETCH FIRST 1 ROWS ONLY
 	</select>
 	
 	<!-- 내 작성 다음글 -->
 	<select id="findByNext" parameterType="map" resultType="com.yss.dto.InquiryDTO">
-	    SELECT q.inquiryId, q.title
-	    FROM inquiry q
-	    JOIN memberdetail m ON q.memberId = m.memberId
+	    SELECT inquiryId, title
+	    FROM inquiry 
 	    <where>
-	        q.memberId = #{memberId}
-	        AND (q.inquiryId &lt; #{inquiryId})
+	        memberId = #{memberId}
+	        AND (inquiryId &lt; #{inquiryId})
 	    </where>
-	    ORDER BY q.inquiryId DESC
+	    ORDER BY inquiryId DESC
 	    FETCH FIRST 1 ROWS ONLY
 	</select>
 

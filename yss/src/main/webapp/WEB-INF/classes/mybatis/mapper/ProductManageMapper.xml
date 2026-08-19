@@ -6,21 +6,21 @@
 	<sql id="where-list">
 		<choose>
 			<when test="schType == 'all'">
-				prodName LIKE '%' || #{kwd} || '%'
-					OR brand LIKE '%' || #{kwd} || '%'
-					OR categoryId LIKE '%' || #{kwd} || '%'
+				UPPER(prodName) LIKE '%' || UPPER(#{kwd}) || '%'
+					OR UPPER(brand)  LIKE '%' || UPPER(#{kwd}) || '%'
+					OR UPPER(ctgName) LIKE '%' || UPPER(#{kwd}) || '%'
 					OR TO_CHAR(inboundPrice)  LIKE '%' || #{kwd} || '%'
 					OR TO_CHAR(price) LIKE '%' || #{kwd} || '%'
 					OR TO_CHAR(heelHeight) LIKE '%' || #{kwd} || '%'
 			</when>
 			<when test="schType == 'prodName'">
-				prodName LIKE '%' || #{kwd} || '%'
+				prodName LIKE '%' || UPPER(#{kwd}) || '%'
 			</when>
 			<when test="schType == 'brand'">
-				brand LIKE '%' || #{kwd} || '%'
+				brand LIKE '%' || UPPER(#{kwd})		 || '%'
 			</when>
 			<when test="schType == 'ctgName'">
-				ctgName LIKE '%' || #{kwd} || '%'
+				UPPER(ctgName)  LIKE '%' || #{kwd} || '%'
 			</when>
 			<when test="schType == 'inboundPrice'">
 				TO_CHAR(inboundPrice) LIKE '%' || #{kwd} || '%'
@@ -38,7 +38,7 @@
 
 	<select id="listProductManage" parameterType="map" resultType="com.yss.dto.ProductDTO">
 		SELECT productId, prodName, brand, c.categoryId, inboundPrice, price, heelHeight, discRate, 
-			minGrade, status, TO_CHAR(regDate, 'YYYY-MM-DD') regDate , c.ctgName
+			minGrade, status, TO_CHAR(regDate, 'YYYY-MM-DD') regDate , c.ctgName , thumbnail
 		FROM product p
 		LEFT OUTER JOIN category c ON p.categoryId = c.categoryId
 		<where>
@@ -49,13 +49,13 @@
 				AND regDate <![CDATA[>=]]> TO_DATE(#{dateFrom}, 'YYYY-MM-DD')
 			</if>
 			<if test="dateTo != null and dateTo != ''">
-				AND regDate <![CDATA[<=]]> TO_DATE(#{dateTo}, 'YYYY-MM-DD')
+				AND regDate <![CDATA[<]]> TO_DATE(#{dateTo}, 'YYYY-MM-DD') + 1
 			</if>
-			<if test="gradeFilter != null and gradeFilter != ''">
-				AND minGrade <![CDATA[>=]]> #{gradeFilter}
+			<if test="minGrade != null and minGrade != ''">
+				AND minGrade <![CDATA[>=]]> #{minGrade}
 			</if>
-			<if test="statusFilter != null and statusFilter != ''">
-				AND status = #{statusFilter}
+			<if test="status != null and status != ''">
+				AND status = #{status}
 			</if>
 		</where>
 		ORDER BY productId DESC
@@ -76,11 +76,11 @@
 			<if test="dateTo != null and dateTo != '' ">
 				AND regDate <![CDATA[<]]> TO_DATE(#{dateTo}, 'YYYY-MM-DD') + 1
 			</if>
-			<if test="gradeFilter != null and gradeFilter != '' ">
-				AND minGrade <![CDATA[>=]]> #{gradeFilter}
+			<if test="minGrade != null and minGrade != '' ">
+				AND minGrade <![CDATA[>=]]> #{minGrade}
 			</if>
-			<if test="statusFilter != null and statusFilter != '' ">
-				AND status = #{statusFilter}
+			<if test="status != null and status != '' ">
+				AND status = #{status}
 			</if>
 		</where>
 	</select>
@@ -91,7 +91,7 @@
 			FROM dual
 		</selectKey>
 			INSERT INTO product(productId, prodName, brand, categoryId, inboundPrice, price, heelHeight, discRate, minGrade, status, regDate , thumbnail)
-			VALUES (#{productId}, #{prodName}, #{brand}, #{categoryId}, #{inboundPrice}, #{price}, #{heelHeight}, #{discRate}, #{minGrade}, #{status}, SYSDATE, #{thumbnail})
+			VALUES (#{productId}, #{prodName}, #{brand}, #{categoryId}, #{inboundPrice}, #{price}, #{heelHeight}, #{discRate}, #{minGrade}, #{status}, SYSDATE, #{thumbnail, jdbcType=VARCHAR})
 	</insert>
 	
 	<insert id="insertProductImage" parameterType="com.yss.dto.ProductDTO">

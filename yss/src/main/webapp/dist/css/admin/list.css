@@ -148,3 +148,15 @@
   }
   .panel-title .light-btn { margin-left: 0; }
 }
+.product-thumbnail {
+    width: 66px;
+    height: 66px;
+    object-fit: contain;
+}
+
+.thumbnail-cell {
+    width: 70px;
+    padding-left: 4px;
+    padding-right: 4px;
+}
+

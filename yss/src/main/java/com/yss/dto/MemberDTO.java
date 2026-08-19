@@ -5,7 +5,7 @@ public class MemberDTO {
 	private String userId;
 	private String password;
 	private int role;
-	private int status;
+	private String status;
 	private String createAt;
 	private String updateAt;
 	private String deleteAt;
@@ -19,7 +19,7 @@ public class MemberDTO {
 	private String refundAccount;
 	private String bankName;
 	private String accountHolder;
-	
+
 	public Long getMemberId() {
 		return memberId;
 	}
@@ -44,10 +44,10 @@ public class MemberDTO {
 	public void setRole(int role) {
 		this.role = role;
 	}
-	public int getStatus() {
+	public String getStatus() {
 		return status;
 	}
-	public void setStatus(int status) {
+	public void setStatus(String status) {
 		this.status = status;
 	}
 	public String getCreateAt() {
@@ -128,6 +128,4 @@ public class MemberDTO {
 	public void setAccountHolder(String accountHolder) {
 		this.accountHolder = accountHolder;
 	}
-	
-	
 }

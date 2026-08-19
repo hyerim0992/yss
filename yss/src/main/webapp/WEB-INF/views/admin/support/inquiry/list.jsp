@@ -63,17 +63,16 @@
           <button type="button" class="dark-btn" onclick="searchList();">검색</button>
           <a href="${pageContext.request.contextPath}/admin/support/inquiry/list" class="light-btn">초기화</a>
         </div>
-
-        <div class="filter-row">
-          <div class="filter-control">
-            <label for="status">답변상태</label>
-            <select name="status" id="status" onchange="searchList();">
-              <option value="all" ${status=='all'?'selected':''}>전체</option>
-              <option value="접수중" ${status=='접수중'?'selected':''}>접수중</option>
-              <option value="답변완료" ${status=='답변완료'?'selected':''}>답변완료</option>
-            </select>
-          </div>
-        </div>
+			<div class="filter-row">
+			  <div class="filter-control">
+			    <label for="status">답변상태</label>
+			    <select name="status" id="status" onchange="searchList();">
+			      <option value="all" ${status=='all'?'selected':''}>전체</option>
+			      <option value="0" ${status=='0'?'selected':''}>접수중</option>
+			      <option value="1" ${status=='1'?'selected':''}>답변완료</option>
+			    </select>
+			  </div>
+			</div>
       </form>
 
       <article class="panel">
@@ -111,13 +110,15 @@
                   <td>${dto.inquiryId}</td>
                   <td><span class="badge light">${dto.inquiryType}</span></td>
                   <td>
-                    <a href="${writeUrl}&inquiryId=${dto.inquiryId}" class="text-reset">${dto.title}</a>
-                  </td>
+                  	<a href="${pageContext.request.contextPath}/admin/support/inquiry/article?inquiryId=${dto.inquiryId}&page=${page}" class="text-reset">
+  						${dto.title}
+					</a>
+				  </td>
                   <td>${dto.memberId}</td>
                   <td>${dto.createdAt}</td>
                   <td>
                     <c:choose>
-                      <c:when test="${dto.status == '답변완료'}">
+                      <c:when test="${dto.status == 1}">
                         <span class="badge green">답변완료</span>
                       </c:when>
                       <c:otherwise>
@@ -126,10 +127,9 @@
                     </c:choose>
                   </td>
                   <td>
-                    <!-- 템플릿의 support-actions 디자인 살림 -->
                     <div class="support-actions">
                       <c:choose>
-                        <c:when test="${dto.status == '답변완료'}">
+                        <c:when test="${dto.status == 1}">
                           <a href="${writeUrl}&inquiryId=${dto.inquiryId}" class="light-btn answer-btn completed">답변 수정</a>
                         </c:when>
                         <c:otherwise>

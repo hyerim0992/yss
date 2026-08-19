@@ -64,6 +64,7 @@ public class ProductManageController {
 			String dateTo = req.getParameter("dateTo");
 			String minGrade = req.getParameter("minGrade");
 			String status = req.getParameter("status");
+			
 			if(schType == null) {
 				schType = "all";
 				kwd = "";
@@ -105,7 +106,6 @@ public class ProductManageController {
 			mav.addObject("totalCount", totalCount);
 			mav.addObject("size", size);
 			mav.addObject("paging", paging);
-			
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -140,18 +140,19 @@ public class ProductManageController {
 					? 0 : Integer.parseInt(req.getParameter("heelHeight")));
 			dto.setDiscRate(req.getParameter("discRate") == null ||req.getParameter("discRate").isBlank() 
 					? 0 : Integer.parseInt(req.getParameter("discRate")));
-			dto.setThumbnail(req.getParameter("thumbnail"));
+			
+			
 			
 			HttpSession session = req.getSession();
 			String root = session.getServletContext().getRealPath("/");
 			String pathname = root + "uploads" + File.separator +"product";
 			
+			List<MyMultipartFile> listFiles = fileManager.doFileUpload(req.getParts(), pathname);
+			dto.setThumbnail(listFiles.get(0).getSaveFilename());
+			dto.setListFile(listFiles);
 			dto.setImageId(Long.parseLong(req.getParameter("imageId")));
-			dto.setFiles(req.getParameter("files"));
 			dto.setSortOrder(Integer.parseInt(req.getParameter("sortOrder")));
 			
-			List<MyMultipartFile> listFiles = fileManager.doFileUpload(req.getParts(), pathname);
-			dto.setListFile(listFiles);
 		
 
 			service.insertProduct(dto);

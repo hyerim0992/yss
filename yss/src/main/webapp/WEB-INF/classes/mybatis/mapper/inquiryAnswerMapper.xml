@@ -22,7 +22,7 @@
 		</if>
 	</sql>
 
-	<!-- 1. 검색된 데이터 개수 가져오기 -->
+	<!-- 검색 데이터 개수 -->
 	<select id="dataCount" parameterType="map" resultType="Integer">
 		SELECT NVL(COUNT(*), 0)
 		FROM inquiry q
@@ -34,12 +34,14 @@
 		</where>
 	</select>
 
-	<!-- 2. 한페이지씩 관리자용 문의 목록 가져오기 -->
+	<!-- 관리자 문의 목록 가져오기 -->
 	<select id="listInquiry" parameterType="map" resultType="com.yss.dto.InquiryDTO">
-		SELECT q.inquiryId, q.memberId, md.name, q.inquiryType, q.title, q.status,
-		       TO_CHAR(q.createdAt, 'YYYY-MM-DD') AS createdAt
+		SELECT q.inquiryId, q.memberId, md.name, q.inquiryType, q.title,
+		       TO_CHAR(q.createdAt, 'YYYY-MM-DD') AS createdAt,
+		       CASE WHEN ia.answerer IS NULL THEN 0 ELSE 1 END status
 		FROM inquiry q
 		JOIN MEMBERDETAIL md ON q.memberId = md.memberId
+		LEFT OUTER JOIN inquiryAnswer ia ON q.inquiryId = ia.inquiryId 
 		<where>
 			<if test="kwd != null and kwd != ''">
 				AND <include refid="where-list"/>
@@ -49,28 +51,28 @@
 		OFFSET #{offset} ROWS FETCH FIRST #{size} ROWS ONLY
 	</select>
 
-	<!-- 3. 등록된 답변 조회 -->
-	<select id="findById" parameterType="Long" resultType="com.yss.dto.InquiryAnswerDTO">
-		SELECT answerId, inquiryId, answerer, content,
+	<!-- 등록한 답변 조회  -->
+	<select id="findByAnswerId" parameterType="Long" resultType="com.yss.dto.InquiryAnswerDTO">
+		SELECT inquiryId, answerer, content,
 		       TO_CHAR(createdAt, 'YYYY-MM-DD HH24:MI:SS') AS createdAt
 		FROM inquiryAnswer
 		WHERE inquiryId = #{inquiryId}
 	</select>
 
-	<!-- 4. 답변 등록 -->
+	<!-- 답변 등록  -->
 	<insert id="insertAnswer" parameterType="com.yss.dto.InquiryAnswerDTO">
-		INSERT INTO inquiryAnswer (answerId, inquiryId, answerer, content, createdAt)
-		VALUES (inquiryAnswer_seq.NEXTVAL, #{inquiryId}, #{answerer}, #{content}, SYSDATE)
+        INSERT INTO inquiryAnswer (inquiryId, answerer, content, createdAt)
+        VALUES (#{inquiryId}, #{answerer}, #{content}, SYSDATE)
 	</insert>
 
-	<!-- 5. 답변 수정 -->
+	<!-- 답변 수정 -->
 	<update id="updateAnswer" parameterType="com.yss.dto.InquiryAnswerDTO">
 		UPDATE inquiryAnswer
 		SET content = #{content}
 		WHERE inquiryId = #{inquiryId}
 	</update>
 
-	<!-- 6. 답변 삭제 -->
+	<!-- 답변 삭제 -->
 	<delete id="deleteAnswer" parameterType="Long">
 		DELETE FROM inquiryAnswer
 		WHERE inquiryId = #{inquiryId}
