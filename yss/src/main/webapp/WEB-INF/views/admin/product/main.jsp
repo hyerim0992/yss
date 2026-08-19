@@ -66,8 +66,8 @@
           </div>
 
           <div class="filter-control">
-            <label for="gradeFilter">상품 노출등급</label>
-            <select id="gradeFilter">
+            <label for="minGradeFilter">상품 노출등급</label>
+            <select id="minGradeFilter">
               <option value="">전체</option>
               <option value="2">실버이상</option>
               <option value="3">골드이상</option>
@@ -96,7 +96,7 @@
           </div>
           <div>
             <button type="button" class="light-btn danger-btn" id="deleteSelectedButton">선택 삭제</button>
-            <button type="button" class="light-btn" id="exportButton">CSV 저장</button>
+            <button type="button" class="light-btn" id="resetListButton">전체 초기화</button>
           </div>
         </div>
 
@@ -123,8 +123,10 @@
               <c:forEach var="dto" items="${list}">
                 <tr class="data-row">
                   <td><input type="checkbox" class="row-check" aria-label="상품 선택"></td>
-                  <td data-field="thumbnail"><c:out value="${dto.thumbnail}"/></td>
-                  <td data-field="productId"><c:out value="${dto.productId}"/></td>
+                  <td class="thumbnail-cell">
+                  	<img src="${pageContext.request.contextPath}/uploads/product/${dto.thumbnail}" class="product-thumbnail">
+                  </td>
+                  <td class="product-id-cell" data-field="productId"><c:out value="${dto.productId}"/></td>
                   <td data-field="prodName"><c:out value="${dto.prodName}"/></td>
                   <td data-field="brand"><c:out value="${dto.brand}"/></td>
                   <td data-field="categoryId"><c:out value="${dto.categoryId}"/></td>
@@ -296,7 +298,7 @@
                   추가 이미지 <span>(선택)</span>
                 </label>
 
-                <div class="sub-image-list">
+                <div id="subImageList" class="sub-image-list">
                   <label for="files" class="sub-image-add">
                     <span class="plus">+</span>
                     <span>이미지 추가</span>
@@ -315,13 +317,77 @@
 
         <div class="modal-actions">
           <button type="button" class="light-btn" id="modalCancel">취소</button>
-          <button type="submit" class="primary-btn" id="modalSave">저장</button>
+          <button type="button" class="primary-btn" id="modalSave" onclick="sendOk()">저장</button>
         </div>
       </form>
     </section>
   </div>
 
   <div class="toast" id="toast">처리되었습니다.</div>
+  
+  <script type="text/javascript">
+  
+
+function sendOk(){
+	const f = document.productForm
+	f.submit();
+}
+  	
+  
+  document.addEventListener("DOMContentLoaded", () => {
+	const schType = document.querySelector("#schType");
+ 	const kwd = document.querySelector("#kwd");
+	const dateFrom = document.querySelector("#dateFrom");
+	const dateTo = document.querySelector("#dateTo");
+	const minGradeFilter = document.querySelector("#minGradeFilter");
+	const statusFilter = document.querySelector("#statusFilter");
+	  
+  	const searchEl = document.querySelector("#searchButton");
+  	const resetEl = document.querySelector("#resetButton");
+  	const resetListEl = document.querySelector("#resetListButton");
+  	searchEl.addEventListener('click', searchList);
+  	resetEl.addEventListener("click", resetSearch);
+  	
+  	schType.addEventListener("keydown", function (e) {
+  	    if (e.key === "Enter" || e.keyCode === 13) {
+  	        e.preventDefault();
+  			searchList();
+  	    }
+  	});
+  	
+  	resetListEl.addEventListener('click', () => {
+  		resetSearch();
+  		location.href = "${pageContext.request.contextPath}/admin/product"
+  	});
+  	
+
+    function searchList(){
+      	let params = new URLSearchParams;
+      	params.set("schType", schType.value);
+      	params.set("kwd", kwd.value.trim());
+      	params.set("dateFrom", dateFrom.value);
+      	params.set("dateTo", dateTo.value);
+      	params.set("minGrade", minGradeFilter.value);
+      	params.set("status", statusFilter.value);
+
+      	location.href = "${pageContext.request.contextPath}/admin/product?" + params.toString();
+      }
+    
+    function resetSearch() {
+        schType.value = "all";
+        kwd.value = "";
+        dateFrom.value = "";
+        dateTo.value = "";
+        minGradeFilter.value = "";
+        statusFilter.value = "";
+    }
+  });
+
+
+  
+  
+
+  </script>
 
   <jsp:include page="/WEB-INF/views/admin/layout/footerResources.jsp"/>
   <!-- 공용 list.js 대신 상품관리에서 필요한 동작만 담은 전용 JS를 사용합니다. -->

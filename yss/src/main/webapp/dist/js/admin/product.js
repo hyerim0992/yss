@@ -1,3 +1,4 @@
+
 "use strict";
 
 // 상품관리 전용 JS
@@ -5,19 +6,13 @@
 // 이 파일에는 검색, 선택, 모달, 이미지 미리보기 같은 동작만 둡니다.
 // Eclipse에서도 읽기 쉽도록 var / function / if 중심으로 작성했습니다.
 
-
 var editingRow = null;
 var previewUrl = "";
 
-var schType = document.querySelector("#schType");
-var kwd = document.querySelector("#kwd");
-var dateFrom = document.querySelector("#dateFrom");
-var dateTo = document.querySelector("#dateTo");
-var gradeFilter = document.querySelector("#gradeFilter");
-var statusFilter = document.querySelector("#statusFilter");
 var checkAll = document.querySelector("#checkAll");
 var productModal = document.querySelector("#productModal");
 var productForm = document.querySelector("#productForm");
+
 
 function toArray(list) {
     return Array.prototype.slice.call(list);
@@ -41,68 +36,12 @@ function cellValue(row, name) {
     return cell.textContent.trim();
 }
 
-// 검색 조건에 맞는 상품 행만 모으기
-function filteredRows() {
-    var keyword = schType.value.trim().toLowerCase();
-    var allRows = rows();
-    var result = [];
-
-    for (var i = 0; i < allRows.length; i++) {
-        var row = allRows[i];
-        var target = "";
-
-        if (schType.value === "all") {
-            target = row.textContent;
-        } else {
-            target = cellValue(row, schType.value);
-        }
-
-        var regDate = cellValue(row, "regDate").slice(0, 10);
-        var keywordOk = keyword === "" || target.toLowerCase().indexOf(keyword) !== -1;
-        var dateFromOk = dateFrom.value === "" || regDate >= dateFrom.value;
-        var dateToOk = dateTo.value === "" || regDate <= dateTo.value;
-        var gradeOk = gradeFilter.value === "" || cellValue(row, "minGrade") === gradeFilter.value;
-        var statusOk = statusFilter.value === "" || cellValue(row, "status") === statusFilter.value;
-
-        if (keywordOk && dateFromOk && dateToOk && gradeOk && statusOk) {
-            result.push(row);
-        }
-    }
-
-    return result;
-}
-
-// 한 페이지에 10개씩 표시
-function renderList() {
-    var matched = filteredRows();
-
-
-    var allRows = rows();
-    var i;
-
-    for (i = 0; i < allRows.length; i++) {
-        allRows[i].hidden = true;
-    }
-
-
-    checkAll.checked = false;
-    checkAll.indeterminate = false;
-
-    for (i = 0; i < allRows.length; i++) {
-        var rowCheck = allRows[i].querySelector(".row-check");
-        if (rowCheck) {
-            rowCheck.checked = false;
-        }
-    }
-
-    updateSelectedCount();
-}
 
 function updateSelectedCount() {
     var selected = document.querySelectorAll(".row-check:checked").length;
     document.querySelector("#selectedCount").textContent = selected;
 
-    var visible = toArray(document.querySelectorAll(".data-row:not([hidden]) .row-check"));
+    var visible = toArray(document.querySelectorAll(".data-row .row-check"));
     var visibleChecked = 0;
 
     for (var i = 0; i < visible.length; i++) {
@@ -130,15 +69,7 @@ function showToast(message) {
     }, 1800);
 }
 
-function resetSearch() {
-    schType.value = "all";
-    kwd.value = "";
-    dateFrom.value = "";
-    dateTo.value = "";
-    gradeFilter.value = "";
-    statusFilter.value = "";
-    renderList();
-}
+
 
 // 상품 등록/수정 모달 열기
 function openModal(row) {
@@ -179,42 +110,6 @@ function closeModal() {
     resetPreview();
 }
 
-// 수정은 현재 화면의 행 값을 바꿈
-function saveEditOnScreen() {
-    var inputs = toArray(productForm.querySelectorAll("[data-form-field]"));
-
-    for (var i = 0; i < inputs.length; i++) {
-        var input = inputs[i];
-        var fieldName = input.getAttribute("data-form-field");
-        var cell = editingRow.querySelector('[data-field="' + fieldName + '"]');
-
-        if (!cell) {
-            continue;
-        }
-
-        cell.setAttribute("data-value", input.value);
-
-        if (fieldName === "status") {
-            var badge = cell.querySelector(".badge");
-            var names = { ready: "판매대기", onSale: "판매중", soldOut: "품절" };
-            var classes = { ready: "blue", onSale: "green", soldOut: "gray" };
-
-            badge.textContent = names[input.value];
-            badge.className = "badge " + classes[input.value];
-        } else if (input.tagName === "SELECT") {
-            cell.textContent = input.options[input.selectedIndex].text;
-        } else if (fieldName === "price" || fieldName === "inboundPrice") {
-            cell.textContent = Number(input.value || 0).toLocaleString("ko-KR") + "원";
-        } else {
-            cell.textContent = input.value;
-        }
-    }
-
-    closeModal();
-    renderList();
-    showToast("화면의 상품 정보를 수정했습니다.");
-}
-
 // 대표 이미지 미리보기
 function showPreview(file) {
     if (!file) {
@@ -243,54 +138,67 @@ function resetPreview() {
     document.querySelector("#subImageCount").textContent = "선택 0장";
 }
 
-// CSV 저장
-function exportCsv() {
-    var headerCells = toArray(document.querySelectorAll("#productTable thead th"));
-    var headers = [];
-    var data = [];
-    var matched = filteredRows();
-    var i;
-    var j;
+document.querySelector("#thumbnail").addEventListener("change" , () =>{
+	showPreview(this.files[0]);
+});
 
-    for (i = 1; i < headerCells.length - 1; i++) {
-        headers.push(headerCells[i].textContent.trim());
-    }
+function showFilesPreview(files){
+	
+	var list = document.querySelector("#subImageList");
+	var addButton = list.querySelector(".sub-image-add");
+	
+	var previews = list.querySelectorAll(".sub-image-preview");
 
-    for (i = 0; i < matched.length; i++) {
-        var cells = toArray(matched[i].querySelectorAll("td"));
-        var line = [];
+	    for (var i = 0; i < previews.length; i++) {
+	        previews[i].remove();
+	    }
 
-        for (j = 1; j < cells.length - 1; j++) {
-            line.push(cells[j].textContent.trim());
-        }
+	    // 최대 10장
+	    var count = Math.min(files.length, 10);
 
-        data.push(line);
-    }
+	    for (var i = 0; i < count; i++) {
 
-    var lines = [headers].concat(data);
-    var csvLines = [];
+	        var file = files[i];
 
-    for (i = 0; i < lines.length; i++) {
-        var values = [];
+	        if (file.type.indexOf("image/") !== 0) {
+	            continue;
+	        }
 
-        for (j = 0; j < lines[i].length; j++) {
-            var value = String(lines[i][j]).replace(/"/g, '""');
-            values.push('"' + value + '"');
-        }
+	        var url = URL.createObjectURL(file);
 
-        csvLines.push(values.join(","));
-    }
+	        var wrapper = document.createElement("div");
+	        wrapper.className = "sub-image-preview";
 
-    var csv = csvLines.join("\n");
-    var blob = new Blob(["\ufeff" + csv], { type: "text/csv;charset=utf-8" });
-    var url = URL.createObjectURL(blob);
-    var link = document.querySelector("#adminCsvDownloadLink");
+	        var img = document.createElement("img");
+	        img.src = url;
+	        img.alt = "추가 이미지 " + (i + 1);
 
-    link.href = url;
-    link.download = "product-list.csv";
-    link.click();
-    URL.revokeObjectURL(url);
+	        wrapper.appendChild(img);
+
+	        list.insertBefore(wrapper, addButton);
+	    }
+
+	    document.querySelector("#subImageCount").textContent =
+	        "선택 " + count + "장";
 }
+
+document.querySelector("#files").addEventListener("change", function () {
+
+    if (this.files.length > 10) {
+
+        this.value = "";
+
+        showToast("추가 이미지는 최대 10장까지 선택할 수 있습니다.");
+
+        return;
+    }
+	
+	showFilesPreview(this.files);
+});
+
+
+	
+
 
 // 기존 상품 한 행의 이벤트 연결
 function bindProductRow(row) {
@@ -311,8 +219,6 @@ function bindProductRow(row) {
     if (deleteButton) {
         deleteButton.addEventListener("click", function () {
             if (window.confirm("선택한 상품을 화면에서 삭제할까요?")) {
-                row.remove();
-                renderList();
             }
         });
     }
@@ -326,27 +232,9 @@ function initProduct() {
         bindProductRow(allRows[i]);
     }
 
-    document.querySelector("#searchButton").addEventListener("click", function () {
-    });
-
-    schType.addEventListener("keydown", function (event) {
-        if (event.key === "Enter" || event.keyCode === 13) {
-            event.preventDefault();
-        }
-    });
-
-    document.querySelector("#resetButton").addEventListener("click", resetSearch);
-
-    var filters = [dateFrom, dateTo, gradeFilter, statusFilter];
-    for (i = 0; i < filters.length; i++) {
-        filters[i].addEventListener("change", function () {
-        });
-    }
-
-
 
     checkAll.addEventListener("change", function () {
-        var visibleChecks = toArray(document.querySelectorAll(".data-row:not([hidden]) .row-check"));
+        var visibleChecks = toArray(document.querySelectorAll(".data-row .row-check"));
 
         for (var i = 0; i < visibleChecks.length; i++) {
             visibleChecks[i].checked = checkAll.checked;
@@ -367,14 +255,11 @@ function initProduct() {
             for (var i = 0; i < selected.length; i++) {
                 var row = selected[i].closest("tr");
                 if (row) {
-                    row.remove();
                 }
             }
-            renderList();
         }
     });
 
-    document.querySelector("#exportButton").addEventListener("click", exportCsv);
 
     document.querySelector("#addButton").addEventListener("click", function () {
         openModal(null);
@@ -445,7 +330,6 @@ function initProduct() {
         }
     });
 
-    renderList();
 }
 
 if (document.readyState === "loading") {
@@ -453,3 +337,4 @@ if (document.readyState === "loading") {
 } else {
     initProduct();
 }
+

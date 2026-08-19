@@ -20,8 +20,7 @@ public class ProductManageServiceImpl implements ProductManageService {
 			
 			if(dto.getListFile().size() != 0) {
 				for(MyMultipartFile mf : dto.getListFile()) {
-					dto.setFiles(mf.getSaveFilename());
-					
+					dto.setFiles(mf.getSaveFilename());	
 					mapper.insertProductImage(dto);
 				}
 
@@ -48,6 +47,7 @@ public class ProductManageServiceImpl implements ProductManageService {
 		int result = mapper.countProductManage(map);
 		return result;
 	}
+
 
 
 }
