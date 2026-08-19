@@ -18,13 +18,6 @@ public class HomeManageController {
             throws ServletException, IOException {
         return new ModelAndView("admin/dashboard/main");
     }
-
-    @GetMapping("/admin/member")
-    public ModelAndView member(HttpServletRequest req, HttpServletResponse resp)
-            throws ServletException, IOException {
-        return new ModelAndView("admin/member/main");
-    }
-
     @GetMapping("/admin/logistics")
     public ModelAndView logistics(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {

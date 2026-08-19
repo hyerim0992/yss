@@ -1,112 +1,266 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-
 <mapper namespace="com.yss.mapper.MemberMapper">
 
-	<!-- 로그인 -->
+	<!-- 로그인: 삭제되지 않았고 상태가 일반인 회원만 로그인 가능 -->
 	<select id="loginMember" parameterType="map"
 		resultType="com.yss.dto.MemberDTO">
-
-		SELECT
-		m.memberId, d.userId, d.password, d.name, m.role
-		FROM
-		member m
-		LEFT OUTER JOIN
-		memberDetail d
-		ON m.memberId = d.memberId
+		SELECT m.MEMBERID, d.USERID, d.PASSWORD, d.NAME, m.ROLE
+		FROM MEMBER m
+		JOIN MEMBERDETAIL d ON m.MEMBERID = d.MEMBERID
 		WHERE
-		d.userId = #{userId}
-		AND d.password = #{password}
+		d.USERID = #{userId}
+		AND d.PASSWORD = #{password}
+		AND m.STATUS = '일반'
+		AND m.DELETEDAT IS NULL
 	</select>
 
-	<!-- 회원번호 생성 -->
 	<select id="memberSeq" resultType="Long">
-		SELECT MEMBER_SEQ.NEXTVAL
-		FROM
+		SELECT MEMBER_SEQ.NEXTVAL FROM
 		dual
 	</select>
 
-	<!-- MEMBER 등록 -->
 	<insert id="insertMember" parameterType="com.yss.dto.MemberDTO">
-
-		INSERT INTO MEMBER (
-		MEMBERID, ROLE, STATUS, CREATEDAT, DELETEDAT)
-		VALUES (
-		#{memberId}, 1,
-		'일반', SYSDATE, NULL)
+		INSERT INTO MEMBER
+		(MEMBERID, ROLE, STATUS, CREATEDAT, DELETEDAT)
+		VALUES (#{memberId},
+		#{role}, #{status,jdbcType=VARCHAR}, SYSDATE, NULL)
 	</insert>
 
-	<!-- 회원 상세정보 등록 -->
 	<insert id="insertMemberDetail"
 		parameterType="com.yss.dto.MemberDTO">
-
 		INSERT INTO MEMBERDETAIL (
-		MEMBERID, USERID, PASSWORD,
-		EMAIL, PHONE, BIRTH, NAME,
-		UPDATEDAT, REFUNDACCOUNT, BANKNAME,
-		ACCOUNTHOLDER)
-		VALUES (
-		#{memberId}, #{userId}, #{password},#{email},
-		#{phone},
-		#{birth}, #{name}, SYSDATE, NULL, NULL, NULL)
+		MEMBERID, USERID, PASSWORD, EMAIL, PHONE, BIRTH, NAME,
+		UPDATEDAT, REFUNDACCOUNT, BANKNAME, ACCOUNTHOLDER
+		) VALUES (
+		#{memberId}, #{userId}, #{password}, #{email}, #{phone},
+		TO_DATE(#{birth}, 'YYYY-MM-DD'), #{name}, SYSDATE,
+		<choose>
+			<when test="refundAccount != null and refundAccount != ''">
+				TO_NUMBER(REPLACE(#{refundAccount}, '-', ''))
+			</when>
+			<otherwise>NULL</otherwise>
+		</choose>
+		,
+		#{bankName,jdbcType=VARCHAR}, #{accountHolder,jdbcType=VARCHAR}
+		)
 	</insert>
 
-	<!-- 기본 배송지 등록 -->
 	<insert id="insertAddress" parameterType="com.yss.dto.MemberDTO">
-
 		INSERT INTO ADDRESS (
 		ADDRESSID, MEMBERID, RECEIVER, RECEIVERNO, ADDR1, ADDR2, ZIPCODE,
+		ISDEFAULT
+		) VALUES (
+		ADDRESS_SEQ.NEXTVAL, #{memberId}, #{name},
+		TO_NUMBER(REPLACE(#{phone}, '-', '')),
+		#{addr1}, #{addr2,jdbcType=VARCHAR}, #{zip}, 'yes'
+		)
+	</insert>
+
+	<select id="checkUserId" parameterType="map"
+		resultType="Integer">
+		SELECT COUNT(*) FROM MEMBERDETAIL WHERE USERID = #{userId}
+	</select>
+
+	<select id="findUserId" parameterType="map"
+		resultType="com.yss.dto.MemberDTO">
+		SELECT MEMBERID, USERID, NAME, EMAIL
+		FROM MEMBERDETAIL
+		WHERE
+		NAME = #{name} AND EMAIL = #{email}
+	</select>
+
+	<select id="checkMemberForPassword" parameterType="map"
+		resultType="Integer">
+		SELECT COUNT(*)
+		FROM MEMBERDETAIL
+		WHERE USERID = #{userId}
+		AND NAME = #{name} AND EMAIL = #{email}
+	</select>
+
+	<update id="updatePassword" parameterType="map">
+		UPDATE MEMBERDETAIL
+		SET PASSWORD = #{password}, UPDATEDAT = SYSDATE
+		WHERE USERID =
+		#{userId}
+	</update>
+
+	<!-- 관리자 회원관리 검색조건 -->
+	<sql id="adminMemberWhere">
+		WHERE 1 = 1
+		<choose>
+			<when test="memberStatus == '삭제'">
+				AND m.DELETEDAT IS NOT NULL
+			</when>
+			<when test="memberStatus != null and memberStatus != ''">
+				AND m.DELETEDAT IS NULL
+				AND m.STATUS = #{memberStatus}
+			</when>
+		</choose>
+
+		<if test="kwd != null and kwd != ''">
+			<choose>
+				<when test="schType == 'memberId'">
+					AND TO_CHAR(m.MEMBERID) LIKE '%' || #{kwd} || '%'
+				</when>
+				<when test="schType == 'name'">
+					AND INSTR(d.NAME, #{kwd}) &gt; 0
+				</when>
+				<when test="schType == 'userId'">
+					AND INSTR(d.USERID, #{kwd}) &gt; 0
+				</when>
+				<when test="schType == 'phone'">
+					AND INSTR(d.PHONE, #{kwd}) &gt; 0
+				</when>
+				<when test="schType == 'email'">
+					AND INSTR(d.EMAIL, #{kwd}) &gt; 0
+				</when>
+				<when test="schType == 'status'">
+					AND (
+					INSTR(m.STATUS, #{kwd}) &gt; 0
+					OR (m.DELETEDAT IS NOT NULL AND INSTR('삭제', #{kwd}) &gt; 0)
+					)
+				</when>
+				<otherwise>
+					AND (
+					TO_CHAR(m.MEMBERID) LIKE '%' || #{kwd} || '%'
+					OR INSTR(d.NAME, #{kwd}) &gt; 0
+					OR INSTR(d.USERID, #{kwd}) &gt; 0
+					OR INSTR(d.PHONE, #{kwd}) &gt; 0
+					OR INSTR(d.EMAIL, #{kwd}) &gt; 0
+					OR INSTR(m.STATUS, #{kwd}) &gt; 0
+					OR (m.DELETEDAT IS NOT NULL AND INSTR('삭제', #{kwd}) &gt; 0)
+					)
+				</otherwise>
+			</choose>
+		</if>
+	</sql>
+
+	<select id="listMember" parameterType="map"
+		resultType="com.yss.dto.MemberDTO">
+		SELECT
+		m.MEMBERID,
+		m.ROLE,
+		m.STATUS,
+		TO_CHAR(m.CREATEDAT, 'YYYY-MM-DD') AS createAt,
+		TO_CHAR(m.DELETEDAT, 'YYYY-MM-DD HH24:MI') AS deleteAt,
+		d.USERID,
+		d.NAME,
+		d.EMAIL,
+		d.PHONE,
+		TO_CHAR(d.BIRTH, 'YYYY-MM-DD') AS birth,
+		TO_CHAR(d.UPDATEDAT, 'YYYY-MM-DD HH24:MI') AS updateAt,
+		d.REFUNDACCOUNT,
+		d.BANKNAME,
+		d.ACCOUNTHOLDER,
+		a.ZIPCODE AS zip,
+		a.ADDR1,
+		a.ADDR2
+		FROM MEMBER m
+		JOIN MEMBERDETAIL d ON m.MEMBERID = d.MEMBERID
+		LEFT JOIN
+		ADDRESS a ON a.ADDRESSID = (
+		SELECT MIN(a2.ADDRESSID)
+		FROM ADDRESS a2
+		WHERE a2.MEMBERID = m.MEMBERID
+		AND LOWER(a2.ISDEFAULT) = 'yes'
+		)
+		<include refid="adminMemberWhere" />
+		ORDER BY m.MEMBERID DESC
+		OFFSET #{offset} ROWS FETCH NEXT #{size} ROWS
+		ONLY
+	</select>
+
+	<select id="dataCountMember" parameterType="map"
+		resultType="Integer">
+		SELECT COUNT(*)
+		FROM MEMBER m
+		JOIN MEMBERDETAIL d ON m.MEMBERID =
+		d.MEMBERID
+		<include refid="adminMemberWhere" />
+	</select>
+
+	<select id="checkUserIdExceptMember" parameterType="map"
+		resultType="Integer">
+		SELECT COUNT(*)
+		FROM MEMBERDETAIL
+		WHERE USERID = #{userId}
+		AND MEMBERID != #{memberId}
+	</select>
+
+	<update id="updateMember" parameterType="com.yss.dto.MemberDTO">
+		UPDATE MEMBER
+		SET ROLE =
+		#{role}, STATUS = #{status,jdbcType=VARCHAR}
+		WHERE MEMBERID =
+		#{memberId} AND DELETEDAT IS NULL
+	</update>
+
+	<update id="updateMemberDetail"
+		parameterType="com.yss.dto.MemberDTO">
+		UPDATE MEMBERDETAIL
+		SET USERID = #{userId},
+		EMAIL = #{email},
+		PHONE = #{phone},
+		BIRTH = TO_DATE(#{birth}, 'YYYY-MM-DD'),
+		NAME = #{name},
+		UPDATEDAT = SYSDATE,
+		REFUNDACCOUNT =
+		<choose>
+			<when test="refundAccount != null and refundAccount != ''">
+				TO_NUMBER(REPLACE(#{refundAccount}, '-', ''))
+			</when>
+			<otherwise>NULL</otherwise>
+		</choose>
+		,
+		BANKNAME = #{bankName,jdbcType=VARCHAR},
+		ACCOUNTHOLDER = #{accountHolder,jdbcType=VARCHAR}
+		<if test="password != null and password != ''">
+			, PASSWORD = #{password}
+		</if>
+		WHERE MEMBERID = #{memberId}
+	</update>
+
+	<update id="saveDefaultAddress"
+		parameterType="com.yss.dto.MemberDTO">
+		MERGE INTO ADDRESS a
+		USING (SELECT #{memberId} AS
+		MEMBERID FROM dual) src
+		ON (a.MEMBERID = src.MEMBERID AND
+		LOWER(a.ISDEFAULT) = 'yes')
+		WHEN MATCHED THEN
+		UPDATE SET
+		a.RECEIVER = #{name},
+		a.RECEIVERNO = TO_NUMBER(REPLACE(#{phone}, '-', '')),
+		a.ADDR1 = #{addr1},
+		a.ADDR2 = #{addr2,jdbcType=VARCHAR},
+		a.ZIPCODE = #{zip}
+		WHEN NOT MATCHED THEN
+		INSERT (ADDRESSID, MEMBERID, RECEIVER, RECEIVERNO, ADDR1, ADDR2, ZIPCODE,
 		ISDEFAULT)
 		VALUES (
 		ADDRESS_SEQ.NEXTVAL, #{memberId}, #{name},
 		TO_NUMBER(REPLACE(#{phone}, '-', '')),
-		#{addr1}, #{addr2}, #{zip},
-		'yes')
-	</insert>
-
-	<!-- 아이디 중복확인 -->
-	<select id="checkUserId" parameterType="map"
-		resultType="Integer">
-
-		SELECT COUNT(*)
-		FROM MEMBERDETAIL
-		WHERE USERID = #{userId}
-	</select>
-
-	<!-- 아이디 찾기 -->
-	<select id="findUserId" parameterType="map"
-		resultType="com.yss.dto.MemberDTO">
-
-		SELECT
-		MEMBERID, USERID, NAME, EMAIL
-		FROM MEMBERDETAIL
-		WHERE
-		NAME = #{name}
-		AND EMAIL = #{email}
-	</select>
-
-	<!-- 비밀번호 찾기 회원 확인 -->
-	<select id="checkMemberForPassword" parameterType="map"
-		resultType="Integer">
-
-		SELECT COUNT(*)
-		FROM MEMBERDETAIL
-		WHERE USERID = #{userId}
-		AND NAME = #{name}
-		AND EMAIL = #{email}
-
-	</select>
-
-	<!-- 비밀번호 변경 -->
-	<update id="updatePassword" parameterType="map">
-
-		UPDATE MEMBERDETAIL
-		SET
-		PASSWORD = #{password},
-		UPDATEDAT = SYSDATE
-		WHERE USERID = #{userId}
-
+		#{addr1}, #{addr2,jdbcType=VARCHAR}, #{zip}, 'yes'
+		)
 	</update>
+
+	<!-- 삭제: STATUS는 유지하고 DELETEDAT만 기록 -->
+	<update id="deleteMember" parameterType="Long">
+		UPDATE MEMBER
+		SET
+		DELETEDAT = SYSDATE
+		WHERE MEMBERID = #{memberId} AND DELETEDAT IS NULL
+	</update>
+
+	<!-- 복구: 삭제일을 지우고 로그인 가능한 일반 상태로 복구 -->
+	<update id="restoreMember" parameterType="Long">
+		UPDATE MEMBER
+		SET STATUS
+		= '일반', DELETEDAT = NULL
+		WHERE MEMBERID = #{memberId} AND DELETEDAT IS
+		NOT NULL
+	</update>
+
 </mapper>
