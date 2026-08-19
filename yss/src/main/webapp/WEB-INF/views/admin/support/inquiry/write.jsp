@@ -104,7 +104,7 @@
                 <tr>
                   <th>답변 내용</th>
                   <td colspan="3">
-                    <textarea name="content" placeholder="고객에게 전달할 답변 내용을 입력하세요.">${answerDto.content}</textarea>
+                    <textarea name="content" placeholder="답변 내용을 입력하세요.">${answerDto.content}</textarea>
                   </td>
                 </tr>
               </tbody>

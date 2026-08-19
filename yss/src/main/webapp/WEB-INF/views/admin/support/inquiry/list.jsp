@@ -46,7 +46,7 @@
         <a href="${pageContext.request.contextPath}/admin/support/qna/list">상품문의 관리</a>
       </nav>
 
-      <!-- 검색 및 상태 필터 폼 -->
+      <!-- 검색 및 상태 필터 -->
       <form name="searchForm" method="get" action="${pageContext.request.contextPath}/admin/support/inquiry/list"
             class="panel search-panel support-search-form">
         <div class="search-row">
@@ -63,7 +63,7 @@
           <button type="button" class="dark-btn" onclick="searchList();">검색</button>
           <a href="${pageContext.request.contextPath}/admin/support/inquiry/list" class="light-btn">초기화</a>
         </div>
-			<div class="filter-row">
+			<div class="filter-row" style="display: none;">
 			  <div class="filter-control">
 			    <label for="status">답변상태</label>
 			    <select name="status" id="status" onchange="searchList();">
