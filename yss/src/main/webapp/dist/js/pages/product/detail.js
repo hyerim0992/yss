@@ -4,6 +4,8 @@ document.addEventListener("DOMContentLoaded", function () {
   var hero = document.querySelector(".product-hero");
   var colorModal = document.getElementById("colorModal");
   var sizeModal = document.getElementById("sizeModal");
+  var reviewModal = document.getElementById("reviewModal");
+  var QnAModal = document.getElementById("QnAModal");
   var selectedOptionCard = document.getElementById("selectedOptionCard");
   var toast = document.getElementById("productToast");
   var selectedColor = "";
@@ -398,6 +400,68 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   });
 
+  
+  var allReviewButton = document.getElementById("allReviewButton");
+  var prodId = allReviewButton.dataset.prodId;
+  if (allReviewButton) {
+    allReviewButton.addEventListener("click", function () {
+		
+		const url = "detail/review";
+		const params = {prodId: prodId};
+
+		console.log(params);
+
+		const fn = function(data){
+			console.log(data.reviews);
+			console.log(data.reviews.contents);
+			
+			
+		const reviewModalContainer = document.getElementById("reviewGrid");
+		reviewModalContainer.innerHTML = "";
+
+		if( ! data|| data.length === 0){
+			reviewModalContainer.innerHTML = "<p>현재 등록된 리뷰가 없는 상품입니다.</p>";
+		}else{
+			// 전체 HTML을 담을 빈 문자열 변수 생성
+			let htmlString = '';
+			const name = data.memberName;
+			const size = data.orderItemOptionList.prodsize;
+			const color = data.orderItemOptionList.color;
+
+			for (let el of data.reviews) {
+			    // 예: el.rating이 3이라면 '★★★☆☆'
+			    let stars = '★'.repeat(el.rating) + '☆'.repeat(5 - el.rating);
+			    
+			    // 완성된 형태의 HTML 문자열을 백틱(`) 안에 한 번에 작성
+			    htmlString += `			
+			    <article class="review-card">
+			        <div class="review-card-head">
+			            <b>${stars}</b>
+			        </div>
+			        <p>${el.contents}</p>
+			        <small>${name} · ${color} · ${size}mm · ${el.updatedAt}</small>
+			    </article>
+			    `;
+			}
+
+			// 반복문이 끝난 후 완성된 HTML 문자열을 DOM에 한 번만 추가
+			reviewModalContainer.innerHTML += htmlString;
+
+		}
+			openModal(reviewModal);
+		  }
+
+		  ajaxRequest(url, 'get', params, 'json', fn);
+    });
+  }
+  
+  var allQnAButton = document.getElementById("allQnAButton");
+  if (allQnAButton) {
+    allReviewButton.addEventListener("click", function () {
+      
+    });
+  }
+  
   var reviewWriteButton = document.getElementById("reviewWriteButton");
   if (reviewWriteButton) {
     reviewWriteButton.addEventListener("click", function () {

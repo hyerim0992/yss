@@ -1169,6 +1169,21 @@ button:disabled {
   border-color: #111;
 }
 
+.all-Button {
+  display: block;
+  min-width: 160px;
+  height: 46px;
+  margin: 34px auto 0;
+  border: 1px solid #d3d6da;
+  border-radius: 8px;
+  background: #fff;
+  font-weight: 700;
+}
+
+.all-Button:hover {
+  border-color: #111;
+}
+
 .modal-backdrop {
   position: fixed;
   z-index: 50;
@@ -1586,9 +1601,11 @@ button:disabled {
 .outline-action,
 .question-title button,
 .more-button,
+.allReviewButton,
 .color-grid button,
 .size-grid button,
-.modal-close {
+.modal-close
+ {
   color: var(--text);
   -webkit-text-fill-color: currentColor;
 }

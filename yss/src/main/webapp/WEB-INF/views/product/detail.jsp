@@ -278,7 +278,7 @@
 					</article>
 
 					<div>
-						<a> 전체 보기 </a>
+						<button type="button" class="all-Button" id="allReviewButton" data-prod-id="${dto.productId}">전체 보기</button>
 					</div>
 				</div>
 
@@ -314,7 +314,7 @@
 					</ul>
 
 					<div>
-						<a> 전체 보기 </a>
+						<button type="button" class="all-Button" id="allQnAButton" >전체 보기</button>
 					</div>
 				</div>
 
@@ -385,6 +385,32 @@
 	</main>
 
 	<div class="modal-backdrop" id="colorModal" aria-hidden="true">
+		<section class="modal-card" role="dialog" aria-modal="true"
+			aria-labelledby="colorTitle">
+
+			<div class="color-grid" id="colorGrid">
+				<c:forEach var="list" items="${uniqueColors}" varStatus="status">
+					<button type="button" data-color="${list}" data-prod-id="${dto.productId}"
+						data-color-key="${list}">
+						<span class="color-chip ${list}"></span><b>${list}</b>
+					</button>
+				</c:forEach>
+			</div>
+		</section>
+	</div>
+	
+	<!-- 리뷰 모달 -->
+	<div class="modal-backdrop" id="reviewModal" aria-hidden="true">
+		<section class="modal-card" role="dialog" aria-modal="true"
+			aria-labelledby="colorTitle">
+
+			<div class="color-grid" id="reviewGrid">
+			</div>
+		</section>
+	</div>
+	
+	<!-- 문의 모달 -->
+	<div class="modal-backdrop" id="QnAModal" aria-hidden="true">
 		<section class="modal-card" role="dialog" aria-modal="true"
 			aria-labelledby="colorTitle">
 

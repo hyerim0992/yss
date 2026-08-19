@@ -9,7 +9,10 @@ import java.util.stream.Collectors;
 
 import com.yss.mvc.annotation.RequestMapping;
 import com.yss.mvc.annotation.ResponseBody;
+import com.yss.dto.OrderItemDTO;
 import com.yss.dto.ProductDTO;
+import com.yss.dto.ReviewDTO;
+import com.yss.dto.ReviewImageDTO;
 import com.yss.dto.SessionInfo;
 import com.yss.dto.wishListDTO;
 import com.yss.mvc.annotation.Controller;
@@ -86,9 +89,31 @@ public class ProductDetailController {
     }
     
     @GetMapping("review")
-    public ModelAndView reviewForm(HttpServletRequest req, HttpServletResponse resp)
+    @ResponseBody
+    public Map<String, Object> reviewList(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-    	return new ModelAndView("product/detail/review");
+    	//넘어오는 파라미터 : prodId
+    	Map<String, Object> model = new HashMap<String, Object>();
+    	
+		long prodId = Long.parseLong(req.getParameter("prodId"));
+		
+		try {
+			List<ReviewDTO> reviewList = service.reviewList(2L); //prodId 넣기
+			reviewList.get(0).getOrderItemId();
+			List<ReviewImageDTO> reviewImageList = service.ReviewImageList(2L);
+			List<ProductDTO> orderItemOptionList = service.OrderItemOptionList(2L);
+			String memberName = service.OrderMemberName(2L);
+			
+			model.put("reviews", reviewList);
+			model.put("reviewImageList", reviewImageList);
+			model.put("orderItemOptionList", orderItemOptionList);
+			model.put("memberName", memberName);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		System.out.println(model);
+		return model;
     }
     
     //AJAX //리뷰 작성
