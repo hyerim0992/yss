@@ -58,6 +58,76 @@
 		DELETE FROM wishlist 
 		WHERE memberId = #{memberId} AND productId = #{productId}
 	</delete>
+	
+	<select id="selectReview" parameterType="Long" resultType="com.yss.dto.ReviewDTO">
+		SELECT orderItemId, productId, rating, contents, status, TO_CHAR(createdAt, 'YY.MM.DD') createdAt, TO_CHAR(updatedAt, 'YY.MM.DD') updatedAt
+		FROM review
+		WHERE productId = #{productId}
+		ORDER BY createdAt
+	</select>
+	
+	<select id="selectReviewImage" parameterType="Long" resultType="com.yss.dto.ReviewImageDTO">
+		SELECT ri.imageId, ri.orderItemId, ri.files, ri.sortOrder
+		FROM reviewImage ri 
+		INNER JOIN review r ON r.orderItemId = ri.orderItemId
+		WHERE r.productId = #{productId}
+		ORDER BY orderItemId, sortOrder
+	</select>
+	
+	<select id="selectOrderItemOption" parameterType="Long" resultType="com.yss.dto.ProductDTO">
+		SELECT oi.orderItemId, po.optionId, po.prodSize, po.color
+		FROM productOption po
+		INNER JOIN orderItem oi ON po.optionId = oi.optionId
+		INNER JOIN review r ON oi.orderItemId = r.orderItemId
+		WHERE r.productId = #{productId}
+	</select>
+	
+		
+	<select id="selectOrderMemberName" parameterType="Long" resultType="String">
+		SELECT md.name
+		FROM orderItem oi
+		INNER JOIN orders o ON oi.orderId = o.orderId
+		INNER JOIN memberDetail md ON o.memberId = md.memberId 
+		WHERE oi.orderItemId = #{orderItemId}
+	</select>
+
+<!-- 
+	SELECT 
+     1. 리뷰 기본 정보
+    r.orderItemId, 
+    r.productId, 
+    r.rating, 
+    r.contents, 
+    r.status, 
+    TO_CHAR(r.createdAt, 'YY.MM.DD') AS createdAt, 
+    TO_CHAR(r.updatedAt, 'YY.MM.DD') AS updatedAt,
+    
+     2. 작성자 이름
+    md.name AS memberName,
+    
+     3. 상품 옵션 정보
+    po.optionId, 
+    po.prodSize, 
+    po.color,
+    
+     4. 리뷰 이미지 정보 (여러 행이 나올 수 있음)
+    ri.imageId, 
+    ri.files, 
+    ri.sortOrder
+
+FROM review r
+ 주문 상품 및 옵션 조인
+INNER JOIN orderItem oi ON r.orderItemId = oi.orderItemId
+INNER JOIN productOption po ON oi.optionId = po.optionId
+ 작성자 이름 조인
+INNER JOIN orders o ON oi.orderId = o.orderId
+INNER JOIN memberDetail md ON o.memberId = md.memberId
+ 리뷰 이미지 조인 (이미지가 없을 수도 있으니 LEFT JOIN)
+LEFT JOIN reviewImage ri ON r.orderItemId = ri.orderItemId
+
+WHERE r.productId = #{productId}
+ORDER BY r.createdAt DESC, ri.sortOrder ASC
+ -->	
 	<!-- 
 	
 	 -->

@@ -4,9 +4,11 @@ public class ReviewDTO {
 	private long orderItemId;
 	private long productId;
 	private int rating;
+	private String contents;
 	private String status;
 	private String createdAt;
 	private String updatedAt;
+	
 	public long getOrderItemId() {
 		return orderItemId;
 	}
@@ -43,7 +45,12 @@ public class ReviewDTO {
 	public void setUpdatedAt(String updatedAt) {
 		this.updatedAt = updatedAt;
 	}
-	
+	public String getContents() {
+		return contents;
+	}
+	public void setContents(String contents) {
+		this.contents = contents;
+	}
 }
 
 /*
