@@ -103,7 +103,7 @@ public class LoginFilter implements Filter {
 				"/customer/notice/**",
 				"/customer/qna/**", // FAQ/공지/상품문의 목록은 비회원도 확인 가능
 				"/order",
-				"/uploads/photo/**", 
+				"/uploads/product/**", 
 				"/dist/**"
 		};
 		

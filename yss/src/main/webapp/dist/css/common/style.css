@@ -14202,3 +14202,27 @@ body > header .header-sticky.sticky-bar {
     width: 126px;
   }
 }
+
+.best-product-img {
+    width: 700px;
+    height: 600px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    overflow:hidden;
+    background: transparent;
+}
+
+
+.best-product-img img {
+    width:120%;
+    height:120%;
+    object-fit:contain;
+}
+
+
+.best-title {
+    font-size:70px;
+    line-height:1.1;
+    word-break:keep-all;
+}

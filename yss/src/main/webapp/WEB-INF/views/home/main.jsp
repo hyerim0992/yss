@@ -24,55 +24,42 @@
 
 
     <main>
-
         <!-- 메인 배너 시작 -->
         <div class="slider-area ">
             <!-- 모바일 메뉴 -->
             <div class="slider-active">
-                <div class="single-slider slider-height" data-background="${ctx}/dist/images/hero/h1_hero.jpg">
-                    <div class="container">
-                        <div class="row d-flex align-items-center justify-content-between">
-                            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 d-none d-md-block">
-                                <div class="hero__img" data-animation="bounceIn" data-delay=".4s">
-                                    <img src="${ctx}/dist/images/hero/hero_man.png" alt="">
-                                </div>
-                            </div>
-                            <div class="col-xl-5 col-lg-5 col-md-5 col-sm-8">
-                                <div class="hero__caption">
-                                    <span data-animation="fadeInRight" data-delay=".4s">60% Discount</span>
-                                    <h1 data-animation="fadeInRight" data-delay=".6s">Winter <br> Collection</h1>
-                                    <p data-animation="fadeInRight" data-delay=".8s">Best Cloth Collection By 2020!</p>
-                                    <!-- 화면 구성 설명 -->
-                                    <div class="hero__btn" data-animation="fadeInRight" data-delay="1s">
-                                        <a href="${ctx}/mypage#wishlist" class="btn hero-btn">Shop Now</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="single-slider slider-height" data-background="${ctx}/dist/images/hero/h1_hero.jpg">
-                    <div class="container">
-                        <div class="row d-flex align-items-center justify-content-between">
-                            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 d-none d-md-block">
-                                <div class="hero__img" data-animation="bounceIn" data-delay=".4s">
-                                    <img src="${ctx}/dist/images/hero/hero_man.png" alt="">
-                                </div>
-                            </div>
-                            <div class="col-xl-5 col-lg-5 col-md-5 col-sm-8">
-                                <div class="hero__caption">
-                                    <span data-animation="fadeInRight" data-delay=".4s">60% Discount</span>
-                                    <h1 data-animation="fadeInRight" data-delay=".6s">Winter <br> Collection</h1>
-                                    <p data-animation="fadeInRight" data-delay=".8s">Best Cloth Collection By 2020!</p>
-                                    <!-- 화면 구성 설명 -->
-                                    <div class="hero__btn" data-animation="fadeInRight" data-delay="1s">
-                                        <a href="${ctx}/mypage#wishlist" class="btn hero-btn">Shop Now</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <div class="slider-active">
+				    <c:forEach var="dto" items="${bestList}">
+				        <div class="single-slider slider-height"
+				             data-background="${ctx}/dist/images/hero/h1_hero.jpg">
+				            <div class="container">
+				                <div class="row d-flex align-items-center justify-content-between">
+				                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 d-none d-md-block">
+				                        <div class="hero__img" data-animation="bounceIn" data-delay=".4s">
+				                            <div class="hero__img best-product-img">
+										 	   <img src="${ctx}/uploads/product/${dto.thumbnail}" alt="${dto.prodName}">
+											</div>
+				                        </div>
+				                    </div>
+				                    <div class="col-xl-5 col-lg-5 col-md-5 col-sm-8">
+				                        <div class="hero__caption">
+				                            <span>BEST ITEM</span>
+				                            <h1 class="best-title">
+											    <c:out value="${dto.prodName}" />
+											</h1>
+				                            <div class="hero__btn">
+				                                <a href="${ctx}/product/detail?productId=${dto.productId}" class="btn hero-btn">
+												    SHOP NOW
+												</a>
+				                            </div>
+				                        </div>
+				                    </div>
+				                </div>
+				            </div>
+				        </div>
+				    </c:forEach>
+				
+				</div>
             </div>
         </div>
         <!-- 메인 배너 끝 -->

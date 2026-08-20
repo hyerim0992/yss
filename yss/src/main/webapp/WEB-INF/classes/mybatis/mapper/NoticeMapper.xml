@@ -110,6 +110,5 @@
 			#{noticeId}
 		</foreach>
 	</delete>	
-	
-	
+
 </mapper>

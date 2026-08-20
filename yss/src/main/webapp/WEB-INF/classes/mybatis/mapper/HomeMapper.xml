@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yss.mapper.HomeMapper">
+	<select id="homeBestList" resultType="com.yss.dto.HomeDTO">
+		SELECT 
+		    po.productId, 
+		    pd.prodName, 
+		    SUM(oi.quantity) AS salesQty, 
+		    pd.price, 
+		    pd.thumbnail 
+		FROM orderItem oi 
+		JOIN productOption po 
+		    ON oi.optionId = po.optionId 
+		JOIN product pd 
+		    ON po.productId = pd.productId 
+		JOIN orders od 
+		    ON oi.orderId = od.orderId 
+		WHERE od.orderedAt >= ADD_MONTHS(SYSDATE, -1)
+   <!-- AND od.status != '승원씨가 정해서 가르쳐줌' -->
+		GROUP BY 
+		    po.productId, 
+		    pd.prodName, 
+		    pd.price, 
+		    pd.thumbnail 
+		ORDER BY salesQty DESC 
+		FETCH FIRST 4 ROWS ONLY
+	</select>
+</mapper>
