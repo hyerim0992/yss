@@ -129,7 +129,7 @@
                   <td class="product-id-cell" data-field="productId"><c:out value="${dto.productId}"/></td>
                   <td data-field="prodName"><c:out value="${dto.prodName}"/></td>
                   <td data-field="brand"><c:out value="${dto.brand}"/></td>
-                  <td data-field="categoryId"><c:out value="${dto.categoryId}"/></td>
+                  <td data-field="categoryId"><c:out value="${dto.ctgName}"/></td>
                   <td data-field="inboundPrice" data-value="${dto.inboundPrice}">
                     <fmt:formatNumber value="${dto.inboundPrice}" pattern="#,##0"/>원
                   </td>
@@ -216,12 +216,29 @@
                    placeholder="브랜드 입력" required>
           </div>
 
-          <div class="form-field">
-            <label for="categoryId">카테고리</label>
-            <input type="number" id="categoryId" name="categoryId" data-form-field="categoryId"
-                   min="1" placeholder="카테고리 번호 입력" required>
-          </div>
-
+			<div class="form-group category-group">
+			    <label>카테고리</label>
+			    <div class="category-select-wrap">
+			        <select id="parentCategory">
+			            <option value="">대분류 선택</option>
+			             	<c:forEach var="ctg" items="${PCList}">
+                				<option value="${ctg.categoryId}">
+                   			 		${ctg.ctgName}
+               				 	</option>
+            			 	</c:forEach>
+			        </select>
+			        <select id="childCategory" name="categoryId" disabled>
+			            <option value="">소분류 선택</option>
+			            	<c:forEach var="ctg" items="${CCList}">
+                				<option value="${ctg.categoryId}" 
+                					data-parent-id="${ctg.parentId}">
+                   			 		${ctg.ctgName}
+               				 	</option>
+            			 	</c:forEach>
+			        </select>
+			    </div>
+			</div>
+			
           <div class="form-field">
             <label for="inboundPrice">입고가</label>
             <input type="number" id="inboundPrice" name="inboundPrice" data-form-field="inboundPrice"
@@ -328,69 +345,14 @@
   <script type="text/javascript">
   
 
-function sendOk(){
-	const f = document.productForm
-	f.submit();
-}
-  	
-  
-  document.addEventListener("DOMContentLoaded", () => {
-	const schType = document.querySelector("#schType");
- 	const kwd = document.querySelector("#kwd");
-	const dateFrom = document.querySelector("#dateFrom");
-	const dateTo = document.querySelector("#dateTo");
-	const minGradeFilter = document.querySelector("#minGradeFilter");
-	const statusFilter = document.querySelector("#statusFilter");
-	  
-  	const searchEl = document.querySelector("#searchButton");
-  	const resetEl = document.querySelector("#resetButton");
-  	const resetListEl = document.querySelector("#resetListButton");
-  	searchEl.addEventListener('click', searchList);
-  	resetEl.addEventListener("click", resetSearch);
-  	
-  	schType.addEventListener("keydown", function (e) {
-  	    if (e.key === "Enter" || e.keyCode === 13) {
-  	        e.preventDefault();
-  			searchList();
-  	    }
-  	});
-  	
-  	resetListEl.addEventListener('click', () => {
-  		resetSearch();
-  		location.href = "${pageContext.request.contextPath}/admin/product"
-  	});
-  	
-
-    function searchList(){
-      	let params = new URLSearchParams;
-      	params.set("schType", schType.value);
-      	params.set("kwd", kwd.value.trim());
-      	params.set("dateFrom", dateFrom.value);
-      	params.set("dateTo", dateTo.value);
-      	params.set("minGrade", minGradeFilter.value);
-      	params.set("status", statusFilter.value);
-
-      	location.href = "${pageContext.request.contextPath}/admin/product?" + params.toString();
-      }
-    
-    function resetSearch() {
-        schType.value = "all";
-        kwd.value = "";
-        dateFrom.value = "";
-        dateTo.value = "";
-        minGradeFilter.value = "";
-        statusFilter.value = "";
-    }
-  });
-
-
-  
-  
 
   </script>
 
   <jsp:include page="/WEB-INF/views/admin/layout/footerResources.jsp"/>
-  <!-- 공용 list.js 대신 상품관리에서 필요한 동작만 담은 전용 JS를 사용합니다. -->
+	<script>
+	    var contextPath = "${pageContext.request.contextPath}";
+	    var openWriteModal = ${openWriteModal ? 'true' : 'false'};
+	</script>
   <script src="${pageContext.request.contextPath}/dist/js/admin/product.js?v=20260818"></script>
 </body>
 </html>

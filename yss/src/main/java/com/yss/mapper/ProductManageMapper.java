@@ -13,7 +13,8 @@ public interface ProductManageMapper {
 	public List<ProductDTO> listProductManage(Map<String, Object> map);
 	public int countProductManage(Map<String, Object> map);
 	public List<ProductDTO> selectGradeProduct(Map<String, Object> map);
-	public List<ProductDTO> listCategory(Map<String, Object> map);
+	public List<ProductDTO> listParentCategory();
+	public List<ProductDTO> listChildCategory();
 	
 	public void insertProductOption(ProductDTO dto) throws SQLException;
 	public void updateProductOption(ProductDTO dto) throws SQLException;

@@ -99,6 +99,12 @@ function openModal(row) {
     productModal.classList.add("show");
     productModal.setAttribute("aria-hidden", "false");
     document.body.classList.add("admin-modal-open");
+	
+	history.pushState(
+	    {},
+	    "",
+	    contextPath + "/admin/product/write"
+	);
 }
 
 function closeModal() {
@@ -108,6 +114,12 @@ function closeModal() {
     document.body.classList.remove("admin-modal-open");
     editingRow = null;
     resetPreview();
+	
+	history.pushState(
+	    {},
+	    "",
+	    contextPath + "/admin/product"
+	);
 }
 
 // 대표 이미지 미리보기
@@ -268,11 +280,6 @@ function initProduct() {
     document.querySelector("#modalClose").addEventListener("click", closeModal);
     document.querySelector("#modalCancel").addEventListener("click", closeModal);
 
-    productModal.addEventListener("click", function (event) {
-        if (event.target === productModal) {
-            closeModal();
-        }
-    });
 
     productForm.addEventListener("submit", function (event) {
         // ProductManageController에는 아직 update가 없어서 수정은 화면 값만 변경합니다.
@@ -325,10 +332,14 @@ function initProduct() {
     });
 
     document.addEventListener("keydown", function (event) {
-        if ((event.key === "Escape" || event.keyCode === 27) && !productModal.hidden) {
+        if (event.target === productModal) {
             closeModal();
         }
     });
+	
+	if (openWriteModal) {
+	    openModal(null);
+	}
 
 }
 
@@ -337,4 +348,127 @@ if (document.readyState === "loading") {
 } else {
     initProduct();
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+function sendOk(){
+	const f = document.productForm
+	f.submit();
+}
+  	
+  
+  document.addEventListener("DOMContentLoaded", () => {
+	const schType = document.querySelector("#schType");
+ 	const kwd = document.querySelector("#kwd");
+	const dateFrom = document.querySelector("#dateFrom");
+	const dateTo = document.querySelector("#dateTo");
+	const minGradeFilter = document.querySelector("#minGradeFilter");
+	const statusFilter = document.querySelector("#statusFilter");
+	
+	  
+  	const searchEl = document.querySelector("#searchButton");
+  	const resetEl = document.querySelector("#resetButton");
+  	const resetListEl = document.querySelector("#resetListButton");
+  	
+  	const parentCategoryEl = document.querySelector("#parentCategory")
+  	const childCategoryEl = document.querySelector("#childCategory")
+  	
+  	searchEl.addEventListener('click', searchList);
+  	resetEl.addEventListener("click", resetSearch);
+  	
+  	schType.addEventListener("keydown", function (e) {
+  	    if (e.key === "Enter" || e.keyCode === 13) {
+  	        e.preventDefault();
+  			searchList();
+  	    }
+  	});
+  	
+  	resetListEl.addEventListener('click', () => {
+  		resetSearch();
+  		location.href = contextPath +"/admin/product"
+  	});
+  	
+	parentCategoryEl.addEventListener("change", function () {
+
+	    const parentId = this.value;
+
+	    childCategoryEl.value = "";
+
+	    if (!parentId) {
+	        childCategoryEl.disabled = true;
+	        return;
+	    }
+
+	    childCategoryEl.disabled = false;
+
+	    const options = childCategoryEl.querySelectorAll("option");
+
+	    for (let i = 0; i < options.length; i++) {
+
+	        const option = options[i];
+
+	        // "소분류 선택"은 항상 표시
+	        if (!option.value) {
+	            option.hidden = false;
+	            continue;
+	        }
+
+	        const optionParentId = option.getAttribute("data-parent-id");
+
+	        // 선택한 대분류의 소분류만 표시
+	        if (optionParentId === parentId) {
+	            option.hidden = false;
+	        } else {
+	            option.hidden = true;
+	        }
+	    }
+
+	});
+  	
+
+    function searchList(){
+      	let params = new URLSearchParams;
+      	params.set("schType", schType.value);
+      	params.set("kwd", kwd.value.trim());
+      	params.set("dateFrom", dateFrom.value);
+      	params.set("dateTo", dateTo.value);
+      	params.set("minGrade", minGradeFilter.value);
+      	params.set("status", statusFilter.value);
+
+      	location.href = contextPath + "/admin/product?" + params.toString();
+      }
+    
+    function resetSearch() {
+        schType.value = "all";
+        kwd.value = "";
+        dateFrom.value = "";
+        dateTo.value = "";
+        minGradeFilter.value = "";
+        statusFilter.value = "";
+    }
+    
+  });
+
+
+  
+  
 

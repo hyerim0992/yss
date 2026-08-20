@@ -440,16 +440,10 @@
 .sub-image-list {
     display: flex;
     flex-wrap: wrap;
-
     gap: 8px;
-
     width: 100%;
-    max-width: 100%;
-    min-width: 0;
-
+    align-items: flex-start;
     box-sizing: border-box;
-
-    overflow: hidden;
 }
 
 
@@ -631,4 +625,54 @@
 }
 .main-preview-area[hidden] {
     display: none !important;
+}
+
+.sub-image-preview {
+    width: 70px;
+    height: 70px;
+
+    flex: 0 0 70px;
+
+    position: relative;
+
+    border: 1px solid #ddd;
+    border-radius: 6px;
+
+    overflow: hidden;
+
+    box-sizing: border-box;
+
+    background: #fafafa;
+}
+
+.sub-image-preview img {
+    display: block;
+
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+}
+.category-group {
+    grid-column: span 1;
+}
+
+.category-select-wrap {
+    display: flex;
+    gap: 10px;
+}
+
+.category-select-wrap select {
+    width: 50%;
+    height: 42px;
+
+    padding: 0 14px;
+    padding-left: 10px; /* 기존보다 살짝 왼쪽 */
+
+    border: 1px solid #d9d9d9;
+    border-radius: 8px;
+}
+
+.category-select-wrap select:focus {
+    border-color: #555;
 }

@@ -50,4 +50,19 @@ public class ProductManageServiceImpl implements ProductManageService {
 
 
 
+	@Override
+	public List<ProductDTO> listParentCategory() throws Exception {
+		
+		return mapper.listParentCategory();
+	}
+
+
+	@Override
+	public List<ProductDTO> listChildCategory() throws Exception {
+		
+		return mapper.listChildCategory();
+	}
+
+
+
 }

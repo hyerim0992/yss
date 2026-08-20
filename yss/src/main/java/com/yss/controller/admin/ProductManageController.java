@@ -23,7 +23,6 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import jakarta.servlet.http.Part;
 
 @Controller
 @RequestMapping("/admin/product/*")
@@ -86,6 +85,9 @@ public class ProductManageController {
 			
 			List<ProductDTO> list = service.listProductManage(map);
 			
+			List<ProductDTO> PCList = service.listParentCategory();
+			List<ProductDTO> CCList = service.listChildCategory();
+			
 			// 페이징
 			String query;
 			String cp = req.getContextPath();
@@ -107,6 +109,9 @@ public class ProductManageController {
 			mav.addObject("size", size);
 			mav.addObject("paging", paging);
 
+			mav.addObject("PCList", PCList);
+			mav.addObject("CCList", CCList);
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -114,20 +119,40 @@ public class ProductManageController {
 		return mav; 
 	}
 	
+
+	
 	@GetMapping("write")
 	public ModelAndView writeForm(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		return new ModelAndView("/write");
+		try {
+			
+			ModelAndView mav = new ModelAndView("admim/product/main");
+					
+		    List<ProductDTO> PCList = service.listParentCategory();
+
+		    List<ProductDTO> CCList = service.listChildCategory();
+		    
+		    mav.addObject("PCList", PCList);
+		    mav.addObject("CCList", CCList);
+		    
+		    mav.addObject("openWriteModal", true);
+			
+		    
+		    return mav;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return new ModelAndView("redirect:/admin/product");
+		
 	}
 	
 	@PostMapping("write")
 	public ModelAndView writeSubmit(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		// 상품 저장
-		
-		
-		
+
 		try {
 			ProductDTO dto = new ProductDTO();
-			
+
 			dto.setProdName(req.getParameter("prodName"));
 			dto.setBrand(req.getParameter("brand"));
 			dto.setCategoryId(Long.parseLong(req.getParameter("categoryId")));
@@ -140,7 +165,6 @@ public class ProductManageController {
 					? 0 : Integer.parseInt(req.getParameter("heelHeight")));
 			dto.setDiscRate(req.getParameter("discRate") == null ||req.getParameter("discRate").isBlank() 
 					? 0 : Integer.parseInt(req.getParameter("discRate")));
-			
 			
 			
 			HttpSession session = req.getSession();

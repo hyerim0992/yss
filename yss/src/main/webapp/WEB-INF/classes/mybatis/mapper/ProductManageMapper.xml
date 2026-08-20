@@ -85,6 +85,20 @@
 		</where>
 	</select>
 	
+	<select id="listParentCategory" resultType="com.yss.dto.ProductDTO">
+	    SELECT categoryId, parentId, ctgName, depth
+   		FROM category
+   		WHERE depth = 1
+   		ORDER BY categoryId
+	</select>
+	
+	<select id="listChildCategory" parameterType="Long" resultType="com.yss.dto.ProductDTO">
+		SELECT categoryId, parentId, ctgName, depth
+   		FROM category
+   		WHERE depth = 2
+   		ORDER BY categoryId
+	</select>
+	
 	<insert id="insertProduct" parameterType="com.yss.dto.ProductDTO">
 		<selectKey keyProperty="productId" resultType="long" order="BEFORE">
 			SELECT product_seq.NEXTVAL
