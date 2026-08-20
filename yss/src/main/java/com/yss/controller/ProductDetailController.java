@@ -48,10 +48,10 @@ public class ProductDetailController {
     		
     		//쿼리 어떻게 넘어올지 모르겠어서 일단 생략... 상품넘버는 보내주겠지
     		
-    		ProductDTO dto = service.productDetails(2L); // 나중에 쿼리로 들어오는 num 넣기
-    		List<ProductDTO> imgList = service.productImages(2L);
-    		List<ProductDTO> optionList = service.productOptions(2L);
-    		int wishlistCount = service.selectWishlist(2L);
+    		ProductDTO dto = service.productDetails(1L); // 나중에 쿼리로 들어오는 num 넣기
+    		List<ProductDTO> imgList = service.productImages(1L);
+    		List<ProductDTO> optionList = service.productOptions(1L);
+    		int wishlistCount = service.selectWishlist(1L);
     		
     		if(dto==null||imgList.isEmpty()||optionList.isEmpty()) {
     			return new ModelAndView("redirect:/product/"); //상품 리스트 페이지로 돌아가기
@@ -98,16 +98,9 @@ public class ProductDetailController {
 		long prodId = Long.parseLong(req.getParameter("prodId"));
 		
 		try {
-			List<ReviewDTO> reviewList = service.reviewList(2L); //prodId 넣기
-			reviewList.get(0).getOrderItemId();
-			List<ReviewImageDTO> reviewImageList = service.ReviewImageList(2L);
-			List<ProductDTO> orderItemOptionList = service.OrderItemOptionList(2L);
-			String memberName = service.OrderMemberName(2L);
+			List<ReviewDTO> reviewList = service.reviewWithDetailsList(1L); //prodId 넣기
 			
 			model.put("reviews", reviewList);
-			model.put("reviewImageList", reviewImageList);
-			model.put("orderItemOptionList", orderItemOptionList);
-			model.put("memberName", memberName);
 			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -142,9 +135,49 @@ public class ProductDetailController {
     //AJAX
     @ResponseBody
     @PostMapping("wishlist")
-    public ModelAndView bookmarkSubmit(HttpServletRequest req, HttpServletResponse resp)
+    public Map<String, String> wishlistToggle(HttpServletRequest req, HttpServletResponse resp)
     		throws ServletException, IOException {
-    	return new ModelAndView("product/detail/wishlist");
+    	long prodId = Long.parseLong(req.getParameter("prodId"));
+    	boolean interestActive = Boolean.parseBoolean(req.getParameter("interestActive"));
+    	HttpSession session = req.getSession();
+    	SessionInfo info = (SessionInfo)session.getAttribute("member"); //null이면 비로그인 상태로 보는거
+    	
+    	Map<String, String> model = new HashMap<String, String>();
+    	
+    	System.out.println(info);
+    	
+    	if (info == null) {
+    		model.put("return", "null");
+    		return model;
+    	}
+    	
+    	Map<String, Object> map = new HashMap<String, Object>();
+    	map.put("productId", prodId);
+    	map.put("memberId", info.getMemberId());
+    	
+    	
+    	if (interestActive) {
+    		try {
+    			service.insertWishlist(map);
+    			int wishlistCount = service.selectWishlist(prodId);
+    			model.put("return", "true");
+        		return model;
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+    	}else {
+    		try {
+				service.deleteWishlist(map);
+				model.put("return", "false");
+				return model;
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+    	}
+    	
+    	
+    	model.put("return", "false");
+		return model;
     }
     
     //AJAX
@@ -169,13 +202,11 @@ public class ProductDetailController {
 		try {
 			list = service.productOptions(prodId);
 			
-			List<Integer> Sizes = list.stream()
+			List<ProductDTO> OptionList = list.stream()
 					.filter(item -> color.equalsIgnoreCase(item.getColor()))
-    				.map(ProductDTO::getProdSize)
-    				.distinct()
     				.collect(Collectors.toList());
 			
-			model.put("sizes", Sizes);
+			model.put("OptionList", OptionList);
 			
 		} catch (Exception e) {
 			e.printStackTrace();

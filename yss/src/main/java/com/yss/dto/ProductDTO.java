@@ -28,6 +28,7 @@ public class ProductDTO {
 	private int prodSize;
 	private String color;
 	private int addPrice;
+	private int changedStock;
 	
 	private long categoryId;
 	private long parentId;
@@ -173,6 +174,13 @@ public class ProductDTO {
 	public void setListFile(List<MyMultipartFile> listFile) {
 		this.listFile = listFile;
 	}
+	public int getChangedStock() {
+		return changedStock;
+	}
+	public void setChangedStock(int changedStock) {
+		this.changedStock = changedStock;
+	}
+	
 	
 	
 	

@@ -15,10 +15,7 @@ public interface ProductDetailService {
 	public List<ProductDTO> productImages(long prodNum) throws Exception;
 	public List<ProductDTO> productRecommend(long prodNum) throws Exception;
 	public int selectWishlist(long num) throws Exception;
-	public void updateWishlist(Map<String, Object> map) throws Exception;
+	public void insertWishlist(Map<String, Object> map) throws Exception;
 	public void deleteWishlist(Map<String, Object> map) throws Exception;
-	public List<ReviewDTO> reviewList(long num) throws Exception;
-	public List<ReviewImageDTO> ReviewImageList(long num);
-	public List<ProductDTO> OrderItemOptionList(long num);
-	public String OrderMemberName (long num);
+	public List<ReviewDTO> reviewWithDetailsList(long num) throws Exception;
 }

@@ -111,13 +111,17 @@ document.addEventListener("DOMContentLoaded", function () {
 
     var name = selectedOptionCard.querySelector(".selected-option-name");
     var stock = selectedOptionCard.querySelector(".stock-badge");
+	var quantity = selectedOptionCard.querySelector(".quantity");
     var complete = Boolean(selectedColor && selectedSize);
+	
 
     selectedOptionCard.classList.toggle("complete", complete);
 
     if (complete) {
       name.textContent = selectedColor + " · " + selectedSize + "mm";
+	  quantity.classList.toggle("quantity-input");
       stock.textContent = "재고 있음";
+	  
     } else if (selectedColor) {
       name.textContent = selectedColor + " · 사이즈를 선택해 주세요.";
       stock.textContent = "사이즈 선택 필요";
@@ -184,12 +188,19 @@ document.addEventListener("DOMContentLoaded", function () {
 			sizeModalContainer.innerHTML = "<p>선택 가능한 사이즈가 없습니다.</p>";
 		}else{
 			
-			for (let el of data.sizes)
-			sizeModalContainer.innerHTML += `			
-				<button type="button" data-size="${el}">
-					${el}<small>재고 3</small>
+			let htmlString = "";
+			
+			console.log(data);
+			
+			for (let el of data.OptionList)
+			htmlString += `			
+				<button type="button" data-size="${el.prodSize}" data-price="${el.price}" data-add-price="${el.addPrice}">
+					${el.prodSize}<small>${el.changedStock}개</small>
+					${el.addPrice !== 0 ? `<small>+${el.addPrice}원</small>` : ''}
 				</button>
 			`;
+			
+			sizeModalContainer.innerHTML = htmlString;
 		}
 		
   		openModal(sizeModal);
@@ -259,23 +270,43 @@ document.addEventListener("DOMContentLoaded", function () {
   var interestActive = false;
   document.querySelectorAll(".js-interest").forEach(function (button) {
     button.addEventListener("click", function () {
-      interestActive = !interestActive;
-      document.querySelectorAll(".js-interest").forEach(function (item) {
-        item.classList.toggle("active", interestActive);
-        item.setAttribute("aria-pressed", String(interestActive));
-      });
-      document.querySelectorAll(".bookmark-button").forEach(function (item) {
-        item.textContent = interestActive ? "♥" : "♡";
-      });
-      document.querySelectorAll(".interest-icon").forEach(function (item) {
-        item.textContent = interestActive ? "♥" : "♡";
-      });
-      setTextForAll(".interest-count", interestActive ? "1,285" : "1,284");
-      showToast(
-        interestActive
-          ? "관심상품에 추가했습니다."
-          : "관심상품에서 해제했습니다."
-      );
+		interestActive = !interestActive;
+		const url = "detail/wishlist";
+		const params = {prodId: prodId , interestActive: interestActive};
+		console.log(params);
+
+		const fn = function(data){
+			
+			console.log(data);
+			if (data.return === "null"){
+				if(! confirm("로그인이 필요한 서비스입니다. 로그인하시겠습니까?")){
+					return;
+				}
+				location.href = contextPath + "/member/login";
+				
+			}else{
+				JSON.parse(data.return);
+			}
+			
+			document.querySelectorAll(".js-interest").forEach(function (item) {
+			  item.classList.toggle("active", interestActive);
+			  item.setAttribute("aria-pressed", String(interestActive));
+			});
+			document.querySelectorAll(".wishlist-button").forEach(function (item) {
+			  item.textContent = interestActive ? "♥" : "♡";
+			});
+			setTextForAll(".interest-count", interestActive ? "1,285" : "1,284");
+			showToast(
+			  interestActive
+			    ? "관심상품에 추가했습니다."
+			    : "관심상품에서 해제했습니다."
+			);
+		  }
+
+		  ajaxRequest(url, 'post', params, 'json', fn);
+				
+		
+
     });
   });
 
@@ -424,9 +455,6 @@ document.addEventListener("DOMContentLoaded", function () {
 		}else{
 			// 전체 HTML을 담을 빈 문자열 변수 생성
 			let htmlString = '';
-			const name = data.memberName;
-			const size = data.orderItemOptionList.prodsize;
-			const color = data.orderItemOptionList.color;
 
 			for (let el of data.reviews) {
 			    // 예: el.rating이 3이라면 '★★★☆☆'
@@ -439,7 +467,7 @@ document.addEventListener("DOMContentLoaded", function () {
 			            <b>${stars}</b>
 			        </div>
 			        <p>${el.contents}</p>
-			        <small>${name} · ${color} · ${size}mm · ${el.updatedAt}</small>
+			        <small>${el.memberName} · ${el.color} · ${el.prodSize}mm · ${el.updatedAt}</small>
 			    </article>
 			    `;
 			}

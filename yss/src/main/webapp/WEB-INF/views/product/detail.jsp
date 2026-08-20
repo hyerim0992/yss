@@ -35,7 +35,7 @@
 					</div>
 					<div class="summary-icons">
 						<button type="button"
-							class="icon-button bookmark-button js-interest"
+							class="icon-button wishlist js-interest"
 							aria-label="관심 상품 저장" aria-pressed="false">♡</button>
 						<button type="button" class="icon-button share-button"
 							aria-label="상품 공유">↗</button>
@@ -93,8 +93,12 @@
 				<div class="selected-option-card" id="selectedOptionCard">
 					<div class="selected-option-visual">
 						<div>
-							<small>선택한 상품</small> <b class="selected-option-name">옵션을 선택해
+							<small>선택한 상품</small>
+							
+							<b class="selected-option-name">옵션을 선택해
 								주세요.</b>
+								
+							<input type="number" maxlength="3" class="quantity quantity-input"> 
 						</div>
 					</div>
 					<span class="stock-badge">옵션 선택 필요</span>

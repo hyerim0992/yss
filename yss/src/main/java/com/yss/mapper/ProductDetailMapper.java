@@ -15,10 +15,7 @@ public interface ProductDetailMapper {
 	public List<ProductDTO> selectProductImage(long num);
 	public List<ProductDTO> productRecommend(long num);
 	public int selectWishlist (long num);
-	public void updateWishList (Map<String, Object> map);
+	public void insertWishlist (Map<String, Object> map);
 	public void deleteWishlist (Map<String, Object> map);
-	public List<ReviewDTO> selectReview(long num);
-	public List<ReviewImageDTO> selectReviewImage(long num);
-	public List<ProductDTO> selectOrderItemOption(long num);
-	public String selectOrderMemberName (long num);
+	public List<ReviewDTO> selectReviewWithDetails(long num);
 }

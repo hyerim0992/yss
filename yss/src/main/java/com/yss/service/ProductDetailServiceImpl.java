@@ -81,9 +81,9 @@ public class ProductDetailServiceImpl implements ProductDetailService{
 		return count;
 	}
 	@Override
-	public void updateWishlist(Map<String, Object> map) throws Exception {
+	public void insertWishlist(Map<String, Object> map) throws Exception {
 		try {
-			mapper.updateWishList(map);
+			mapper.insertWishlist(map);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -97,50 +97,16 @@ public class ProductDetailServiceImpl implements ProductDetailService{
 		}
 	}
 	@Override
-	public List<ReviewDTO> reviewList(long num) throws Exception {
+	public List<ReviewDTO> reviewWithDetailsList(long num) throws Exception {
 		List<ReviewDTO> list = null;
-		
 		try {
-			list = mapper.selectReview(num);
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
-		return list;
-	}
-	@Override
-	public List<ReviewImageDTO> ReviewImageList(long num) {
-		List<ReviewImageDTO> list = null;
-		try {
-			list = mapper.selectReviewImage(num);
+			list = mapper.selectReviewWithDetails(num);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return list;
 	}
-	@Override
-	public List<ProductDTO> OrderItemOptionList(long num) {
-		List<ProductDTO> list = null;
-		try {
-			list = mapper.selectOrderItemOption(num);
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
-		return list;
-	}
-	@Override
-	public String OrderMemberName(long num) {
-		String name = "";
-		try {
-			name = mapper.selectOrderMemberName(num);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
-		return name;
-	}
+	
+	
 	
 }

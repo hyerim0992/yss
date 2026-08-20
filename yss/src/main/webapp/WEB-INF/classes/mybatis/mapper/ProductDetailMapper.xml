@@ -32,6 +32,9 @@
 		    LatestStock ls ON po.optionId = ls.optionId AND ls.RN = 1
 		WHERE 
 		    po.productId = #{productId}
+		ORDER BY 
+			po.prodSize ASC 
+		
 		
 	</select>
 	<select id="selectProductImage" parameterType="Long" resultType="com.yss.dto.ProductDTO">
@@ -50,50 +53,42 @@
 		INNER JOIN wishlist w ON p.productId = w.productId
 		WHERE p.productId = #{productId} 
 	</select>
-	<update id="updateWishlist" parameterType="map" >
+	<update id="insertWishlist" parameterType="map" >
 		INSERT INTO wishlist (wishlistId, createdAt, memberId, productId)
-			   VALUES(wishlistSeq_NEXTVAL, SYSDATE, #{memberId}, #{productId})
+			   VALUES(wishlist_Seq.NEXTVAL, SYSDATE, #{memberId}, #{productId})
 	</update>
 	<delete id="deleteWishlist" parameterType="map" >
 		DELETE FROM wishlist 
 		WHERE memberId = #{memberId} AND productId = #{productId}
 	</delete>
-	
-	<select id="selectReview" parameterType="Long" resultType="com.yss.dto.ReviewDTO">
-		SELECT orderItemId, productId, rating, contents, status, TO_CHAR(createdAt, 'YY.MM.DD') createdAt, TO_CHAR(updatedAt, 'YY.MM.DD') updatedAt
-		FROM review
-		WHERE productId = #{productId}
-		ORDER BY createdAt
-	</select>
-	
-	<select id="selectReviewImage" parameterType="Long" resultType="com.yss.dto.ReviewImageDTO">
-		SELECT ri.imageId, ri.orderItemId, ri.files, ri.sortOrder
-		FROM reviewImage ri 
-		INNER JOIN review r ON r.orderItemId = ri.orderItemId
-		WHERE r.productId = #{productId}
-		ORDER BY orderItemId, sortOrder
-	</select>
-	
-	<select id="selectOrderItemOption" parameterType="Long" resultType="com.yss.dto.ProductDTO">
-		SELECT oi.orderItemId, po.optionId, po.prodSize, po.color
-		FROM productOption po
-		INNER JOIN orderItem oi ON po.optionId = oi.optionId
-		INNER JOIN review r ON oi.orderItemId = r.orderItemId
-		WHERE r.productId = #{productId}
-	</select>
-	
-		
-	<select id="selectOrderMemberName" parameterType="Long" resultType="String">
-		SELECT md.name
-		FROM orderItem oi
-		INNER JOIN orders o ON oi.orderId = o.orderId
-		INNER JOIN memberDetail md ON o.memberId = md.memberId 
-		WHERE oi.orderItemId = #{orderItemId}
-	</select>
 
-<!-- 
-	SELECT 
-     1. 리뷰 기본 정보
+ <resultMap id="ReviewResultMap" type="com.yss.dto.ReviewDTO">
+    <!-- PK 식별자 (MyBatis가 리뷰를 구분하는 기준) -->
+    <id property="orderItemId" column="orderItemId" />
+    
+    <result property="productId" column="productId" />
+    <result property="rating" column="rating" />
+    <result property="status" column="status" />
+    <result property="createdAt" column="createdAt" />
+    <result property="updatedAt" column="updatedAt" />
+    <result property="contents" column="contents"/>
+    
+    <!-- JOIN으로 가져온 1:1 데이터들 -->
+    <result property="memberName" column="memberName" />
+    <result property="prodSize" column="prodSize" />
+    <result property="color" column="color" />
+    
+    <!-- JOIN으로 가져온 1:N 이미지 리스트 매핑 -->
+    <collection property="imageList" ofType="com.yss.dto.ReviewImageDTO">
+        <id property="imageId" column="imageId" />
+        <result property="orderItemId" column="orderItemId" />
+        <result property="files" column="files" /> <!-- 이미지가 BLOB이면 여기도 핸들러 필요 -->
+        <result property="sortOrder" column="sortOrder" />
+    </collection>
+</resultMap>
+
+<select id="selectReviewWithDetails" parameterType="Long" resultMap="ReviewResultMap">
+    SELECT 
     r.orderItemId, 
     r.productId, 
     r.rating, 
@@ -102,35 +97,26 @@
     TO_CHAR(r.createdAt, 'YY.MM.DD') AS createdAt, 
     TO_CHAR(r.updatedAt, 'YY.MM.DD') AS updatedAt,
     
-     2. 작성자 이름
     md.name AS memberName,
     
-     3. 상품 옵션 정보
     po.optionId, 
     po.prodSize, 
     po.color,
     
-     4. 리뷰 이미지 정보 (여러 행이 나올 수 있음)
     ri.imageId, 
     ri.files, 
     ri.sortOrder
-
-FROM review r
- 주문 상품 및 옵션 조인
-INNER JOIN orderItem oi ON r.orderItemId = oi.orderItemId
-INNER JOIN productOption po ON oi.optionId = po.optionId
- 작성자 이름 조인
-INNER JOIN orders o ON oi.orderId = o.orderId
-INNER JOIN memberDetail md ON o.memberId = md.memberId
- 리뷰 이미지 조인 (이미지가 없을 수도 있으니 LEFT JOIN)
-LEFT JOIN reviewImage ri ON r.orderItemId = ri.orderItemId
-
-WHERE r.productId = #{productId}
-ORDER BY r.createdAt DESC, ri.sortOrder ASC
- -->	
-	<!-- 
+    
+	FROM review r
+	INNER JOIN orderItem oi ON r.orderItemId = oi.orderItemId
+	INNER JOIN productOption po ON oi.optionId = po.optionId
+	INNER JOIN orders o ON oi.orderId = o.orderId
+	INNER JOIN memberDetail md ON o.memberId = md.memberId
+	LEFT JOIN reviewImage ri ON r.orderItemId = ri.orderItemId
 	
-	 -->
+	WHERE r.productId = #{productId}
+	ORDER BY r.createdAt DESC, ri.sortOrder ASC
+</select>	 
 </mapper>
 
 <!-- 

@@ -1,5 +1,7 @@
 package com.yss.dto;
 
+import java.util.List;
+
 public class ReviewDTO {
 	private long orderItemId;
 	private long productId;
@@ -8,6 +10,12 @@ public class ReviewDTO {
 	private String status;
 	private String createdAt;
 	private String updatedAt;
+	
+    private String memberName; 
+    private String prodSize;
+    private String color;
+    
+    private List<ReviewImageDTO> imageList;
 	
 	public long getOrderItemId() {
 		return orderItemId;
@@ -51,6 +59,31 @@ public class ReviewDTO {
 	public void setContents(String contents) {
 		this.contents = contents;
 	}
+	public String getMemberName() {
+		return memberName;
+	}
+	public void setMemberName(String memberName) {
+		this.memberName = memberName;
+	}
+	public String getProdSize() {
+		return prodSize;
+	}
+	public void setProdSize(String prodSize) {
+		this.prodSize = prodSize;
+	}
+	public String getColor() {
+		return color;
+	}
+	public void setColor(String color) {
+		this.color = color;
+	}
+	public List<ReviewImageDTO> getImageList() {
+		return imageList;
+	}
+	public void setImageList(List<ReviewImageDTO> imageList) {
+		this.imageList = imageList;
+	}
+	
 }
 
 /*
