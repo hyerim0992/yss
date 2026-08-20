@@ -29,65 +29,66 @@
   	<main class="admin-main">
   		<section class="page active">
   		
-  			<div class="page-heading">
-  				<div>
-  					<p>관리자 페이지 / 고객 지원 / 공지사항</p>
-         		    <h1>공지사항 상세</h1>
-  				</div>
-  			</div>
+  			<section class="page active">
+			
+				<div class="page-heading">
+					<div>
+						<p>관리자 페이지 / 고객 지원 / 관리</p>
+						<h1>고객 지원 / 관리</h1>
+						<span>1:1 문의, FAQ, 공지사항과 상품문의 답변을 관리합니다.</span>
+					</div>
+				</div>
+			
+				<nav class="support-tabs" aria-label="고객지원 관리 탭">
+					<a href="${pageContext.request.contextPath}/admin/support/inquiry/list">1:1 문의 관리</a>
+					<a href="${pageContext.request.contextPath}/admin/support/faq/list">FAQ 관리</a>
+					<a href="${pageContext.request.contextPath}/admin/support/notice/list" class="active">공지사항 관리</a>
+					<a href="${pageContext.request.contextPath}/admin/support/qna/list">상품문의 관리</a>
+				</nav>
+			
+			</section>
   			
   			<article class="panel">
-  				<h2>
-  					<c:out value="${dto.title}"/>
-  				</h2>
-  				
-  				<div>
-  					작성자 : 
-  					<c:out value="${dto.name}"/>
-  				</div>
-  				
-  				<div>
-  					작성일 : 
-  					<c:out value="${dto.createDate}"/>
-  				</div>
-  				
-  				<hr>
-  				
-  				<div>
-  					${dto.content}
-  				</div>
-  				
-  				<!-- 첨부파일 -->
-  				<c:if test="${not empty listFile}">
-  					<div class="support-file" style="margin-top: 20px;">
-  						<i class="bi bi-folder2-open"></i>
-  						<c:forEach var="vo" items="${listFile}" varStatus="status">
-  							<a href="${pageContext.request.contextPath}/admin/support/notice/download?fileId=${vo.fileId}"
-  								class="text-reset">${vo.files}</a>
-  								<c:if test="${not status.last}"> | </c:if>
-  						</c:forEach>
-  					</div>
-  				</c:if>
-  				
-  				<div class="support-actions" style="margin-top: 30px;">
-  					<a href="${pageContext.request.contextPath}/admin/support/notice/list?${query}"
-  						class="light-btn">
-  						목록
-  					</a>
-  					
-  					<a href="${pageContext.request.contextPath}/admin/support/notice/update?page=${page}&noticeId=${dto.noticeId}"
-  						class="light-btn">
-  						수정
-  					</a>
-  					
-  					<a href="${pageContext.request.contextPath}/admin/support/notice/delete?noticeId=${dto.noticeId}&${query}"
-  						class="light-btn"
-  						onclick="return confirm('공지사항을 삭제하시겠습니까 ?');">
-  						삭제
-  					</a>
-  				</div>
-  				
-  			</article>
+			
+				<div class="support-detail-head">
+					<h2><c:out value="${dto.title}"/></h2>
+					<div class="support-detail-date">작성일 : <c:out value="${dto.createDate}"/></div>
+				</div>
+			
+				<div class="support-detail-writer">작성자 : <c:out value="${dto.name}"/></div>
+			
+				<hr>
+			
+				<div class="support-detail-content">
+					${dto.content}
+				</div>
+			
+				<c:if test="${not empty listFile}">
+					<details class="support-file-dropdown">
+						<summary>첨부파일 <span>${listFile.size()}</span></summary>
+			
+						<div class="support-file-list">
+							<c:forEach var="vo" items="${listFile}">
+								<a href="${pageContext.request.contextPath}/admin/support/notice/download?fileId=${vo.fileId}"
+									class="text-reset" data-no-page-loader>${vo.files}</a>
+							</c:forEach>
+						</div>
+					</details>
+				</c:if>
+				
+				<div class="support-actions support-detail-actions">
+					<a href="${pageContext.request.contextPath}/admin/support/notice/list?${query}" class="light-btn">목록</a>
+				
+					<a href="${pageContext.request.contextPath}/admin/support/notice/update?noticeId=${dto.noticeId}&${query}" class="light-btn">수정</a>
+				
+					<a href="${pageContext.request.contextPath}/admin/support/notice/delete?noticeId=${dto.noticeId}&page=${page}&size=${size}"
+              			class="light-btn"
+              			onclick="return confirm('공지사항을 삭제하시겠습니까?');">
+              			삭제
+              		</a>
+				</div>
+			
+			</article>
   		</section>
   	</main>
 

@@ -101,5 +101,15 @@
 		WHERE ${field} = #{noticeId}
 	</delete>
 	
+	<!-- 선택 파일 삭제 -->
+	<delete id="deleteListNotice" parameterType="java.util.List">
+		DELETE FROM notice
+		WHERE noticeId IN
+		<foreach collection="list" item="noticeId" index="index"
+			open="(" separator="," close=")">
+			#{noticeId}
+		</foreach>
+	</delete>	
+	
 	
 </mapper>

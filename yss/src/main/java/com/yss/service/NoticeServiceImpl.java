@@ -82,7 +82,15 @@ public class NoticeServiceImpl implements NoticeService {
 		try {
 			mapper.updateNotice(dto);
 			
-			
+			// 퍼일 저장
+			if (dto.getListFile().size() != 0) {
+				for (MyMultipartFile mf: dto.getListFile()) {
+					dto.setServerFiles(mf.getSaveFilename());
+					dto.setFiles(mf.getOriginalFilename());
+					
+					mapper.insertNoticeFile(dto);
+				}
+			}			
 		} catch (Exception e) {
 			e.printStackTrace();
 			
@@ -131,6 +139,17 @@ public class NoticeServiceImpl implements NoticeService {
 	public void deleteNoticeFile(Map<String, Object> map) throws Exception {
 		try {
 			mapper.deleteNoticeFile(map);
+		} catch (Exception e) {
+			e.printStackTrace();
+			
+			throw e;
+		}
+	}
+
+	@Override
+	public void deleteListNotice(List<Long> list) throws Exception {
+		try {
+			mapper.deleteListNotice(list);
 		} catch (Exception e) {
 			e.printStackTrace();
 			

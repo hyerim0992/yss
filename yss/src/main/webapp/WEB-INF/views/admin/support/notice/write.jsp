@@ -64,17 +64,27 @@
 					<td>
 						<input type="file" name="selectFile" multiple>
 				 	</td>
-				</tr>				
+				</tr>
+				<c:if test="${mode=='update'}">
+					<c:forEach var="vo" items="${listFile}">
+						<tr>
+							<td>첨부된파일</td>
+							<td>
+								<p class="update-file-item">
+									<span>${vo.files}</span>
+									<a href="javascript:deleteFile('${vo.fileId}');" class="light-btn">삭제</a>
+								</p>
+							</td>
+						</tr>
+					</c:forEach>
+				</c:if>				
 			</table>
 			
-			<button type="button" onclick="submitContents(this.form);">
-				${mode=='update'?'수정완료':'등록완료'}
-			</button>
-			<button type="reset">다시입력</button>
-			<button type="button" 
-				onclick="location.href='${pageContext.request.contextPath}/admin/support/notice/list';">
-				${mode=='update'?'수정취소':'등록취소'}
-			</button>
+			<div class="support-form-actions">
+				<button type="button" class="light-btn" onclick="submitContents(this.form);">${mode=='update'?'수정완료':'등록완료'}</button>
+				<button type="button" class="light-btn" onclick="resetForm(this.form);">다시입력</button>
+				<button type="button" class="light-btn" onclick="location.href='${pageContext.request.contextPath}/admin/support/notice/list';">${mode=='update'?'수정취소':'등록취소'}</button>
+			</div>
 			
 			<c:if test="${mode=='update'}">
 				<input type="hidden" name="noticeId" value="${dto.noticeId}">
@@ -131,6 +141,23 @@ function submitContents(elClickedObj) {
 		
 	} catch(e) {
 	}
+}
+
+<c:if test = "${mode == 'update'}">
+	function deleteFile(fileId) {
+		if(! confirm('파일을 삭제 하시겠습니까 ? ')) {
+			return
+		}
+		
+		let params = 'noticeId=${dto.noticeId}&fileId=' + fileId + '&page=${page}';
+		let url = '${pageContext.request.contextPath}/admin/support/notice/deleteFile?' + params;
+		location.href = url;
+	}
+</c:if>
+
+function resetForm(f) {
+	f.reset();
+	oEditors.getById["ir1"].exec("SET_IR", [f.content.value]);
 }
 </script>
 

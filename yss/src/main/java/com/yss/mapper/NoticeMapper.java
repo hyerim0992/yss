@@ -23,4 +23,6 @@ public interface NoticeMapper {
 	public List<NoticeDTO> listNoticeFile(long noticeId);
 	public NoticeDTO findByFileId(long fileId);
 	public void deleteNoticeFile(Map<String, Object> map) throws SQLException;
+	public void deleteListNotice(List<Long> list) throws SQLException;
+
 }

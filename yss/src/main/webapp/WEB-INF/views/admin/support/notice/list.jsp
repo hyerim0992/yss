@@ -65,75 +65,79 @@
       </form>
 
       <article class="panel">
-        <div class="panel-title">
-          <div>
-            <h2>공지사항 목록</h2>
-            <p>검색 결과 <b>${dataCount}</b>건 · 선택 0건</p>
-          </div>
-
-          <div>
-            <button type="button" class="light-btn danger-btn">선택 삭제</button>
-          </div>
-        </div>
-        <div class="table-wrap">
-          <table>
-            <thead>
-              <tr>
-                <th><input type="checkbox" id="checkAll"></th>
-                <th>공지사항 번호</th>
-                <th>제목</th>
-                <th>작성자</th>
-                <th>작성일시</th>
-                <th>관리</th>
-              </tr>
-            </thead>
-
-            <tbody>
-              <!--
-                ★ 연습할 부분
-                아래 샘플 행을 목록 데이터 반복 출력 코드로 직접 바꿔보세요.
-                공지등록/상태 값에 따라 표시 방법도 직접 정해보세요.
-              -->
-              <c:forEach var="dto" items="${list}" varStatus="status">
-              	<tr>
-              		<td>
-              			<input type="checkbox" name="nums" value="${dto.noticeId}" class="row-check">
-              		</td>
-              		
-              		<td>${dataCount - (page-1) * size - status.index}</td>
-              		
-              		<td>
-              			<a href="${articleUrl}&noticeId=${dto.noticeId}" class="text-reset">
-              			<c:out value="${dto.title}"/>
-              			</a>
-              		</td>
-              		
-              		<td>${dto.name}</td>
-              		
-              		<td>${dto.createDate}</td>
-              		<td>
-              			<div class="support-actions">
-              				<a href="${pageContext.request.contextPath}/admin/support/notice/update?page=${page}&noticeId=${dto.noticeId}"
-              					class="light-btn">
-              					수정
-              				</a>
-              				
-              				<a href="${pageContext.request.contextPath}/admin/support/notice/delete?noticeId=${dto.noticeId}&page=${page}&size=${size}"
-              					class="light-btn"
-              					onclick="return confirm('공지사항을 삭제하시겠습니까?');">
-              					삭제
-              				</a>
-              			</div>
-              		</td>
-              	</tr>
-              </c:forEach>
-            </tbody>
-          </table>
-        </div>
-        <!-- TODO : 실제 페이징 값으로 바꿔보기 -->
-        <div class="support-pagination">
-			${dataCount == 0 ? "등록된 게시물이 없습니다." : paging}
-        </div>
+      	<form name="deleteListForm" method="post">
+	        <div class="panel-title">
+	          <div>
+	            <h2>공지사항 목록</h2>
+	            <p>검색 결과 <b>${dataCount}</b>건 · 선택 <b id="selectedCount">0</b>건</p>
+	          </div>
+	
+	          <div>
+	            <button type="button" class="light-btn danger-btn" onclick="deleteList();">선택 삭제</button>
+	          </div>
+	        </div>
+	        <div class="table-wrap">
+	          <table>
+	            <thead>
+	              <tr>
+	                <th><input type="checkbox" id="checkAll"></th>
+	                <th>공지사항 번호</th>
+	                <th>제목</th>
+	                <th>작성자</th>
+	                <th>작성일시</th>
+	                <th>관리</th>
+	              </tr>
+	            </thead>
+	
+	            <tbody>
+	              <!--
+	                ★ 연습할 부분
+	                아래 샘플 행을 목록 데이터 반복 출력 코드로 직접 바꿔보세요.
+	                공지등록/상태 값에 따라 표시 방법도 직접 정해보세요.
+	              -->
+	              <c:forEach var="dto" items="${list}" varStatus="status">
+	              	<tr>
+	              		<td>
+	              			<input type="checkbox" name="nums" value="${dto.noticeId}" class="row-check">
+	              		</td>
+	              		
+	              		<td>${dataCount - (page-1) * size - status.index}</td>
+	              		
+	              		<td>
+	              			<a href="${articleUrl}&noticeId=${dto.noticeId}" class="text-reset">
+	              			<c:out value="${dto.title}"/>
+	              			</a>
+	              		</td>
+	              		
+	              		<td>${dto.name}</td>
+	              		
+	              		<td>${dto.createDate}</td>
+	              		<td>
+	              			<div class="support-actions">
+	              				<a href="${pageContext.request.contextPath}/admin/support/notice/update?page=${page}&noticeId=${dto.noticeId}"
+	              					class="light-btn">
+	              					수정
+	              				</a>
+	              				
+	              				<a href="${pageContext.request.contextPath}/admin/support/notice/delete?noticeId=${dto.noticeId}&page=${page}&size=${size}"
+	              					class="light-btn"
+	              					onclick="return confirm('공지사항을 삭제하시겠습니까?');">
+	              					삭제
+	              				</a>
+	              			</div>
+	              		</td>
+	              	</tr>
+	              </c:forEach>
+	            </tbody>
+	          </table>
+	        </div>
+	        <!-- TODO : 실제 페이징 값으로 바꿔보기 -->
+	        <div class="support-pagination">
+				${dataCount == 0 ? "등록된 게시물이 없습니다." : paging}
+	        </div>
+	        <input type="hidden" name="page" value="${page}">
+			<input type="hidden" name="size" value="${size}">
+        </form>
       </article>
 
     </section>
@@ -144,19 +148,45 @@
   <script type="text/javascript">
 	  const checkAll = document.getElementById('checkAll');
 	  const rowChecks = document.querySelectorAll('.row-check');
+	  
+	  const selectedCount = document.getElementById('selectedCount');
+
+	  function updateSelectedCount() {
+	  	selectedCount.textContent =
+	  		document.querySelectorAll('.row-check:checked').length;
+	  }
 	
 	  checkAll.addEventListener('change', function() {
-	    rowChecks.forEach(function(chk) {
-	      chk.checked = checkAll.checked;
-	    });
+		rowChecks.forEach(function(chk) {
+			chk.checked = checkAll.checked;
+		});
+		updateSelectedCount();
 	  });
 	
 	  rowChecks.forEach(function(chk) {
-	    chk.addEventListener('change', function() {
-	      checkAll.checked =
-	        document.querySelectorAll('.row-check:checked').length === rowChecks.length;
-	    });
+		chk.addEventListener('change', function() {
+			checkAll.checked =
+				document.querySelectorAll('.row-check:checked').length === rowChecks.length;
+			updateSelectedCount();
+		});
 	  });
+	  
+	  function deleteList() {
+		  const f = document.deleteListForm;
+		  const checked = document.querySelectorAll('input[name="nums"]:checked');
+		  
+		  if(checked.length === 0) {
+			  alert('삭제할 공지사항을 선택하세요.');
+			  return;
+		  }
+		  
+		  if(! confirm('선택한 공지사항 ' + checked.length + '개를 삭제하시겠습니까?')) {
+				return;
+		  }
+		  
+		  f.action = '${pageContext.request.contextPath}/admin/support/notice/deleteList';
+		  f.submit();
+	  }
   </script>
 </body>
 </html>

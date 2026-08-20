@@ -1007,3 +1007,93 @@
 	width: 20%;
 	text-align: center;
 }
+
+/* 공지사항 목록 컬럼 */
+.abc-cs-notice-columns,
+.abc-cs-notice-row {
+	display: grid;
+	grid-template-columns: 90px 1fr 130px;
+	align-items: center;
+}
+
+.abc-cs-notice-columns {
+	padding: 14px 0;
+	border-top: 1px solid #222;
+	border-bottom: 1px solid #ddd;
+	font-weight: 600;
+	text-align: center;
+}
+
+.abc-cs-notice-row {
+	min-height: 64px;
+	border-bottom: 1px solid #e5e5e5;
+}
+
+.notice-number {
+	text-align: center;
+}
+
+.notice-title {
+	padding: 0 20px;
+}
+
+.notice-title a {
+	color: #333;
+	text-decoration: none;
+}
+
+.notice-title a:hover {
+	text-decoration: underline;
+}
+
+.notice-date {
+	text-align: center;
+	white-space: nowrap;
+}
+
+.notice-detail-file summary {
+	cursor: pointer;
+	font-size: 14px;
+	color: #555;
+}
+
+.notice-detail-file details div {
+	margin-top: 8px;
+	padding-left: 15px;
+}
+
+.page-navigation {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	gap: 6px;
+	margin-top: 30px;
+}
+
+.page-navigation a,
+.page-navigation span {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	min-width: 36px;
+	height: 36px;
+	padding: 0 10px;
+	border: 1px solid #ddd;
+	border-radius: 6px;
+	background: #fff;
+	color: #555;
+	text-decoration: none;
+	font-size: 14px;
+}
+
+.page-navigation a:hover {
+	border-color: #111;
+	color: #111;
+}
+
+.page-navigation .active,
+.page-navigation span {
+	background: #111;
+	border-color: #111;
+	color: #fff;
+}

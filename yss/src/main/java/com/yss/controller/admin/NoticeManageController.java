@@ -3,6 +3,7 @@ package com.yss.controller.admin;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -53,7 +54,7 @@ public class NoticeManageController {
 			kwd = util.decodeUrl(kwd);
 			
 			String pageSize = req.getParameter("size");
-			int size = pageSize == null ? 5 : Integer.parseInt(pageSize);
+			int size = pageSize == null ? 7 : Integer.parseInt(pageSize);
 			
 			Map<String, Object> map = new HashMap<String, Object>();
 			map.put("schType", schType);
@@ -128,10 +129,14 @@ public class NoticeManageController {
 				return new ModelAndView("redirect:/admin/support/notice/list?" + query);
 			}
 			
+			// 파일
+			List<NoticeDTO> listFile = service.listNoticeFile(noticeId);
+						
 			ModelAndView mav = new ModelAndView("admin/support/notice/article");
 			
 			mav.addObject("dto", dto);
 			mav.addObject("query", query);
+			mav.addObject("listFile", listFile);
 			mav.addObject("page", page);
 			mav.addObject("size", size);
 			
@@ -213,17 +218,20 @@ public class NoticeManageController {
     	
     	String page = req.getParameter("page");
     	try {
-			long NoticeId = Long.parseLong(req.getParameter("noticeId"));
-			NoticeDTO dto = service.findById(NoticeId);
+			long noticeId = Long.parseLong(req.getParameter("noticeId"));
+			NoticeDTO dto = service.findById(noticeId);
 			
 			if(dto == null) {
 				return new ModelAndView("redirect:/admin/support/notice/list?page=" + page);
 			}
 			
+			List<NoticeDTO> listFile = service.listNoticeFile(noticeId);
+			
 			ModelAndView mav = new ModelAndView("admin/support/notice/write");
 			
 			mav.addObject("dto", dto);
 			mav.addObject("page", page);
+			mav.addObject("listFile", listFile);
 			mav.addObject("mode", "update");
 			
 			return mav;
@@ -235,7 +243,10 @@ public class NoticeManageController {
     
     @PostMapping("update")
     public ModelAndView updateSubmit(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-    	
+    	HttpSession session = req.getSession();
+		String root = session.getServletContext().getRealPath("/");
+		String pathname = root + "uploads" + File.separator + "notice";
+		
     	String page = req.getParameter("page");
     	try {
     		NoticeDTO dto = new NoticeDTO();
@@ -244,6 +255,9 @@ public class NoticeManageController {
     		dto.setTitle(req.getParameter("title"));
     		dto.setContent(req.getParameter("content"));
     		
+			List<MyMultipartFile> listFile = fileManager.doFileUpload(req.getParts(), pathname);
+			dto.setListFile(listFile);
+			
     		service.updateNotice(dto);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -251,8 +265,51 @@ public class NoticeManageController {
     	return new ModelAndView("redirect:/admin/support/notice/list?page=" + page);
     }
     
+	@GetMapping("deleteFile")
+	public ModelAndView deleteFile(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		// 수정에서 파일만 삭제
+		// 넘어온 파라미터 : 글번호, 파일번호, 페이지번호, size
+		HttpSession session = req.getSession();
+		
+		// 파일 저장 경로
+		String root = session.getServletContext().getRealPath("/");
+		String pathname = root + "uploads" + File.separator + "notice";
+
+		String page = req.getParameter("page");
+
+		try {
+			long noticeId = Long.parseLong(req.getParameter("noticeId"));
+			long fileId = Long.parseLong(req.getParameter("fileId"));
+			NoticeDTO dto = service.findByFileId(fileId);
+			if (dto != null) {
+				// 파일삭제
+				fileManager.doFiledelete(pathname, dto.getServerFiles());
+				
+				// 테이블 파일 정보 삭제
+				Map<String, Object> map = new HashMap<String, Object>();
+				map.put("field", "fileId");
+				map.put("noticeId", fileId);
+				
+				service.deleteNoticeFile(map);
+			}
+
+			// 다시 수정 화면으로
+			return new ModelAndView("redirect:/admin/support/notice/update?noticeId=" + noticeId + "&page=" + page);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return new ModelAndView("redirect:/admin/support/notice/list?page=" + page);
+	}
+	
     @GetMapping("delete")
     public ModelAndView delete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		HttpSession session = req.getSession();
+		
+		// 파일 저장 경로
+		String root = session.getServletContext().getRealPath("/");
+		String pathname = root + "uploads" + File.separator + "notice";
+		
     	String page = req.getParameter("page");
     	String size = req.getParameter("size");
     	String query = "page=" + page + "&size=" + size;
@@ -271,6 +328,20 @@ public class NoticeManageController {
 				query += "&schType=" + schType + "&kwd=" + util.encodeUrl(kwd);
 			}
 			
+			// 실제 파일 삭제
+			List<NoticeDTO> listFile = service.listNoticeFile(noticeId);
+			for (NoticeDTO vo : listFile) {
+				fileManager.doFiledelete(pathname, vo.getServerFiles());
+			}
+			
+			Map<String, Object> map = new HashMap<String, Object>();
+			map.put("field", "noticeId");
+			map.put("noticeId", noticeId);
+			
+			// 파일 정보 삭제
+			service.deleteNoticeFile(map);
+			
+			// 기시글 삭제
 			service.deleteNotice(noticeId);
 			
 		} catch (Exception e) {
@@ -278,5 +349,58 @@ public class NoticeManageController {
 		}
     	return new ModelAndView("redirect:/admin/support/notice/list?" + query);
     }
+    
+    @PostMapping("deleteList")
+    public ModelAndView deleteList(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    	HttpSession session = req.getSession();
+    	
+    	String root = session.getServletContext().getRealPath("/");
+		String pathname = root + "uploads" + File.separator + "notice";
+		
+		String page = req.getParameter("page");
+		String size = req.getParameter("size");
+		String query = "size=" + size + "&page=" + page;
+		
+		try {
+			String schType = req.getParameter("schType");
+			String kwd = req.getParameter("kwd");
+			if (schType == null) {
+				schType = "all";
+				kwd = "";
+			}
+			kwd = util.decodeUrl(kwd);
+			if (! kwd.isBlank()) {
+				query += "&schType=" + schType + "&kwd=" + util.encodeUrl(kwd);
+			}
+			
+			String[] nn = req.getParameterValues("nums");
+			List<Long> nums = new ArrayList<Long>();
+			for (int i = 0; i < nn.length; i++) {
+				nums.add(Long.parseLong(nn[i]));
+			}
+
+			Map<String, Object> map = new HashMap<String, Object>();
+			map.put("field", "noticeId");
+			for (Long n : nums) {
+				List<NoticeDTO> listFile = service.listNoticeFile(n);
+				
+				for (NoticeDTO vo : listFile) {
+					fileManager.doFiledelete(pathname, vo.getServerFiles());
+				}
+				
+				map.put("noticeId", n);
+				
+				service.deleteNoticeFile(map);
+			}
+
+			service.deleteListNotice(nums);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return new ModelAndView("redirect:/admin/support/notice/list?" + query);
+    }
+   
     
 }

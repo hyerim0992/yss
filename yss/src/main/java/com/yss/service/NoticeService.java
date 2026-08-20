@@ -20,5 +20,6 @@ public interface NoticeService {
 	public List<NoticeDTO> listNoticeFile(long noticeId);
 	public NoticeDTO findByFileId(long fileId);
 	public void deleteNoticeFile(Map<String, Object> map) throws Exception;
+	public void deleteListNotice(List<Long> list) throws Exception;
 
 }
