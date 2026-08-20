@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.yss.dto.InquiryAnswerDTO;
 import com.yss.dto.InquiryDTO;
 import com.yss.dto.SessionInfo;
 import com.yss.mvc.annotation.Controller;
@@ -12,6 +13,8 @@ import com.yss.mvc.annotation.GetMapping;
 import com.yss.mvc.annotation.PostMapping;
 import com.yss.mvc.annotation.RequestMapping;
 import com.yss.mvc.view.ModelAndView;
+import com.yss.service.InquiryAnswerService;
+import com.yss.service.InquiryAnswerServiceImpl;
 import com.yss.service.InquiryService;
 import com.yss.service.InquiryServiceImpl;
 import com.yss.util.MyUtil;
@@ -27,6 +30,7 @@ import jakarta.servlet.http.HttpSession;
 public class InquiryController {
 	private PaginateUtil paginateUtil = new PaginateUtil();
 	private InquiryService service = new InquiryServiceImpl();
+	private InquiryAnswerService answerService = new InquiryAnswerServiceImpl();
 	private MyUtil util = new MyUtil();
 	
 	// 1:1 문의
@@ -133,6 +137,8 @@ public class InquiryController {
         try {
             long inquiryId = Long.parseLong(req.getParameter("inquiryId")); 
             
+            InquiryAnswerDTO answerDto = answerService.findByAnswerId(inquiryId);
+            
         // 게시물 가져오기
         InquiryDTO dto = service.findById(inquiryId);
         if (dto == null || dto.getMemberId() != info.getMemberId()) { // 게시물이 없으면 다시 리스트로
@@ -154,6 +160,7 @@ public class InquiryController {
         
         // JSP로 전달할 속성
         mav.addObject("dto", dto);
+        mav.addObject("answerDto", answerDto);
         mav.addObject("page", page);
         mav.addObject("query", query);
         mav.addObject("prevDto", prevDto);

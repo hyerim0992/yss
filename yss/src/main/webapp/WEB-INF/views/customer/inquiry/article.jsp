@@ -109,7 +109,7 @@
               <c:if test="${not empty answerDto}">
                 <div class="reply mb-4 p-3 bg-light border rounded">
                   <div class="form-header mb-2 pb-2 border-bottom d-flex justify-content-between align-items-center">
-                    <span class="fw-bold text-primary">💬 관리자 답변</span>
+                    <span class="fw-bold text-primary">관리자 답변</span>
                     <span class="text-muted small">답변일 : ${answerDto.createdAt}</span>
                   </div>
                   <div class="p-2 lh-base">

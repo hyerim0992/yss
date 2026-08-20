@@ -5,6 +5,15 @@ public class wishListDTO {
 	private String cratedAt;
 	private Long productId;
 	private Long memberId;
+	
+	private ProductDTO product;
+	
+	public ProductDTO getProduct() {
+		return product;
+	}
+	public void setProduct(ProductDTO product) {
+		this.product = product;
+	}
 	public Long getWishListId() {
 		return wishListId;
 	}

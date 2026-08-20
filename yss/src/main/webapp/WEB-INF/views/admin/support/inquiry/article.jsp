@@ -81,7 +81,7 @@
                 <td colspan="3">${dto.content}</td>
               </tr>
 
-              <!-- 관리자 답변 내용 존재 -->
+              <!-- 관리자 답변 내용 -->
               <c:if test="${not empty answerDto}">
                 <tr>
                   <th>관리자 답변</th>
@@ -95,7 +95,7 @@
           </table>
         </div>
 
-        <!-- 하단 버튼 영역 -->
+        <!-- 하단 버튼 -->
         <div class="support-actions">
           <div>
             <c:choose>

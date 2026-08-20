@@ -265,59 +265,7 @@
         </section>
 
         <!-- 위시리스트 -->        <!-- 위시리스트 -->
-        <section class="page-view" data-page="wishlist">
-          <div class="page-title">
-            <div>
-              <span class="eyebrow">MY FAVORITES</span>
-              <h1>위시리스트</h1>
-              <p>관심 상품을 구매하거나 선택한 상품을 삭제할 수 있어요.</p>
-            </div>
-            <label class="select-all"
-              ><input type="checkbox" id="wishAll" /> 전체 선택</label
-            >
-          </div>
-          <div class="wish-grid" id="wishGrid">
-            <article>
-              <label><input type="checkbox" class="wish-check" /></label
-              ><button class="heart is-on" data-action="heart">♥</button>
-              <div class="wish-image dark">AD</div>
-              <small>Adidas</small>
-              <h3>Samba OG Core Black</h3>
-              <p>구매가 <strong>149,000원</strong></p>
-              <div>
-                <a href="${ctx}/product/detail">구매하기</a
-                ><button data-action="remove-wish">삭제</button>
-              </div>
-            </article>
-            <article>
-              <label><input type="checkbox" class="wish-check" /></label
-              ><button class="heart is-on" data-action="heart">♥</button>
-              <div class="wish-image">NB</div>
-              <small>New Balance</small>
-              <h3>993 Made in USA Grey</h3>
-              <p>구매가 <strong>289,000원</strong></p>
-              <div>
-                <a href="${ctx}/product/detail">구매하기</a
-                ><button data-action="remove-wish">삭제</button>
-              </div>
-            </article>
-            <article>
-              <label><input type="checkbox" class="wish-check" /></label
-              ><button class="heart is-on" data-action="heart">♥</button>
-              <div class="wish-image cream">NK</div>
-              <small>Nike</small>
-              <h3>Air Force 1 '07 White</h3>
-              <p>구매가 <strong>139,000원</strong></p>
-              <div>
-                <a href="${ctx}/product/detail">구매하기</a
-                ><button data-action="remove-wish">삭제</button>
-              </div>
-            </article>
-          </div>
-          <button class="outline-button danger-text" id="deleteSelectedWish">
-            선택 상품 삭제
-          </button>
-        </section>
+        <jsp:include page="/WEB-INF/views/mypage/wishlist.jsp" />
 
         <!-- 장바구니 -->
         <section class="page-view" data-page="cart">
