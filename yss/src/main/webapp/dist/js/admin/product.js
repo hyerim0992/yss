@@ -99,12 +99,7 @@ function openModal(row) {
     productModal.classList.add("show");
     productModal.setAttribute("aria-hidden", "false");
     document.body.classList.add("admin-modal-open");
-	
-	history.pushState(
-	    {},
-	    "",
-	    contextPath + "/admin/product/write"
-	);
+
 }
 
 function closeModal() {
@@ -115,11 +110,6 @@ function closeModal() {
     editingRow = null;
     resetPreview();
 	
-	history.pushState(
-	    {},
-	    "",
-	    contextPath + "/admin/product"
-	);
 }
 
 // 대표 이미지 미리보기
@@ -362,14 +352,6 @@ if (document.readyState === "loading") {
 
 
 
-
-
-
-
-
-
-
-
 function sendOk(){
 	const f = document.productForm
 	f.submit();
@@ -465,6 +447,8 @@ function sendOk(){
         minGradeFilter.value = "";
         statusFilter.value = "";
     }
+	
+	
     
   });
 
