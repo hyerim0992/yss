@@ -23,17 +23,13 @@ public class ProductManageServiceImpl implements ProductManageService {
 					dto.setFiles(mf.getSaveFilename());	
 					mapper.insertProductImage(dto);
 				}
-
 			}
-			
 		} catch (Exception e) {
 			e.printStackTrace();
 			
 			throw e;
 		}
-		
 	}
-
 
 	@Override
 	public List<ProductDTO> listProductManage(Map<String, Object> map) throws Exception {
@@ -48,19 +44,23 @@ public class ProductManageServiceImpl implements ProductManageService {
 		return result;
 	}
 
-
-
 	@Override
 	public List<ProductDTO> listParentCategory() throws Exception {
 		
 		return mapper.listParentCategory();
 	}
 
-
 	@Override
 	public List<ProductDTO> listChildCategory() throws Exception {
 		
 		return mapper.listChildCategory();
+	}
+
+
+	@Override
+	public ProductDTO findById(long num) {
+		ProductDTO dto = mapper.findById(num);
+		return dto;
 	}
 
 

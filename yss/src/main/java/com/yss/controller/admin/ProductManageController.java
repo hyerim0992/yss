@@ -11,6 +11,7 @@ import com.yss.mvc.annotation.Controller;
 import com.yss.mvc.annotation.GetMapping;
 import com.yss.mvc.annotation.PostMapping;
 import com.yss.mvc.annotation.RequestMapping;
+import com.yss.mvc.annotation.ResponseBody;
 import com.yss.mvc.view.ModelAndView;
 import com.yss.service.ProductManageService;
 import com.yss.service.ProductManageServiceImpl;
@@ -64,9 +65,13 @@ public class ProductManageController {
 			String minGrade = req.getParameter("minGrade");
 			String status = req.getParameter("status");
 			
-			if(schType == null) {
+			if(schType == null || schType.isBlank()) {
 				schType = "all";
 				kwd = "";
+			}
+			
+			if(kwd == null) {
+			    kwd = "";
 			}
 			
 			kwd = util.decodeUrl(kwd);
@@ -93,7 +98,7 @@ public class ProductManageController {
 			String cp = req.getContextPath();
 			String listUrl = cp + "/admin/product";
 			if(! kwd.isBlank()) {
-				query = "schType=" + schType + "kwd=" + util.encodeUrl(kwd);
+				query = "schType=" + schType + "&kwd=" + util.encodeUrl(kwd);
 				listUrl += "?" + query; 
 			}
 			
@@ -123,10 +128,10 @@ public class ProductManageController {
 	
 	@GetMapping("write")
 	public ModelAndView writeForm(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		ModelAndView mav = new ModelAndView("admin/product/main");
+		
 		try {
-			
-			ModelAndView mav = new ModelAndView("admim/product/main");
-					
+	
 		    List<ProductDTO> PCList = service.listParentCategory();
 
 		    List<ProductDTO> CCList = service.listChildCategory();
@@ -188,5 +193,28 @@ public class ProductManageController {
 		return new ModelAndView("redirect:/admin/product");
 	}
 	
+	@GetMapping("stock")
+	@ResponseBody
+	public Map<String, Object> stockForm(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		Map<String, Object> map = new HashMap<String, Object>();
+			
+		try {
+
+			Long productId = Long.parseLong(req.getParameter("productId"));
+			
+			ProductDTO dto = service.findById(productId);
+			
+			map.put("productId", dto.getProductId());
+			map.put("prodName", dto.getProdName());
+			map.put("price", dto.getPrice());
+			map.put("thumbnail", dto.getThumbnail());
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return map;
+	}
+
 
 }

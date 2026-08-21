@@ -3,7 +3,6 @@ package com.yss.service;
 
 import java.util.List;
 import java.util.Map;
-
 import com.yss.dto.ProductDTO;
 
 public interface ProductManageService {
@@ -14,6 +13,7 @@ public interface ProductManageService {
 	public List<ProductDTO> listParentCategory() throws Exception;
 	public List<ProductDTO> listChildCategory() throws Exception;
 	
+	public ProductDTO findById(long num);
 	
 	
 }
