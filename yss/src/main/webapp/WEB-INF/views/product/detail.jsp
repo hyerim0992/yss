@@ -1,5 +1,6 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="jakarta.tags.core"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <c:set var="ctx" value="${pageContext.request.contextPath}" />
 <!doctype html>
 <html lang="ko">
@@ -23,7 +24,7 @@
 		<section class="product-hero page-width">
 			<div class="product-gallery">
 				<!-- 대표 상품 사진은 이 파일을 같은 이름으로 교체하면 됩니다. -->
-				<img src="${ctx}${dto.thumbnail}" alt="${dto.prodName}" />
+				<img src="${ctx}/uploads/product/${dto.thumbnail}" alt="${dto.prodName}" />
 			</div>
 
 			<div class="product-summary">
@@ -35,8 +36,8 @@
 					</div>
 					<div class="summary-icons">
 						<button type="button"
-							class="icon-button wishlist js-interest"
-							aria-label="관심 상품 저장" aria-pressed="false">♡</button>
+							class="icon-button wishlist js-interest wishlist-button"
+							aria-label="관심 상품 저장" aria-pressed="false" data-wishlist="${wishlistCount}">♡</button>
 						<button type="button" class="icon-button share-button"
 							aria-label="상품 공유">↗</button>
 					</div>
@@ -50,7 +51,9 @@
 								<c:if test="${dto.discRate != 0}">
 									<del>${dto.price}원</del>
 								</c:if>
-								<strong class="product-sale-price">${dto.price - (dto.price * (dto.discRate/100))}원</strong>
+									<strong class="product-sale-price">
+										<fmt:formatNumber value="${dto.price - (dto.price * (dto.discRate/100))}" pattern="#,##0" />원
+									</strong>
 								<c:if test="${dto.discRate != 0}">
 									<span>${dto.discRate}% 할인</span>
 								</c:if>
@@ -83,36 +86,32 @@
 								선택하세요</small>
 						</span> <span>⌄</span>
 					</button>
-					<button type="button" class="option-select js-open-size" id="sizeOption">
+					<button type="button" class="option-select js-open-size" id="sizeOption" >
 						<span> <b>사이즈</b> <small class="selected-size">사이즈를
 								선택하세요</small>
 						</span> <span>⌄</span>
 					</button>
 				</div>
 
-				<div class="selected-option-card" id="selectedOptionCard">
-					<div class="selected-option-visual">
-						<div>
-							<small>선택한 상품</small>
-							
-							<b class="selected-option-name">옵션을 선택해
-								주세요.</b>
-								
-							<input type="number" maxlength="3" class="quantity quantity-input"> 
-						</div>
-					</div>
-					<span class="stock-badge">옵션 선택 필요</span>
+				<div class="selected-option-list" id="selectedOptionList">
+				
 				</div>
 
-				<button type="button" class="purchase-button js-purchase">
-					<span> <small>총 상품 금액</small> <b class="js-purchase-price">130,000원</b>
-					</span> <strong>구매하기</strong>
-				</button>
+				<div class="purchase-area">
+					<div class="total-price-wrap">
+						<span>총 상품 금액</span> <b class="js-total-price" id="totalPrice">0원</b>
+					</div>
+					<div class="button-group">
+						<!-- 기본 비활성화 처리 (옵션 선택 시 활성화) -->
+						<button type="button" class="btn btn-cart js-cart-btn" disabled>장바구니</button>
+						<button type="button" class="btn btn-buy js-buy-btn" disabled>바로구매</button>
+					</div>
+				</div>
 
 				<div class="secondary-actions">
 					<button type="button" class="secondary-button js-interest"
 						aria-pressed="false">
-						<span class="interest-icon">♡</span> <span><b>관심상품</b><small><span
+						<span class="interest-icon wishlist-button">♡</span> <span><b>관심상품</b><small><span
 								class="interest-count">${wishlistCount}</span>명이 저장</small></span>
 						<!-- 관심상품 횟수 필요 -->
 					</button>
@@ -209,7 +208,7 @@
 						</p>
 						<c:forEach var="list" items="${imgList}" varStatus="status">
 							<div>
-								<img alt="${list.imageId}" src="${ctx}${list.files}">
+								<img alt="${list.imageId}" src="${ctx}/uploads/product/${list.files}"> 
 							</div>
 						</c:forEach>
 						<p class="info-warning">
@@ -404,10 +403,10 @@
 	</div>
 	
 	<!-- 리뷰 모달 -->
-	<div class="modal-backdrop" id="reviewModal" aria-hidden="true">
-		<section class="modal-card" role="dialog" aria-modal="true"
+	<div class="reviewmodal-backdrop" id="reviewModal" aria-hidden="true">
+		<section class="reviewmodal-card" role="dialog" aria-modal="true"
 			aria-labelledby="colorTitle">
-
+			
 			<div class="color-grid" id="reviewGrid">
 			</div>
 		</section>

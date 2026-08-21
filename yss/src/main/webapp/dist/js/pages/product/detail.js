@@ -43,6 +43,15 @@ document.addEventListener("DOMContentLoaded", function () {
       document.body.classList.remove("modal-open");
     }
   }
+  
+  function closeModal(modal) {
+    if (!modal) return;
+    modal.classList.remove("open");
+    modal.setAttribute("aria-hidden", "true");
+    if (!document.querySelector(".reviewmodal-backdrop.open")) {
+      document.body.classList.remove("modal-open");
+    }
+  }
 
   function setTextForAll(selector, value) {
     document.querySelectorAll(selector).forEach(function (item) {
@@ -194,8 +203,9 @@ document.addEventListener("DOMContentLoaded", function () {
 			
 			for (let el of data.OptionList)
 			htmlString += `			
-				<button type="button" data-size="${el.prodSize}" data-price="${el.price}" data-add-price="${el.addPrice}">
-					${el.prodSize}<small>${el.changedStock}개</small>
+				<button type="button" data-size="${el.prodSize}" data-price="${el.price}" data-addprice="${el.addPrice}" 
+				${el.changedStock == 0 ? "disabled" : ""}>
+					${el.prodSize}<small>${el.changedStock == 0 ? "품절" : el.changedStock+"개"}</small>
 					${el.addPrice !== 0 ? `<small>+${el.addPrice}원</small>` : ''}
 				</button>
 			`;
@@ -222,12 +232,15 @@ document.addEventListener("DOMContentLoaded", function () {
         item.classList.remove("active");
       });
       button.classList.add("active");
-
+	  
       selectedSize = button.dataset.size;
+	  price = button.dataset.price;
+	  addPrice = button.dataset.addprice;
       setTextForAll(".selected-size", selectedSize + "mm");
       updateSelectedOption();
       closeModal(sizeModal);
       showToast(selectedSize + "mm 사이즈를 선택했습니다.");
+	  addSelectedOption(selectedColor, selectedSize, price, addPrice);
     });
   }
 
@@ -270,6 +283,8 @@ document.addEventListener("DOMContentLoaded", function () {
   var interestActive = false;
   document.querySelectorAll(".js-interest").forEach(function (button) {
     button.addEventListener("click", function () {
+		const wishlist = document.querySelector(".js-interest").dataset.wishlist;
+		console.log(wishlist);
 		interestActive = !interestActive;
 		const url = "detail/wishlist";
 		const params = {prodId: prodId , interestActive: interestActive};
@@ -285,7 +300,7 @@ document.addEventListener("DOMContentLoaded", function () {
 				location.href = contextPath + "/member/login";
 				
 			}else{
-				JSON.parse(data.return);
+				interestActive= JSON.parse(data.return);
 			}
 			
 			document.querySelectorAll(".js-interest").forEach(function (item) {
@@ -295,7 +310,7 @@ document.addEventListener("DOMContentLoaded", function () {
 			document.querySelectorAll(".wishlist-button").forEach(function (item) {
 			  item.textContent = interestActive ? "♥" : "♡";
 			});
-			setTextForAll(".interest-count", interestActive ? "1,285" : "1,284");
+			setTextForAll(".interest-count", interestActive ? Number(wishlist)+1 : wishlist);
 			showToast(
 			  interestActive
 			    ? "관심상품에 추가했습니다."
@@ -394,9 +409,189 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
+  // 기본 데이터 정의 (실제 환경에서는 서버/모달에서 선택된 값이 들어옵니다)
+  const UNIT_PRICE = 130000; // 상품 단가
+  const selectedOptions = new Map(); // 중복 선택 방지 및 상태 관리용 Map
+
+  const optionListContainer = document.getElementById('selectedOptionList');
+  const totalPriceEl = document.getElementById('totalPrice');
+  const cartBtn = document.querySelector('.js-cart-btn');
+  const buyBtn = document.querySelector('.js-buy-btn');
+
+  /**
+   * 1. 외부 모달/클릭 이벤트에서 옵션 선택이 완료되었을 때 호출하는 함수
+   * @param {string} color - 선택된 색상
+   * @param {string} size - 선택된 사이즈
+   */
+  function addSelectedOption(color, size, price, addPrice) {
+      const optionKey = `${color}/${size}`;
+
+      // 이미 선택된 옵션인 경우 수량만 +1
+      if (selectedOptions.has(optionKey)) {
+          const item = selectedOptions.get(optionKey);
+          updateQuantity(optionKey, item.quantity + 1);
+          return;
+      }
+
+      // 신규 옵션 추가
+      selectedOptions.set(optionKey, { color, size, quantity: 1, price: price + addPrice });
+      renderOptionCards();
+      calculateTotal();
+  }
+
+  /**
+   * 2. 선택된 옵션 목록 UI 렌더링
+   */
+  function renderOptionCards() {
+      optionListContainer.innerHTML = '';
+
+      selectedOptions.forEach((item, key) => {
+          const itemTotalPrice = (item.price * item.quantity).toLocaleString();
+          
+          const card = document.createElement('div');
+          card.className = 'selected-option-card';
+          card.dataset.key = key;
+          card.innerHTML = `
+              <div class="option-info">
+                  <b class="selected-option-name">${item.color} / ${item.size}</b>
+                  <!-- onclick 대신 data-action 및 data-key 사용 -->
+                  <button type="button" class="btn-delete" data-action="delete" data-key="${key}">✕</button>
+              </div>
+              <div class="option-controls">
+                  <div class="quantity-wrap">
+                      <button type="button" data-action="minus" data-key="${key}">-</button>
+                      <input type="number" class="quantity-input" value="${item.quantity}" min="1" max="999" readonly>
+                      <button type="button" data-action="plus" data-key="${key}">+</button>
+                  </div>
+                  <span class="option-price">${itemTotalPrice}원</span>
+              </div>
+          `;
+          optionListContainer.appendChild(card);
+      });
+  }
+
+  /**
+   * 3. 수량 변경 처리
+   */
+  function changeQty(key, delta) {
+      const item = selectedOptions.get(key);
+      if (!item) return;
+      
+      const newQty = item.quantity + delta;
+      if (newQty >= 1 && newQty <= 999) {
+          updateQuantity(key, newQty);
+      }
+  }
+
+  function updateQuantity(key, newQty) {
+      const item = selectedOptions.get(key);
+      item.quantity = newQty;
+      renderOptionCards();
+      calculateTotal();
+  }
+
+  /**
+   * 4. 옵션 카드 삭제
+   */
+  function removeOption(key) {
+      selectedOptions.delete(key);
+      renderOptionCards();
+      calculateTotal();
+  }
+
+  /**
+   * 5. 총 가격 계산 및 버튼 활성화 제어
+   */
+  function calculateTotal() {
+      let total = 0;
+      selectedOptions.forEach(item => {
+          total += item.price * item.quantity;
+      });
+
+      totalPriceEl.textContent = `${total.toLocaleString()}원`;
+
+      // 선택된 옵션이 없으면 버튼 비활성화
+      const isDisabled = selectedOptions.size === 0;
+      cartBtn.disabled = isDisabled;
+      buyBtn.disabled = isDisabled;
+  }
+  
+  // 리스너를 한 번만 등록해두면, 동적으로 추가되는 버튼도 모두 정상 작동합니다.
+  optionListContainer.addEventListener('click', (e) => {
+      const btn = e.target.closest('button');
+      if (!btn) return;
+
+      const action = btn.dataset.action;
+      const key = btn.dataset.key;
+
+      if (action === 'minus') {
+          changeQty(key, -1);
+      } else if (action === 'plus') {
+          changeQty(key, 1);
+      } else if (action === 'delete') {
+          removeOption(key);
+      }
+  });
+
+  /**
+   * 6. 장바구니 / 바로구매 데이터 전송
+   */
+  function sendOrderData(actionType) {
+      if (selectedOptions.size === 0) return;
+
+      // 전송할 데이터 구조 형성
+      const payload = {
+          action: actionType, // 'cart' 또는 'buy'
+          items: Array.from(selectedOptions.entries()).map(([key, item]) => ({
+              color: item.color,
+              size: item.size,
+              quantity: item.quantity,
+              itemTotalPrice: item.price * item.quantity
+          })),
+          grandTotal: Array.from(selectedOptions.values()).reduce((sum, item) => sum + (item.price * item.quantity), 0)
+      };
+
+      console.log('전송 데이터:', payload);
+
+      // 예시: fetch를 통한 서버 API 호출
+      /*
+      fetch('/order/process', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+      })
+      .then(res => res.json())
+      .then(data => {
+          if(actionType === 'cart') alert('장바구니에 담겼습니다.');
+          else location.href = '/checkout';
+      });
+      */
+  }
+
+  // 버튼 클릭 이벤트 바인딩
+  cartBtn.addEventListener('click', () => sendOrderData('cart'));
+  buyBtn.addEventListener('click', () => sendOrderData('buy'));
+
+  // [테스트용] 임시로 옵션을 선택해 추가해보는 코드 (기존 모달 선택 완료 시점에 이 함수를 호출하세요)
+  // addSelectedOption('블랙', '260');
+  // addSelectedOption('화이트', '270');
+  
+  
   updateAppliedProductPrice();
 
   document.querySelectorAll(".modal-backdrop").forEach(function (modal) {
+    var closeButton = modal.querySelector(".modal-close");
+    if (closeButton) {
+      closeButton.addEventListener("click", function () {
+        closeModal(modal);
+      });
+    }
+    modal.addEventListener("click", function (event) {
+      if (event.target === modal) closeModal(modal);
+    });
+  });
+  
+  document.querySelectorAll(".reviewmodal-backdrop").forEach(function (modal) {
     var closeButton = modal.querySelector(".modal-close");
     if (closeButton) {
       closeButton.addEventListener("click", function () {
@@ -411,6 +606,15 @@ document.addEventListener("DOMContentLoaded", function () {
   document.addEventListener("keydown", function (event) {
     if (event.key === "Escape") {
       document.querySelectorAll(".modal-backdrop.open").forEach(function (modal) {
+        closeModal(modal);
+      });
+      closeOwnerMenus();
+    }
+  });
+  
+  document.addEventListener("keydown", function (event) {
+    if (event.key === "Escape") {
+      document.querySelectorAll(".reviewmodal-backdrop.open").forEach(function (modal) {
         closeModal(modal);
       });
       closeOwnerMenus();
@@ -460,16 +664,27 @@ document.addEventListener("DOMContentLoaded", function () {
 			    // 예: el.rating이 3이라면 '★★★☆☆'
 			    let stars = '★'.repeat(el.rating) + '☆'.repeat(5 - el.rating);
 			    
-			    // 완성된 형태의 HTML 문자열을 백틱(`) 안에 한 번에 작성
-			    htmlString += `			
-			    <article class="review-card">
-			        <div class="review-card-head">
-			            <b>${stars}</b>
-			        </div>
-			        <p>${el.contents}</p>
-			        <small>${el.memberName} · ${el.color} · ${el.prodSize}mm · ${el.updatedAt}</small>
-			    </article>
-			    `;
+				// 완성된 형태의 HTML 문자열을 백틱(`) 안에 작성
+				    htmlString += `			
+				    <article class="review-card">
+				        <div class="review-card-head">
+				            <b>${stars}</b>
+				        </div>
+				        <p>${el.contents}</p>
+				        <div class="review-img-list">`; // 이미지들을 감싸줄 영역 추가
+				        
+				        for (let imgs of el.imageList) {
+				            if ("files" in imgs) {
+				                // review-img 클래스 추가
+				                htmlString += `<img src="${contextPath}/uploads/product/${imgs.files}" class="review-img" alt="리뷰 이미지">`;
+				            }
+				        }	
+				        
+				    // 백틱 위치와 구문 수정
+				    htmlString += `
+				        </div>
+				        <small>${el.memberName} · ${el.color} · ${el.prodSize}mm · ${el.updatedAt}</small>
+				    </article>`;
 			}
 
 			// 반복문이 끝난 후 완성된 HTML 문자열을 DOM에 한 번만 추가
