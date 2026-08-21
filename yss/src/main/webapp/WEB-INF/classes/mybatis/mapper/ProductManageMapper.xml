@@ -99,6 +99,13 @@
    		ORDER BY categoryId
 	</select>
 	
+	<select id="findById" parameterType="long" resultType="com.yss.dto.ProductDTO">
+		SELECT productId, prodName, price, thumbnail
+		FROM product
+		WHERE productId = #{productId}
+	</select>
+
+	
 	<insert id="insertProduct" parameterType="com.yss.dto.ProductDTO">
 		<selectKey keyProperty="productId" resultType="long" order="BEFORE">
 			SELECT product_seq.NEXTVAL
@@ -112,5 +119,7 @@
 		INSERT INTO productImage(imageId, productId, files, sortOrder)
 		VALUES (PRODUCT_IMAGE_SEQ.NEXTVAL, #{productId}, #{files}, #{sortOrder})
 	</insert>
+	
+	<insert id="insertProductOption"></insert>
 
 </mapper>

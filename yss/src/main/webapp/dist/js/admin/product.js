@@ -1,11 +1,6 @@
 
 "use strict";
 
-// 상품관리 전용 JS
-// HTML 구조와 디자인은 main.jsp / CSS에 두고,
-// 이 파일에는 검색, 선택, 모달, 이미지 미리보기 같은 동작만 둡니다.
-// Eclipse에서도 읽기 쉽도록 var / function / if 중심으로 작성했습니다.
-
 var editingRow = null;
 var previewUrl = "";
 
@@ -451,6 +446,8 @@ function sendOk(){
 	
     
   });
+  
+
 
 
   

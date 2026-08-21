@@ -676,3 +676,483 @@
 .category-select-wrap select:focus {
     border-color: #555;
 }
+
+/* =========================================
+   재고 관리 모달
+========================================= */
+
+.stock-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.stock-modal[hidden] {
+    display: none;
+}
+
+
+/* =========================================
+   배경
+========================================= */
+
+.stock-modal-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+}
+
+
+/* =========================================
+   모달 본체
+========================================= */
+
+.stock-modal-content {
+    position: relative;
+    z-index: 1;
+
+    width: min(1250px, calc(100vw - 80px));
+    max-height: calc(100vh - 80px);
+
+    display: flex;
+    flex-direction: column;
+
+    background: #fff;
+    border-radius: 14px;
+
+    box-shadow:
+        0 20px 60px rgba(0, 0, 0, 0.25);
+
+    overflow: hidden;
+}
+
+
+/* =========================================
+   헤더
+========================================= */
+
+.stock-modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 22px 30px;
+
+    border-bottom: 1px solid #e5e5e5;
+}
+
+.stock-modal-header h2 {
+    margin: 0;
+    font-size: 22px;
+}
+
+.stock-modal-close {
+    width: 40px;
+    height: 40px;
+
+    border: 0;
+    background: transparent;
+
+    font-size: 30px;
+    cursor: pointer;
+
+    border-radius: 8px;
+}
+
+.stock-modal-close:hover {
+    background: #f5f5f5;
+}
+
+
+/* =========================================
+   상품 정보 영역
+========================================= */
+
+.stock-product-info {
+    display: grid;
+
+    grid-template-columns:
+        120px
+        150px
+        minmax(250px, 1fr)
+        180px;
+
+    gap: 24px;
+    align-items: center;
+
+    padding: 25px 30px;
+
+    background: #fafafa;
+
+    border-bottom: 1px solid #e5e5e5;
+}
+
+
+/* 상품 정보 칸을 은은하게 구분 */
+
+.stock-product-item {
+    display: flex;
+    flex-direction: column;
+
+    gap: 8px;
+
+    padding-left: 24px;
+
+    border-left: 1px solid #e5e5e5;
+}
+
+.stock-product-thumbnail + .stock-product-item {
+    border-left: none;
+    padding-left: 0;
+}
+
+
+/* 판매가를 조금 왼쪽으로 */
+
+.stock-product-price {
+    justify-self: start;
+}
+
+
+/* =========================================
+   상품 썸네일
+========================================= */
+
+.stock-product-thumbnail {
+    width: 110px;
+    height: 110px;
+
+    border: 1px solid #e5e5e5;
+    border-radius: 10px;
+
+    background: #fff;
+    overflow: hidden;
+}
+
+.stock-product-thumbnail img {
+    width: 100%;
+    height: 100%;
+
+    display: block;
+
+    object-fit: cover;
+}
+
+
+/* =========================================
+   상품 정보
+========================================= */
+
+.stock-product-label {
+    font-size: 12px;
+    color: #888;
+    font-weight: 600;
+}
+
+.stock-product-item strong {
+    font-size: 16px;
+    color: #222;
+
+    word-break: break-word;
+}
+
+.stock-product-name strong {
+    font-size: 18px;
+}
+
+
+/* =========================================
+   재고 영역
+========================================= */
+
+.stock-modal-body {
+    flex: 1;
+
+    padding: 30px;
+
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+
+/* =========================================
+   상단 제목
+========================================= */
+
+.stock-option-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    margin-bottom: 20px;
+}
+
+.stock-option-top h3 {
+    margin: 0 0 5px;
+    font-size: 18px;
+}
+
+.stock-option-top p {
+    margin: 0;
+
+    font-size: 13px;
+    color: #888;
+}
+
+.stock-add-btn {
+    min-width: 120px;
+}
+
+
+/* =========================================
+   옵션 리스트
+========================================= */
+
+.stock-option-body {
+    max-height: 320px;
+
+    overflow-y: auto;
+    overflow-x: auto;
+}
+
+
+/* 헤더와 행의 컬럼 구조 통일 */
+
+.stock-option-header,
+.stock-option-row {
+    display: grid;
+
+    grid-template-columns:
+        110px
+        150px
+        minmax(180px, 1fr)
+        220px
+        170px;
+
+    gap: 10px;
+
+    align-items: center;
+
+    min-width: 850px;
+}
+
+
+/* =========================================
+   리스트 헤더
+========================================= */
+
+.stock-option-header {
+    padding: 13px 16px;
+
+    background: #f6f6f6;
+
+    border-top: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
+
+    font-size: 13px;
+    font-weight: 700;
+
+    text-align: center;
+}
+
+
+/* =========================================
+   옵션 행
+========================================= */
+
+.stock-option-row {
+    padding: 10px 16px;
+
+    border-bottom: 1px solid #eeeeee;
+
+    box-sizing: border-box;
+}
+
+.stock-option-row:hover {
+    background: #fafafa;
+}
+
+
+/* =========================================
+   입력창
+========================================= */
+
+.stock-option-row input {
+    width: 100%;
+    height: 40px;
+
+    padding: 0 12px;
+
+    border: 1px solid #dcdcdc;
+    border-radius: 7px;
+
+    box-sizing: border-box;
+
+    font: inherit;
+}
+
+
+/* 오른쪽 정렬 */
+
+.stock-size-input,
+.stock-color-input,
+.stock-extra-price-input {
+    text-align: right;
+}
+.stock-qty-input {
+	text-align: center;
+}
+
+
+/* =========================================
+   단위 포함 입력창
+========================================= */
+
+.input-unit-wrap {
+    position: relative;
+    width: 100%;
+}
+
+
+/* 사이즈, 추가금액 */
+
+.input-unit-wrap input {
+    width: 100%;
+    height: 40px;
+
+    padding-left: 12px;
+    padding-right: 45px;
+
+    text-align: right;
+}
+
+
+.input-unit {
+    position: absolute;
+
+    top: 50%;
+    right: 14px;
+
+    transform: translateY(-50%);
+
+    color: #777;
+    font-size: 14px;
+
+    pointer-events: none;
+}
+
+
+/* =========================================
+   읽기 전용
+========================================= */
+
+.stock-option-row input[readonly] {
+    background: #f5f5f5;
+    color: #555;
+
+    cursor: default;
+}
+
+
+/* 수정 상태 */
+
+.stock-option-row.editing {
+    background: #fffdf5;
+}
+
+.stock-option-row.editing input {
+    background: #fff;
+    border-color: #555;
+}
+
+
+/* =========================================
+   관리 버튼
+========================================= */
+
+.stock-option-actions {
+    display: flex;
+
+    justify-content: center;
+    align-items: center;
+
+    gap: 8px;
+}
+
+.stock-option-actions button {
+    min-width: 65px;
+    height: 38px;
+}
+
+
+/* =========================================
+   빈 상태
+========================================= */
+
+.stock-empty-state {
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    min-height: 160px;
+
+    color: #999;
+
+    border-bottom: 1px solid #eeeeee;
+}
+
+.stock-empty-state[hidden] {
+    display: none;
+}
+
+
+/* =========================================
+   하단
+========================================= */
+
+.stock-modal-footer {
+    display: flex;
+
+    justify-content: flex-end;
+
+    gap: 10px;
+
+    padding: 20px 30px;
+
+    border-top: 1px solid #e5e5e5;
+
+    background: #fff;
+}
+
+
+/* =========================================
+   반응형
+========================================= */
+
+@media (max-width: 900px) {
+
+    .stock-modal-content {
+        width: calc(100vw - 30px);
+    }
+
+    .stock-product-info {
+        grid-template-columns:
+            100px
+            1fr;
+
+        gap: 16px;
+    }
+
+    .stock-product-thumbnail {
+        grid-row: span 2;
+    }
+
+    .stock-modal-body {
+        overflow-x: auto;
+    }
+
+}

@@ -22,7 +22,7 @@ public interface ProductManageMapper {
 	public List<ProductDTO> listProductOption(Map<String, Object> map);
 	
 	public void insertProductImage(ProductDTO dto) throws SQLException;
-	
+	public ProductDTO findById(long num);
 	
 		
 	

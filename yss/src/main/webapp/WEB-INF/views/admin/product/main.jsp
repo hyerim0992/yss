@@ -12,6 +12,9 @@
     document.documentElement.classList.add("ys-page-loading");
     window.__ysPageLoaderStart = Date.now();
   </script>
+  <script type="text/javascript"
+    src="${pageContext.request.contextPath}/dist/jquery/js/jquery.min.js">
+	</script>
   <jsp:include page="/WEB-INF/views/admin/layout/headerResources.jsp"/>
   <link rel="stylesheet" href="${pageContext.request.contextPath}/dist/css/admin/list.css?v=20260813">
   <link rel="stylesheet" href="${pageContext.request.contextPath}/dist/css/admin/modal.css?v=20260813">
@@ -22,6 +25,7 @@
   <jsp:include page="/WEB-INF/views/common/page-loader.jsp"/>
   <jsp:include page="/WEB-INF/views/admin/layout/header.jsp"/>
   <jsp:include page="/WEB-INF/views/admin/layout/left.jsp"/>
+  <jsp:include page="/WEB-INF/views/admin/product/stockModal.jsp" />
 
   <main class="admin-main">
     <section class="page active admin-static-page" data-page-key="product">
@@ -92,7 +96,7 @@
         <div class="panel-title">
           <div>
             <h2>등록 상품 목록</h2>
-            <p>검색 결과 <b id="resultCount">0</b>건 · 선택 <b id="selectedCount">0</b>건</p>
+            <p>검색 결과 <b id="resultCount">${totalCount}</b>건 · 선택 <b id="selectedCount">0</b>건</p>
           </div>
           <div>
             <button type="button" class="light-btn danger-btn" id="deleteSelectedButton">선택 삭제</button>
@@ -164,7 +168,7 @@
                     </c:choose>
                   </td>
                   <td class="action-cell">
-                    <button type="button" class="light-btn stock-row">재고</button>
+                    <button type="button" class="light-btn stock-row" data-product-id="${dto.productId}">재고</button>
                     <button type="button" class="light-btn edit-row">수정</button>
                     <button type="button" class="light-btn delete-row">삭제</button>
                   </td>
@@ -343,10 +347,51 @@
   <div class="toast" id="toast">처리되었습니다.</div>
   
   <script type="text/javascript">
-  
+	$(function () {
+		
+		$('button.stock-row').on('click', function() {
+			
+		
+		var productId = $(this).data("product-id");
+		
+		
+		$.ajax({
+			
+			url : '${pageContext.request.contextPath}/admin/product/stock',
+			type : 'GET',
+			data : {productId},
+			dataType : 'json',
+			success : function(data) {
+				
+				$('#stockProductId').text(data.productId);
+				$('#stockProdName').text(data.prodName);
+				$('#stockPrice').text(data.price);
+				$('#stockThumbnail').attr('src', 
+						'${pageContext.request.contextPath}/uploads/product/' + data.thumbnail);
+				
+				$('#stockModal')
+					.prop('hidden' , false)
+					.attr('aria-hidden', 'false')
+			}
 
+		});
+	});
 
+		function closeStockModal() {
+		    $('#stockModal')
+		        .prop('hidden', true)
+		        .attr('aria-hidden', 'true');
+		}
+		
+		$('#stockModalClose').on('click', closeStockModal);
+		$('#stockModalCancel').on('click', closeStockModal);
+
+	});
+	
+	
+	
   </script>
+  
 
   <jsp:include page="/WEB-INF/views/admin/layout/footerResources.jsp"/>
 	<script>
