@@ -39,6 +39,12 @@ public class WishlistController {
         }
         
         List<wishListDTO> list = service.listWishlist(info.getMemberId());
+        
+        System.out.println("============================================");
+        System.out.println("로그인 회원 ID: " + info.getMemberId());
+        System.out.println("조회된 위시리스트 개수: " + (list != null ? list.size() : "null"));
+        System.out.println("============================================");
+        
         int totalCount = service.getWishlistCount(info.getMemberId());
         
         mav.addObject("list", list);

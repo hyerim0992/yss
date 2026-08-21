@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-	<mapper namespace="com.yss.mapper.WishlistMapper">
+<mapper namespace="com.yss.mapper.WishlistMapper">
 
 	<!-- 중첩 객체 매핑 -->
 	<resultMap id="wishlistResultMap" type="com.yss.dto.wishListDTO">
 		<id property="wishListId" column="WISHLISTID" />
-		<result property="cratedAt" column="CREATEDAT" />
+		<!-- [수정] 오타 수정: cratedAt -> createdAt -->
+		<result property="createdAt" column="CREATEDAT" />
 		<result property="memberId" column="MEMBERID" />
 		<result property="productId" column="PRODUCTID" />
 		
@@ -24,7 +25,7 @@
 	</resultMap>
 
 	<!-- 마이페이지 위시리스트 목록 조회 -->
-	<select id="selectWishlistList" parameterType="Long" resultMap="wishlistResultMap">
+	<select id="selectWishlistList" parameterType="Object" resultMap="wishlistResultMap">
 		SELECT 
 			w.WISHLISTID,
 			TO_CHAR(w.CREATEDAT, 'YYYY-MM-DD HH24:MI:SS') AS CREATEDAT,
@@ -48,14 +49,14 @@
 		ORDER BY w.WISHLISTID DESC
 	</select>
 
-	<!-- 3. 위시리스트 총 개수 조회 -->
-	<select id="selectWishlistCount" parameterType="Long" resultType="int">
+	<!-- 위시리스트 총 개수 조회 -->
+	<select id="selectWishlistCount" parameterType="Object" resultType="int">
 		SELECT COUNT(*)
 		FROM WISHLIST
 		WHERE MEMBERID = #{memberId}
 	</select>
 
-	<!-- 4. 특정 상품 중복 찜 여부 확인 ('Y' / 'N') -->
+	<!-- 특정 상품 중복 찜 여부 확인 ('Y' / 'N') -->
 	<select id="checkIsWished" parameterType="map" resultType="String">
 		SELECT 
 			CASE WHEN COUNT(*) > 0 THEN 'Y' ELSE 'N' END AS isWished
@@ -64,20 +65,20 @@
 		  AND PRODUCTID = #{productId}
 	</select>
 
-	<!-- 5. 위시리스트 상품 추가 -->
+	<!-- 위시리스트 상품 추가 -->
 	<insert id="insertWishlist" parameterType="map">
 		INSERT INTO WISHLIST (WISHLISTID, CREATEDAT, MEMBERID, PRODUCTID)
 		VALUES (wishlistSeq.NEXTVAL, SYSDATE, #{memberId}, #{productId})
 	</insert>
 
-	<!-- 6. 단일 항목 삭제 -->
+	<!-- 단일 항목 삭제 -->
 	<delete id="deleteWishlist" parameterType="map">
 		DELETE FROM WISHLIST 
 		WHERE WISHLISTID = #{wishListId} 
 		  AND MEMBERID = #{memberId}
 	</delete>
 
-	<!-- 7. 선택 항목 다중 삭제 -->
+	<!-- 선택 항목 다중 삭제 -->
 	<delete id="deleteWishlistList" parameterType="map">
 		DELETE FROM WISHLIST 
 		WHERE MEMBERID = #{memberId} 
@@ -87,23 +88,10 @@
 		  </foreach>
 	</delete>
 
-	<!-- 8. 전체 삭제 -->
-	<delete id="deleteAllWishlist" parameterType="Long">
+	<!-- 전체 삭제 -->
+	<delete id="deleteAllWishlist" parameterType="Object">
 		DELETE FROM WISHLIST 
 		WHERE MEMBERID = #{memberId}
 	</delete>
 
 </mapper>
-
-<!-- 
-CREATE TABLE WISHLIST (
-	WISHLISTID	NUMBER		NOT NULL,
-	CREATEDAT	DATE		DEFAULT SYSDATE NOT NULL,
-	MEMBERID	NUMBER		NOT NULL,
-	PRODUCTID	NUMBER		NOT NULL,
-	CONSTRAINT PK_WISHLIST PRIMARY KEY (WISHLISTID),
-	CONSTRAINT UK_WISHLIST_MEMBER_PRODUCT UNIQUE (MEMBERID, PRODUCTID)
-);
-
-CREATE SEQUENCE wishlistSeq START WITH 1 INCREMENT BY 1;
--->

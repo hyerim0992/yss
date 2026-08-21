@@ -10,22 +10,27 @@
       <h1>위시리스트</h1>
       <p>관심 상품을 구매하거나 선택한 상품을 삭제할 수 있어요.</p>
     </div>
-    <c:if test="${not empty list}">
-      <label class="select-all">
-        <input type="checkbox" id="wishAll" /> 전체 선택
-      </label>
-    </c:if>
+    
+    <!-- JS 에러 방지: c:if를 제거하여 wishAll 아이디를 가진 요소를 항상 노출 (데이터 없으면 disabled) -->
+    <label class="select-all">
+      <input type="checkbox" id="wishAll" ${empty list ? 'disabled' : ''} /> 전체 선택
+    </label>
   </div>
 
-  <!-- 위시리스트에 담긴 상품이 없을 때 -->
+  <!-- 1. 위시리스트에 담긴 상품이 없을 때 -->
   <c:if test="${empty list}">
     <div style="text-align: center; padding: 80px 0; color: #888;">
       <p style="font-size: 16px; margin-bottom: 16px;">위시리스트에 담긴 관심 상품이 없습니다.</p>
       <a href="${ctx}/" class="outline-button" style="display: inline-block; padding: 10px 20px; text-decoration: none;">쇼핑하러 가기</a>
     </div>
+    
+    <!-- JS 에러 방지: 데이터가 없을 때도 deleteSelectedWish 버튼을 숨김 처리 상태로 배치 -->
+    <div style="display: none;">
+      <button type="button" id="deleteSelectedWish"></button>
+    </div>
   </c:if>
 
-  <!-- 위시리스트 목록이 존재할 때 -->
+  <!-- 2. 위시리스트 목록이 존재할 때 -->
   <c:if test="${not empty list}">
     <form id="wishlistDeleteListForm" action="${ctx}/mypage/wishlist/deleteList" method="post">
       <div class="wish-grid" id="wishGrid">
