@@ -121,7 +121,7 @@
 									</div>
 								</li>
 								<li class="d-none d-xl-block header-mypage-item"><a
-									href="${ctx}/mypage" class="header-auth-link" data-mypage-link>MYPAGE</a>
+									href="${ctx}/mypage/main" class="header-auth-link" data-mypage-link>MYPAGE</a>
 								</li>
 								<li class="d-none d-lg-block ${isMember ? 'is-hidden' : ''}"
 									data-desktop-login-item><a href="${ctx}/member/login"

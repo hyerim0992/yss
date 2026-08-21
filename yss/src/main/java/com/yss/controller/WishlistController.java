@@ -27,9 +27,16 @@ public class WishlistController {
     private WishlistService service = new WishlistServiceImpl();
 
     // 위시리스트 목록 화면 요청
-    @GetMapping("wishlist")
-    public ModelAndView wishlistList(HttpServletRequest req, HttpServletResponse resp) throws Exception {
+    @GetMapping("main")
+    public ModelAndView main(HttpServletRequest req, HttpServletResponse resp) throws Exception {
         ModelAndView mav = new ModelAndView("mypage/mypage");
+        
+        return mav;
+    }
+
+    @GetMapping("wishlist")
+    public ModelAndView wishlist(HttpServletRequest req, HttpServletResponse resp) throws Exception {
+        ModelAndView mav = new ModelAndView("mypage/wishlist");
         
         HttpSession session = req.getSession();
         SessionInfo info = (SessionInfo) session.getAttribute("member");
@@ -52,7 +59,14 @@ public class WishlistController {
         
         return mav;
     }
-
+    
+    @GetMapping("cart")
+    public ModelAndView cart(HttpServletRequest req, HttpServletResponse resp) throws Exception {
+        ModelAndView mav = new ModelAndView("mypage/cart");
+        
+        return mav;
+    }
+    
     // 단일 항목 삭제
     @PostMapping("wishlist/delete")
     public ModelAndView deleteWishlist(HttpServletRequest req, HttpServletResponse resp) throws Exception {

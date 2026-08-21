@@ -103,7 +103,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  function activateView(name, updateHash = true) {
+  function activateView(name, updateHash = false) {
     const next = views.find((view) => view.dataset.page === name) || views[0];
     const nextName = next.dataset.page;
     if (protectedViews.has(nextName) && !unlocked) {
@@ -137,22 +137,23 @@ document.addEventListener("DOMContentLoaded", () => {
 
   window.YSMypage = {
     activateView(name) {
-      activateView(name, true);
+      activateView(name, false);
     },
   };
 
-  window.addEventListener("hashchange", activateHashView);
+  // 🔴 해시 이동 이벤트 제거 (URL 기반 이동 전용)
+  // window.addEventListener("hashchange", activateHashView);
 
   document.addEventListener("yongsinsa:mypage-view", (event) => {
     const viewName = event.detail && event.detail.view;
-    if (viewName) activateView(viewName, true);
+    if (viewName) activateView(viewName, false);
   });
 
   document.addEventListener("click", (event) => {
     const viewButton = event.target.closest("[data-view]");
     if (viewButton) {
-      event.preventDefault();
-      activateView(viewButton.dataset.view);
+      // 🔴 event.preventDefault() 제거! 
+      // 실제 a 태그 href 주소(/mypage/wishlist 등)로 Controller를 다녀오도록 페이지 이동을 허용합니다.
       return;
     }
     const modalButton = event.target.closest("[data-modal]");
@@ -1065,5 +1066,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
+  // 🔴 페이지 접속 시 현재 URL(location.pathname)을 확인해서 해당 탭 자동 출력
   activateHashView();
 });
