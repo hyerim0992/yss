@@ -2,9 +2,10 @@ package com.yss.dto;
 
 public class wishListDTO {
 	private Long wishListId;
-	private String cratedAt;
+	private String createdAt;
 	private Long productId;
 	private Long memberId;
+	
 	
 	private ProductDTO product;
 	
@@ -21,10 +22,10 @@ public class wishListDTO {
 		this.wishListId = wishListId;
 	}
 	public String getCratedAt() {
-		return cratedAt;
+		return createdAt;
 	}
 	public void setCratedAt(String cratedAt) {
-		this.cratedAt = cratedAt;
+		this.createdAt = cratedAt;
 	}
 	public Long getProductId() {
 		return productId;

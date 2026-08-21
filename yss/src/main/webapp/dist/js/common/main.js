@@ -20,12 +20,14 @@
         var $animatingElements = $('.single-slider[data-slick-index="' + nextSlide + '"]').find('[data-animation]');
         doAnimations($animatingElements);
       });
-      BasicSlider.slick({
-        autoplay: false,
-        autoplaySpeed: 10000,
-        dots: false,
-        fade: true,
-        arrows: false,
+	  BasicSlider.slick({
+	      autoplay:true,
+	      autoplaySpeed:4000,
+	      speed:800,
+	      dots:false,
+	      arrows:false,
+	      fade:false,
+	      adaptiveHeight:false,
         responsive: [{
             breakpoint: 1024,
             settings: {
@@ -470,7 +472,29 @@
 
       $('.controls').on('click', function(){
         $(this).addClass('active').siblings().removeClass('active');
-      }); 
+      });	  
+	  
+	  $(window).on('load', function() {
+	      setTimeout(function() {
+	          window.scrollTo(0, 0);
+	      }, 0);
+	  });
+	  
+	  $('.best-slider').slick({
+	      autoplay:true,
+	      autoplaySpeed:3000,
+	      arrows:false,
+	      dots:false,
+	      fade:true
+	  });
+
+	  $('.best-text-slider').slick({
+	      autoplay:true,
+	      autoplaySpeed:3000,
+	      arrows:false,
+	      dots:false,
+	      fade:true
+	  });
 
 
 /* 기능 설명 */

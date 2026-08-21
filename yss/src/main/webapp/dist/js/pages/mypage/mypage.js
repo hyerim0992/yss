@@ -27,7 +27,6 @@ document.addEventListener("DOMContentLoaded", () => {
     modal.setAttribute("aria-hidden", "false");
     document.body.style.overflow = "hidden";
 
-    // 비밀번호 확인창을 열면 바로 입력할 수 있도록 포커스를 이동한다.
     if (id === "passwordGate") {
       const input = $("#gatePassword");
       const help = $("#gateHelp");
@@ -104,7 +103,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  function activateView(name, updateHash = true) {
+  function activateView(name, updateHash = false) {
     const next = views.find((view) => view.dataset.page === name) || views[0];
     const nextName = next.dataset.page;
     if (protectedViews.has(nextName) && !unlocked) {
@@ -117,34 +116,44 @@ document.addEventListener("DOMContentLoaded", () => {
     $$(".my-sidebar [data-view]").forEach((link) => {
       link.classList.toggle("is-active", link.dataset.view === nextName);
     });
-    sidebar.classList.remove("is-open");
+    if (sidebar) {
+      sidebar.classList.remove("is-open");
+    }
     if (updateHash) history.replaceState(null, "", `#${nextName}`);
     window.scrollTo({ top: 0, behavior: "smooth" });
     finishSamePageLoading();
   }
 
   function activateHashView() {
-    activateView(location.hash.replace("#", "") || "home", false);
+    const path = location.pathname;
+    let defaultView = "home";
+
+    if (path.indexOf("/wishlist") !== -1) {
+      defaultView = "wishlist";
+    }
+
+    activateView(location.hash.replace("#", "") || defaultView, false);
   }
 
   window.YSMypage = {
     activateView(name) {
-      activateView(name, true);
+      activateView(name, false);
     },
   };
 
-  window.addEventListener("hashchange", activateHashView);
+  // 🔴 해시 이동 이벤트 제거 (URL 기반 이동 전용)
+  // window.addEventListener("hashchange", activateHashView);
 
   document.addEventListener("yongsinsa:mypage-view", (event) => {
     const viewName = event.detail && event.detail.view;
-    if (viewName) activateView(viewName, true);
+    if (viewName) activateView(viewName, false);
   });
 
   document.addEventListener("click", (event) => {
     const viewButton = event.target.closest("[data-view]");
     if (viewButton) {
-      event.preventDefault();
-      activateView(viewButton.dataset.view);
+      // 🔴 event.preventDefault() 제거! 
+      // 실제 a 태그 href 주소(/mypage/wishlist 등)로 Controller를 다녀오도록 페이지 이동을 허용합니다.
       return;
     }
     const modalButton = event.target.closest("[data-modal]");
@@ -153,9 +162,6 @@ document.addEventListener("DOMContentLoaded", () => {
       openModal(modalButton.dataset.modal);
       return;
     }
-    // 닫기 버튼을 눌렀거나 실제 배경 자체를 눌렀을 때만 닫는다.
-    // closest("[data-close-modal]")만 사용하면 잘못된 DOM 겹침이나
-    // 이벤트 버블링 때문에 대화상자 안의 클릭까지 닫힘으로 처리될 수 있다.
     const modalCloseButton = event.target.closest(".modal-close[data-close-modal]");
     if (modalCloseButton) {
       event.preventDefault();
@@ -164,9 +170,6 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-    // 배경 닫기는 아래에서 각 backdrop에 직접 연결한다.
-    // document 위임으로 처리하면 레이어가 겹친 경우 모달 내부 클릭도
-    // 배경 클릭으로 잘못 판정될 수 있다.
     const actionButton = event.target.closest("[data-action]");
     if (!actionButton) return;
     handleAction(actionButton);
@@ -189,8 +192,8 @@ document.addEventListener("DOMContentLoaded", () => {
       exchange: "교환 신청 화면을 열었어요.",
       return: "반품 신청 화면을 열었어요.",
       refund: "환불 신청 화면을 열었어요.",
-       edit: "수정 입력 화면을 열었어요.",
-        "coupon-register": "쿠폰 등록창을 열었어요.",
+      edit: "수정 입력 화면을 열었어요.",
+      "coupon-register": "쿠폰 등록창을 열었어요.",
       photo: "프로필 이미지 업로드 연결 위치입니다.",
       "faq-search": "관련 질문을 검색했어요.",
       copy: "운송장 번호를 복사했어요.",
@@ -227,13 +230,13 @@ document.addEventListener("DOMContentLoaded", () => {
     } else if (messages[action]) toast(messages[action]);
   }
 
-  $("#sidebarToggle").addEventListener("click", () =>
-    sidebar.classList.toggle("is-open")
-  );
+  const sidebarToggle = $("#sidebarToggle");
+  if (sidebarToggle) {
+    sidebarToggle.addEventListener("click", () =>
+      sidebar.classList.toggle("is-open")
+    );
+  }
 
-  // 모달 내부의 pointer 이벤트만 차단한다.
-  // click 이벤트는 document까지 전달되어야 nice-select 드롭다운이 정상 작동한다.
-  // 배경 닫기는 backdrop 자체에 직접 연결되어 있으므로 click 전파를 막을 필요가 없다.
   $$(".modal-dialog").forEach(function (dialog) {
     ["pointerdown", "mousedown", "touchstart"].forEach(function (eventName) {
       dialog.addEventListener(eventName, function (event) {
@@ -242,7 +245,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  // 실제 어두운 배경 자체를 클릭했을 때만 모달을 닫는다.
   $$(".modal-backdrop[data-close-modal]").forEach(function (backdrop) {
     backdrop.addEventListener("click", function (event) {
       if (event.target !== backdrop) return;
@@ -270,9 +272,6 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
       }
 
-      // 현재는 Controller가 없는 UI 단계이므로 1234로 본인 확인을 테스트한다.
-      // 실제 구현 단계에서는 비밀번호를 JSP나 JavaScript에서 비교하지 말고
-      // 로그인 세션을 확인한 뒤 Controller에서 암호화 비밀번호를 검증해야 한다.
       if (password !== UI_TEST_PASSWORD) {
         gateHelp.textContent =
           "비밀번호가 일치하지 않습니다. UI 확인용 비밀번호는 1234입니다.";
@@ -284,8 +283,6 @@ document.addEventListener("DOMContentLoaded", () => {
       const nextView = pendingView || "profile";
       unlocked = true;
 
-      // 먼저 대상 화면을 확정한 뒤 모달을 닫는다.
-      // pendingView를 너무 일찍 비우거나 닫기 클릭과 충돌하지 않게 한다.
       closeModal($("#passwordGate"));
       activateView(nextView);
       pendingView = null;
@@ -357,8 +354,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-
-  // 자주하는 질문 카테고리와 검색어를 함께 적용한다.
   const faqCategoryButtons = $$("[data-faq-category]");
   const faqItems = $$("[data-faq-item]");
   const faqSearchInput = $("#mypageFaqSearchInput");
@@ -424,18 +419,25 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  $("#wishAll").addEventListener("change", (event) => {
-    $$(".wish-check").forEach((check) => {
-      check.checked = event.target.checked;
+  const wishAll = $("#wishAll");
+  if (wishAll) {
+    wishAll.addEventListener("change", (event) => {
+      $$(".wish-check").forEach((check) => {
+        check.checked = event.target.checked;
+      });
     });
-  });
-  $("#deleteSelectedWish").addEventListener("click", () => {
-    const selected = $$(".wish-check:checked");
-    if (!selected.length) return toast("삭제할 상품을 선택해 주세요.");
-    if (!confirm(`${selected.length}개 상품을 삭제하시겠어요?`)) return;
-    selected.forEach((check) => check.closest("article").remove());
-    toast("선택 상품을 삭제했어요.");
-  });
+  }
+
+  const deleteSelectedWish = $("#deleteSelectedWish");
+  if (deleteSelectedWish) {
+    deleteSelectedWish.addEventListener("click", () => {
+      const selected = $$(".wish-check:checked");
+      if (!selected.length) return toast("삭제할 상품을 선택해 주세요.");
+      if (!confirm(`${selected.length}개 상품을 삭제하시겠어요?`)) return;
+      selected.forEach((check) => check.closest("article").remove());
+      toast("선택 상품을 삭제했어요.");
+    });
+  }
 
   function formatWon(value) {
     return Number(value || 0).toLocaleString("ko-KR") + "원";
@@ -599,16 +601,35 @@ document.addEventListener("DOMContentLoaded", () => {
     const grandTotal = Math.max(0, data.productTotal - discountTotal);
     const expectedPoint = Math.floor(grandTotal * 0.01);
 
-    $("#cartSelectedSummary").textContent =
-      "선택 상품 " + data.itemCount + "개 · 총 수량 " + data.quantityCount + "개";
-    $("#cartProductTotal").textContent = formatWon(data.productTotal);
-    $("#cartDetailProduct").textContent = formatWon(data.productTotal);
-    $("#cartDiscountTotal").textContent = formatWon(discountTotal);
-    $("#cartCouponDiscount").textContent = "-" + formatWon(cartCouponDiscountValue);
-    $("#cartPointDiscount").textContent = "-" + formatPoint(cartPointUseValue);
-    $("#cartShippingFee").textContent = data.productTotal > 0 ? "무료" : "0원";
-    $("#cartExpectedPoint").textContent = formatPoint(expectedPoint);
-    $("#cartGrandTotal").textContent = formatWon(grandTotal);
+    const summary = $("#cartSelectedSummary");
+    if (summary) {
+      summary.textContent =
+        "선택 상품 " + data.itemCount + "개 · 총 수량 " + data.quantityCount + "개";
+    }
+
+    const cartProdTotal = $("#cartProductTotal");
+    if (cartProdTotal) cartProdTotal.textContent = formatWon(data.productTotal);
+
+    const cartDetailProd = $("#cartDetailProduct");
+    if (cartDetailProd) cartDetailProd.textContent = formatWon(data.productTotal);
+
+    const cartDiscTotal = $("#cartDiscountTotal");
+    if (cartDiscTotal) cartDiscTotal.textContent = formatWon(discountTotal);
+
+    const cartCpnDisc = $("#cartCouponDiscount");
+    if (cartCpnDisc) cartCpnDisc.textContent = "-" + formatWon(cartCouponDiscountValue);
+
+    const cartPntDisc = $("#cartPointDiscount");
+    if (cartPntDisc) cartPntDisc.textContent = "-" + formatPoint(cartPointUseValue);
+
+    const cartShipFee = $("#cartShippingFee");
+    if (cartShipFee) cartShipFee.textContent = data.productTotal > 0 ? "무료" : "0원";
+
+    const cartExpPnt = $("#cartExpectedPoint");
+    if (cartExpPnt) cartExpPnt.textContent = formatPoint(expectedPoint);
+
+    const cartGrndTotal = $("#cartGrandTotal");
+    if (cartGrndTotal) cartGrndTotal.textContent = formatWon(grandTotal);
 
     const cartAll = $("#cartAll");
     const checks = $$(".cart-check");
@@ -1032,7 +1053,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }
       }
 
-      // 실제 구현 단계에서는 Controller로 전송해서 DB에 저장
       closeModal(form.closest(".modal"));
       toast("입력한 내용이 저장되었습니다.");
     });
@@ -1046,5 +1066,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
+  // 🔴 페이지 접속 시 현재 URL(location.pathname)을 확인해서 해당 탭 자동 출력
   activateHashView();
 });

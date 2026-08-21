@@ -2,6 +2,7 @@ package com.yss.mapper;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Map;
 
 import com.yss.dto.FaqDTO;
 
@@ -21,4 +22,8 @@ public interface FaqMapper {
 	
 	// FAQ 삭제
 	public void deleteFaq(Long faqId) throws SQLException;
+
+	// 관리자 FAQ 검색
+	public List<FaqDTO> listFaqAdmin(Map<String, Object> map);
+	public int dataCountFaqAdmin(Map<String, Object> map);
 }

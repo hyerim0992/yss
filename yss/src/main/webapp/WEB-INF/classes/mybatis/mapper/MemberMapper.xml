@@ -6,7 +6,6 @@
 	<!-- 로그인: 삭제되지 않았고 상태가 일반인 회원만 로그인 가능 -->
 	<select id="loginMember" parameterType="map"
 		resultType="com.yss.dto.MemberDTO">
-
 		SELECT
 		m.MEMBERID,
 		d.USERID,
@@ -21,8 +20,8 @@
 
 		WHERE d.USERID = #{userId}
 		AND d.PASSWORD = #{password}
-		AND m.DELETEDAT IS NULL
-
+		AND m.DELETEDAT
+		IS NULL
 	</select>
 
 	<select id="memberSeq" resultType="Long">
@@ -291,5 +290,441 @@
 		WHERE MEMBERID = #{memberId} AND DELETEDAT IS
 		NOT NULL
 	</update>
+
+	<!-- 회원의 현재 상태 확인 -->
+	<select id="findMemberStatus" parameterType="Long"
+		resultType="String">
+		SELECT STATUS
+		FROM MEMBER
+		WHERE MEMBERID = #{memberId}
+	</select>
+
+	<!-- 접속불가 변경 시 제재 이력 등록 -->
+	<insert id="insertSanction"
+		parameterType="com.yss.dto.MemberDTO">
+		INSERT INTO MEMBER_SANCTION (
+		SANCTIONID,
+		MEMBERID,
+		REASON,
+		STARTDATE,
+		ENDDATE,
+		STATUS
+		)
+		VALUES (
+		MEMBER_SANCTION_SEQ.NEXTVAL,
+		#{memberId},
+		#{sanctionReason},
+		SYSDATE,
+		NULL,
+		'진행중'
+		)
+
+	</insert>
+
+	<!-- 접속불가 -> 일반 변경 시 진행중 제재 해제 -->
+	<update id="releaseSanction" parameterType="Long">
+		UPDATE
+		MEMBER_SANCTION
+		SET STATUS = '해제',
+		ENDDATE = SYSDATE
+		WHERE MEMBERID =
+		#{memberId}
+		AND STATUS = '진행중'
+	</update>
+	<!-- 다시 제재 시 회원 접속 제한 -->
+	<update id="updateMemberStatusBlocked" parameterType="Long">
+		UPDATE
+		MEMBER
+		SET STATUS = '접속불가'
+		WHERE MEMBERID = #{memberId}
+		AND DELETEDAT IS
+		NULL
+	</update>
+	<!-- 제재 해제 시 회원 로그인 상태 복구 -->
+	<update id="updateMemberStatusNormal" parameterType="Long">
+		UPDATE
+		MEMBER
+		SET STATUS = '일반'
+		WHERE MEMBERID = #{memberId}
+		AND DELETEDAT IS
+		NULL
+	</update>
+
+	<!-- 회원 제재 목록 + 상태 검색 -->
+	<select id="listSanction" parameterType="map"
+		resultType="com.yss.dto.MemberDTO">
+
+		SELECT
+		s.SANCTIONID AS sanctionId,
+		s.MEMBERID AS memberId,
+		d.USERID AS
+		userId,
+		d.NAME AS name,
+		s.REASON AS sanctionReason,
+		TO_CHAR(s.STARTDATE,
+		'YYYY-MM-DD') AS sanctionStartDate,
+		TO_CHAR(s.ENDDATE, 'YYYY-MM-DD') AS
+		sanctionEndDate,
+		s.STATUS AS sanctionStatus
+		FROM MEMBER_SANCTION s
+		JOIN
+		MEMBERDETAIL d
+		ON s.MEMBERID = d.MEMBERID
+		WHERE 1 = 1
+
+		<if test="sanctionStatus != null and sanctionStatus != ''">
+			AND s.STATUS = #{sanctionStatus}
+		</if>
+
+		ORDER BY s.SANCTIONID DESC
+
+	</select>
+
+	<select id="dataCountSanction" parameterType="map"
+		resultType="Integer">
+
+		SELECT COUNT(*)
+		FROM MEMBER_SANCTION s
+
+		WHERE 1 = 1
+
+		<if test="sanctionStatus != null and sanctionStatus != ''">
+			AND s.STATUS = #{sanctionStatus}
+		</if>
+
+	</select>
+
+	<select id="findMemberForSanction" parameterType="Long"
+		resultType="com.yss.dto.MemberDTO">
+
+		SELECT
+		m.MEMBERID AS memberId,
+		d.USERID AS userId,
+		d.NAME AS
+		name,
+		m.STATUS AS
+		status
+		FROM MEMBER m
+		JOIN MEMBERDETAIL d
+		ON m.MEMBERID =
+		d.MEMBERID
+		WHERE m.MEMBERID = #{memberId}
+		AND m.DELETEDAT IS NULL
+	</select>
+
+	<!-- 진행중 제재를 삭제하면 회원 상태 복구 -->
+	<update id="restoreMemberStatusForDeletedSanctions"
+		parameterType="list">
+
+		UPDATE MEMBER m
+		SET STATUS = '일반'
+		WHERE m.DELETEDAT IS NULL
+
+		AND
+		m.MEMBERID IN (
+		SELECT s.MEMBERID
+		FROM MEMBER_SANCTION s
+		WHERE s.STATUS
+		=
+		'진행중'
+		AND s.SANCTIONID IN
+		<foreach collection="list" item="sanctionId" open="("
+			separator="," close=")">
+			#{sanctionId}
+		</foreach>
+		)
+
+		AND NOT EXISTS (
+		SELECT 1
+		FROM MEMBER_SANCTION x
+		WHERE x.MEMBERID =
+		m.MEMBERID
+		AND x.STATUS = '진행중'
+		AND x.SANCTIONID NOT IN
+		<foreach collection="list" item="sanctionId" open="("
+			separator="," close=")">
+			#{sanctionId}
+		</foreach>
+		)
+
+	</update>
+
+	<!-- 선택한 제재 삭제 -->
+	<delete id="deleteSanctions" parameterType="list">
+
+		DELETE FROM MEMBER_SANCTION
+		WHERE SANCTIONID IN
+
+		<foreach collection="list" item="sanctionId" open="("
+			separator="," close=")">
+			#{sanctionId}
+		</foreach>
+
+	</delete>
+
+
+	<!-- ===================== 포인트 관리 ===================== -->
+	<select id="listPointSummary" parameterType="map" resultType="map">
+		SELECT
+			m.MEMBERID AS "memberId",
+			d.NAME AS "name",
+			d.USERID AS "userId",
+			NVL(
+				MAX(p.BALANCE) KEEP (
+					DENSE_RANK LAST ORDER BY p.UPDATEDAT, p.POINTID
+				), 0
+			) AS "balance",
+			NVL(SUM(
+				CASE
+					WHEN p.TYPE IN ('사용', '차감', 'USE', 'DEDUCT', 'MINUS') THEN 0
+					WHEN p.AMOUNT &gt; 0 THEN p.AMOUNT
+					ELSE 0
+				END
+			), 0) AS "totalEarn",
+			NVL(SUM(
+				CASE
+					WHEN p.TYPE IN ('사용', '차감', 'USE', 'DEDUCT', 'MINUS') THEN ABS(p.AMOUNT)
+					WHEN p.AMOUNT &lt; 0 THEN ABS(p.AMOUNT)
+					ELSE 0
+				END
+			), 0) AS "totalUsed",
+			TO_CHAR(MAX(p.UPDATEDAT), 'YYYY-MM-DD HH24:MI') AS "lastUpdatedAt"
+		FROM MEMBER m
+		JOIN MEMBERDETAIL d ON d.MEMBERID = m.MEMBERID
+		LEFT JOIN POINTLOG p ON p.MEMBERID = TO_CHAR(m.MEMBERID)
+		WHERE m.DELETEDAT IS NULL
+		<if test="pointKwd != null and pointKwd != ''">
+			<choose>
+				<when test="pointSchType == 'memberId'">
+					AND TO_CHAR(m.MEMBERID) LIKE '%' || #{pointKwd} || '%'
+				</when>
+				<when test="pointSchType == 'name'">
+					AND INSTR(d.NAME, #{pointKwd}) &gt; 0
+				</when>
+				<when test="pointSchType == 'userId'">
+					AND INSTR(d.USERID, #{pointKwd}) &gt; 0
+				</when>
+				<otherwise>
+					AND (
+						TO_CHAR(m.MEMBERID) LIKE '%' || #{pointKwd} || '%'
+						OR INSTR(d.NAME, #{pointKwd}) &gt; 0
+						OR INSTR(d.USERID, #{pointKwd}) &gt; 0
+					)
+				</otherwise>
+			</choose>
+		</if>
+		GROUP BY m.MEMBERID, d.NAME, d.USERID
+		ORDER BY m.MEMBERID DESC
+	</select>
+
+	<select id="dataCountPointSummary" parameterType="map" resultType="Integer">
+		SELECT COUNT(*)
+		FROM MEMBER m
+		JOIN MEMBERDETAIL d ON d.MEMBERID = m.MEMBERID
+		WHERE m.DELETEDAT IS NULL
+		<if test="pointKwd != null and pointKwd != ''">
+			<choose>
+				<when test="pointSchType == 'memberId'">
+					AND TO_CHAR(m.MEMBERID) LIKE '%' || #{pointKwd} || '%'
+				</when>
+				<when test="pointSchType == 'name'">
+					AND INSTR(d.NAME, #{pointKwd}) &gt; 0
+				</when>
+				<when test="pointSchType == 'userId'">
+					AND INSTR(d.USERID, #{pointKwd}) &gt; 0
+				</when>
+				<otherwise>
+					AND (
+						TO_CHAR(m.MEMBERID) LIKE '%' || #{pointKwd} || '%'
+						OR INSTR(d.NAME, #{pointKwd}) &gt; 0
+						OR INSTR(d.USERID, #{pointKwd}) &gt; 0
+					)
+				</otherwise>
+			</choose>
+		</if>
+	</select>
+
+	<!-- 회원별 포인트 적립/차감 전체 히스토리 -->
+	<select id="listPointHistory" parameterType="Long" resultType="map">
+		SELECT
+			p.POINTID AS "pointId",
+			p.ORDERID AS "orderId",
+			p.MEMBERID AS "memberId",
+			d.NAME AS "name",
+			d.USERID AS "userId",
+			p.AMOUNT AS "amount",
+			p.TYPE AS "type",
+			p.REASON AS "reason",
+			p.BALANCE AS "balance",
+			TO_CHAR(p.UPDATEDAT, 'YYYY-MM-DD HH24:MI:SS') AS "updatedAt",
+			TO_CHAR(p.EXPIREDAT, 'YYYY-MM-DD') AS "expiredAt"
+		FROM POINTLOG p
+		LEFT JOIN MEMBERDETAIL d
+			ON TO_CHAR(d.MEMBERID) = p.MEMBERID
+		WHERE p.MEMBERID = TO_CHAR(#{memberId})
+		ORDER BY p.UPDATEDAT DESC, p.POINTID DESC
+	</select>
+
+	<select id="currentPointBalance" parameterType="Long" resultType="Integer">
+		SELECT NVL((
+			SELECT BALANCE
+			FROM (
+				SELECT BALANCE
+				FROM POINTLOG
+				WHERE MEMBERID = TO_CHAR(#{memberId})
+				ORDER BY UPDATEDAT DESC, POINTID DESC
+			)
+			WHERE ROWNUM = 1
+		), 0)
+		FROM dual
+	</select>
+
+	<select id="nextPointId" resultType="Long">
+		SELECT NVL(MAX(POINTID), 0) + 1 FROM POINTLOG
+	</select>
+
+	<insert id="insertPointAdjustment" parameterType="map">
+		INSERT INTO POINTLOG (
+			POINTID, ORDERID, MEMBERID, AMOUNT, TYPE,
+			REASON, BALANCE, UPDATEDAT, EXPIREDAT
+		) VALUES (
+			#{pointId}, #{orderId}, TO_CHAR(#{memberId}), #{amount}, #{type},
+			#{reason}, #{balance}, SYSDATE, NULL
+		)
+	</insert>
+
+	<!-- ===================== 쿠폰 관리 ===================== -->
+	<select id="listCoupon" parameterType="map" resultType="map">
+		SELECT
+			c.COUPONID AS "couponId",
+			c.NAME AS "name",
+			TO_CHAR(c.VALIDDAYS, 'YYYY-MM-DD') AS "validDays",
+			c.DISCOUNT AS "discount",
+			c.DISCOUNTTYPE AS "discountType",
+			c.MINORDERAMOUNT AS "minOrderAmount",
+			c.MAXDISCOUNTAMOUNT AS "maxDiscountAmount",
+			c.AVAILABILITY AS "availability",
+			COUNT(uc.MEMBERCOUPONID) AS "issuedCount"
+		FROM COUPON c
+		LEFT JOIN USERCOUPONS uc ON uc.COUPONID = c.COUPONID
+		WHERE 1 = 1
+		<if test="couponStatus != null and couponStatus != ''">
+			AND c.AVAILABILITY = #{couponStatus}
+		</if>
+		<if test="couponKwd != null and couponKwd != ''">
+			<choose>
+				<when test="couponSchType == 'couponId'">
+					AND TO_CHAR(c.COUPONID) LIKE '%' || #{couponKwd} || '%'
+				</when>
+				<when test="couponSchType == 'name'">
+					AND INSTR(c.NAME, #{couponKwd}) &gt; 0
+				</when>
+				<otherwise>
+					AND (
+						TO_CHAR(c.COUPONID) LIKE '%' || #{couponKwd} || '%'
+						OR INSTR(c.NAME, #{couponKwd}) &gt; 0
+						OR INSTR(c.DISCOUNTTYPE, #{couponKwd}) &gt; 0
+						OR INSTR(c.AVAILABILITY, #{couponKwd}) &gt; 0
+					)
+				</otherwise>
+			</choose>
+		</if>
+		GROUP BY
+			c.COUPONID, c.NAME, c.VALIDDAYS, c.DISCOUNT,
+			c.DISCOUNTTYPE, c.MINORDERAMOUNT, c.MAXDISCOUNTAMOUNT,
+			c.AVAILABILITY
+		ORDER BY c.COUPONID DESC
+	</select>
+
+	<select id="dataCountCoupon" parameterType="map" resultType="Integer">
+		SELECT COUNT(*)
+		FROM COUPON c
+		WHERE 1 = 1
+		<if test="couponStatus != null and couponStatus != ''">
+			AND c.AVAILABILITY = #{couponStatus}
+		</if>
+		<if test="couponKwd != null and couponKwd != ''">
+			<choose>
+				<when test="couponSchType == 'couponId'">
+					AND TO_CHAR(c.COUPONID) LIKE '%' || #{couponKwd} || '%'
+				</when>
+				<when test="couponSchType == 'name'">
+					AND INSTR(c.NAME, #{couponKwd}) &gt; 0
+				</when>
+				<otherwise>
+					AND (
+						TO_CHAR(c.COUPONID) LIKE '%' || #{couponKwd} || '%'
+						OR INSTR(c.NAME, #{couponKwd}) &gt; 0
+						OR INSTR(c.DISCOUNTTYPE, #{couponKwd}) &gt; 0
+						OR INSTR(c.AVAILABILITY, #{couponKwd}) &gt; 0
+					)
+				</otherwise>
+			</choose>
+		</if>
+	</select>
+
+	<select id="nextCouponId" resultType="Long">
+		SELECT NVL(MAX(COUPONID), 0) + 1 FROM COUPON
+	</select>
+
+	<insert id="insertCoupon" parameterType="map">
+		INSERT INTO COUPON (
+			COUPONID, NAME, VALIDDAYS, DISCOUNT, DISCOUNTTYPE,
+			MINORDERAMOUNT, MAXDISCOUNTAMOUNT, AVAILABILITY
+		) VALUES (
+			#{couponId}, #{name}, TO_DATE(#{validDays}, 'YYYY-MM-DD'),
+			#{discount}, #{discountType},
+			#{minOrderAmount,jdbcType=NUMERIC},
+			#{maxDiscountAmount,jdbcType=NUMERIC},
+			#{availability}
+		)
+	</insert>
+
+	<update id="updateCoupon" parameterType="map">
+		UPDATE COUPON
+		SET NAME = #{name},
+			VALIDDAYS = TO_DATE(#{validDays}, 'YYYY-MM-DD'),
+			DISCOUNT = #{discount},
+			DISCOUNTTYPE = #{discountType},
+			MINORDERAMOUNT = #{minOrderAmount,jdbcType=NUMERIC},
+			MAXDISCOUNTAMOUNT = #{maxDiscountAmount,jdbcType=NUMERIC},
+			AVAILABILITY = #{availability}
+		WHERE COUPONID = #{couponId}
+	</update>
+
+	<delete id="deleteCoupon" parameterType="Long">
+		DELETE FROM COUPON c
+		WHERE c.COUPONID = #{couponId}
+		AND NOT EXISTS (
+			SELECT 1
+			FROM USERCOUPONS uc
+			WHERE uc.COUPONID = c.COUPONID
+		)
+	</delete>
+
+	<select id="nextMemberCouponId" resultType="Long">
+		SELECT NVL(MAX(MEMBERCOUPONID), 0) + 1 FROM USERCOUPONS
+	</select>
+
+	<insert id="issueCoupon" parameterType="map">
+		INSERT INTO USERCOUPONS (
+			MEMBERCOUPONID, COUPONID, MEMBERID, ORDERID,
+			ISSUED, ISSUEDAT, USEDAT, EXPIREDAT
+		)
+		SELECT
+			#{memberCouponId}, c.COUPONID, #{memberId}, NULL,
+			'Y', SYSDATE, NULL, c.VALIDDAYS
+		FROM COUPON c
+		WHERE c.COUPONID = #{couponId}
+		AND NOT EXISTS (
+			SELECT 1
+			FROM USERCOUPONS uc
+			WHERE uc.COUPONID = c.COUPONID
+			AND uc.MEMBERID = #{memberId}
+			AND uc.ISSUED = 'Y'
+			AND uc.USEDAT IS NULL
+			AND (uc.EXPIREDAT IS NULL OR uc.EXPIREDAT &gt;= TRUNC(SYSDATE))
+		)
+	</insert>
 
 </mapper>

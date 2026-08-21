@@ -19,6 +19,11 @@ public class MemberDTO {
 	private String refundAccount;
 	private String bankName;
 	private String accountHolder;
+	private Long sanctionId;
+	private String sanctionReason;
+	private String sanctionStartDate;
+	private String sanctionEndDate;
+	private String sanctionStatus;
 
 	public Long getMemberId() {
 		return memberId;
@@ -127,5 +132,44 @@ public class MemberDTO {
 	}
 	public void setAccountHolder(String accountHolder) {
 		this.accountHolder = accountHolder;
+	}
+	public Long getSanctionId() {
+	    return sanctionId;
+	}
+
+	public void setSanctionId(Long sanctionId) {
+	    this.sanctionId = sanctionId;
+	}
+
+	public String getSanctionReason() {
+	    return sanctionReason;
+	}
+
+	public void setSanctionReason(String sanctionReason) {
+	    this.sanctionReason = sanctionReason;
+	}
+
+	public String getSanctionStartDate() {
+	    return sanctionStartDate;
+	}
+
+	public void setSanctionStartDate(String sanctionStartDate) {
+	    this.sanctionStartDate = sanctionStartDate;
+	}
+
+	public String getSanctionEndDate() {
+	    return sanctionEndDate;
+	}
+
+	public void setSanctionEndDate(String sanctionEndDate) {
+	    this.sanctionEndDate = sanctionEndDate;
+	}
+
+	public String getSanctionStatus() {
+	    return sanctionStatus;
+	}
+
+	public void setSanctionStatus(String sanctionStatus) {
+	    this.sanctionStatus = sanctionStatus;
 	}
 }

@@ -26,7 +26,7 @@ public class HomeController {
     	
     	try {
 			List<HomeDTO> bestList = service.homeBestList();
-			
+					
 			mav.addObject("bestList", bestList);
 			
 		} catch (Exception e) {

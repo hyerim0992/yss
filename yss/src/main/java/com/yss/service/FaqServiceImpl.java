@@ -1,6 +1,7 @@
 package com.yss.service;
 
 import java.util.List;
+import java.util.Map;
 
 import com.yss.dto.FaqDTO;
 import com.yss.mapper.FaqMapper;
@@ -15,7 +16,7 @@ public class FaqServiceImpl implements FaqService {
 		try {
 			mapper.insertFaq(dto);
 		} catch (Exception e) {
-			e.printStackTrace();
+			throw new RuntimeException(e);
 		}
 	}
 
@@ -50,7 +51,7 @@ public class FaqServiceImpl implements FaqService {
 		try {
 			mapper.updateFaq(dto);
 		} catch (Exception e) {
-			e.printStackTrace();
+			throw new RuntimeException(e);
 		}
 	}
 
@@ -59,7 +60,26 @@ public class FaqServiceImpl implements FaqService {
 		try {
 			mapper.deleteFaq(faqId);
 		} catch (Exception e) {
-			e.printStackTrace();
+			throw new RuntimeException(e);
+		}
+	}
+
+
+	@Override
+	public List<FaqDTO> listFaqAdmin(Map<String, Object> map) {
+		try {
+			return mapper.listFaqAdmin(map);
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	@Override
+	public int dataCountFaqAdmin(Map<String, Object> map) {
+		try {
+			return mapper.dataCountFaqAdmin(map);
+		} catch (Exception e) {
+			throw new RuntimeException(e);
 		}
 	}
 }

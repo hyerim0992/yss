@@ -38,7 +38,7 @@
 												<li><a href="${ctx}/product/category?type=sandals&sort=new">샌들</a></li>
 												<li><a href="${ctx}/product/category?type=boots&sort=new">부츠</a></li>
 											</ul></li>
-										<li><a href="${ctx}/product/category?audience=man">MAN</a>
+										<li><a href="${ctx}/product/category?audience=man">MEN</a>
 											<ul class="submenu">
 												<li><a href="${ctx}/product/category?type=sneakers&audience=man">스니커즈</a></li>
 												<li><a href="${ctx}/product/category?type=sports&audience=man">스포츠</a></li>
@@ -47,7 +47,7 @@
 												<li><a href="${ctx}/product/category?type=sandals&audience=man">샌들</a></li>
 												<li><a href="${ctx}/product/category?type=boots&audience=man">부츠</a></li>
 											</ul></li>
-										<li><a href="${ctx}/product/category?audience=woman">WOMAN</a>
+										<li><a href="${ctx}/product/category?audience=woman">WOMEN</a>
 											<ul class="submenu">
 												<li><a href="${ctx}/product/category?type=sneakers&audience=woman">스니커즈</a></li>
 												<li><a href="${ctx}/product/category?type=sports&audience=woman">스포츠</a></li>
@@ -121,7 +121,7 @@
 									</div>
 								</li>
 								<li class="d-none d-xl-block header-mypage-item"><a
-									href="${ctx}/mypage" class="header-auth-link" data-mypage-link>MYPAGE</a>
+									href="${ctx}/mypage/main" class="header-auth-link" data-mypage-link>MYPAGE</a>
 								</li>
 								<li class="d-none d-lg-block ${isMember ? 'is-hidden' : ''}"
 									data-desktop-login-item><a href="${ctx}/member/login"
