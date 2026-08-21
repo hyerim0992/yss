@@ -44,18 +44,18 @@ public class ProductDetailController {
     	String query = "page=" + page;
     	
     	try {
-    		//long num = Long.parseLong(req.getParameter("num"));
     		
-    		//쿼리 어떻게 넘어올지 모르겠어서 일단 생략... 상품넘버는 보내주겠지
+    		long prodId = Long.parseLong(req.getParameter("productId"));
     		
-    		ProductDTO dto = service.productDetails(1L); // 나중에 쿼리로 들어오는 num 넣기
-    		List<ProductDTO> imgList = service.productImages(1L);
-    		List<ProductDTO> optionList = service.productOptions(1L);
-    		int wishlistCount = service.selectWishlist(1L);
+    		ProductDTO dto = service.productDetails(prodId); // 나중에 쿼리로 들어오는 num 넣기
+    		List<ProductDTO> imgList = service.productImages(prodId);
+    		List<ProductDTO> optionList = service.productOptions(prodId);
+    		int wishlistCount = service.selectWishlist(prodId);
     		
-    		if(dto==null||imgList.isEmpty()||optionList.isEmpty()) {
-    			return new ModelAndView("redirect:/product/"); //상품 리스트 페이지로 돌아가기
-    		}
+			/*
+			 * if(dto==null||imgList.isEmpty()||optionList.isEmpty()) { return new
+			 * ModelAndView("redirect:/product/"); //상품 리스트 페이지로 돌아가기 }
+			 */
     		
     		List<String> uniqueColors = optionList.stream()
     			    .map(ProductDTO::getColor)
@@ -98,7 +98,7 @@ public class ProductDetailController {
 		long prodId = Long.parseLong(req.getParameter("prodId"));
 		
 		try {
-			List<ReviewDTO> reviewList = service.reviewWithDetailsList(1L); //prodId 넣기
+			List<ReviewDTO> reviewList = service.reviewWithDetailsList(prodId); //prodId 넣기
 			
 			model.put("reviews", reviewList);
 			
