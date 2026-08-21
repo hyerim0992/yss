@@ -23,30 +23,27 @@
 	<jsp:include page="/WEB-INF/views/common/page-loader.jsp" />
 	<jsp:include page="/WEB-INF/views/admin/layout/header.jsp" />
 	<jsp:include page="/WEB-INF/views/admin/layout/left.jsp" />
-
 	<main class="admin-main">
 		<section class="page active admin-static-page" data-page-key="member">
 			<div class="page-heading">
 				<div>
 					<p>관리자 페이지 / 회원관리</p>
 					<h1>회원관리</h1>
-					<span>회원 등록·검색, 레벨, 제재, 포인트와 쿠폰을 관리합니다.</span>
+					<span>회원 등록·검색, 제재, 포인트, 쿠폰과 FAQ를 관리합니다.</span>
 				</div>
 			</div>
-
 			<nav class="sub-tabs" aria-label="회원관리 탭">
 				<button type="button" data-section-target="0" class="active">회원
 					등록 / 검색</button>
-				<button type="button" data-section-target="1" class="">회원
-					레벨 관리</button>
 				<button type="button" data-section-target="2" class="">회원
 					제재 목록</button>
 				<button type="button" data-section-target="3" class="">포인트
 					관리</button>
 				<button type="button" data-section-target="4" class="">쿠폰
 					관리</button>
+				<button type="button" data-section-target="5" class="">FAQ
+					관리</button>
 			</nav>
-
 			<section class="admin-section-panel active" data-admin-section="0"
 				data-section-name="회원 등록 / 검색" data-table-title="회원 검색 리스트"
 				data-add-label="+ 회원 등록" data-can-add="true">
@@ -54,7 +51,6 @@
 					<div id="memberResultMessage"
 						data-message="<c:out value='${message}'/>" hidden></div>
 				</c:if>
-
 				<article class="panel search-panel">
 					<form class="search-row" method="get"
 						action="${pageContext.request.contextPath}/admin/member">
@@ -81,7 +77,6 @@
 							href="${pageContext.request.contextPath}/admin/member">초기화</a>
 					</form>
 				</article>
-
 				<article class="panel">
 					<div class="panel-title">
 						<div>
@@ -95,7 +90,6 @@
 								회원 등록</button>
 						</div>
 					</div>
-
 					<div class="table-wrap">
 						<table>
 							<thead>
@@ -187,11 +181,9 @@
 							</tbody>
 						</table>
 					</div>
-
 					<c:if test="${empty list}">
 						<div class="empty-state show">검색 결과가 없습니다.</div>
 					</c:if>
-
 					<c:url var="prevUrl" value="/admin/member">
 						<c:param name="page" value="${page - 1}" />
 						<c:param name="schType" value="${schType}" />
@@ -204,7 +196,6 @@
 						<c:param name="kwd" value="${kwd}" />
 						<c:param name="memberStatus" value="${memberStatus}" />
 					</c:url>
-
 					<div class="pagination" aria-label="목록 페이지 이동">
 						<c:choose>
 							<c:when test="${page gt 1}">
@@ -225,7 +216,6 @@
 						</c:choose>
 					</div>
 				</article>
-
 				<div class="modal-backdrop" id="memberModal" aria-hidden="true"
 					hidden>
 					<section class="admin-modal" role="dialog" aria-modal="true"
@@ -238,7 +228,6 @@
 							<button type="button" class="modal-close" id="memberModalClose"
 								aria-label="닫기">×</button>
 						</div>
-
 						<form id="memberForm" method="post"
 							action="${pageContext.request.contextPath}/admin/member/write">
 							<input type="hidden" name="memberId" id="memberId">
@@ -288,6 +277,7 @@
 										<option value="접속불가">접속불가</option>
 									</select>
 								</div>
+
 								<div class="form-field">
 									<label for="memberZip">우편번호 *</label>
 									<div style="display: flex; gap: 8px;">
@@ -322,7 +312,6 @@
 										name="accountHolder" id="memberAccountHolder" maxlength="100">
 								</div>
 							</div>
-
 							<div class="modal-actions">
 								<button type="button" class="light-btn" id="memberModalCancel">취소</button>
 								<button type="submit" class="primary-btn">저장</button>
@@ -330,7 +319,6 @@
 						</form>
 					</section>
 				</div>
-
 				<form id="memberDeleteForm" method="post"
 					action="${pageContext.request.contextPath}/admin/member/delete"
 					hidden>
@@ -342,238 +330,61 @@
 					<input type="hidden" name="memberId" id="restoreMemberId">
 				</form>
 			</section>
-
-			<section class="admin-section-panel" data-admin-section="1"
-				data-section-name="회원 레벨 관리" data-table-title="회원 레벨 목록"
-				data-add-label="+ 레벨 등록" data-can-add="true" hidden>
-				<article class="panel search-panel">
-					<div class="search-row">
-						<select class="js-search-type" aria-label="검색 항목" disabled>
-							<option value="all">전체</option>
-							<option value="0">레벨코드</option>
-							<option value="1">레벨명</option>
-							<option value="2">적용대상</option>
-							<option value="3">포인트적립률</option>
-							<option value="4">주요혜택</option>
-							<option value="5">회원수</option>
-							<option value="6">수정일</option>
-						</select> <input type="search" class="js-search-keyword"
-							placeholder="검색어를 입력하세요" disabled>
-						<button type="button" class="dark-btn js-search-button" disabled
-							title="백엔드 기능 구현 전">검색</button>
-						<button type="button" class="light-btn js-reset-button" disabled
-							title="백엔드 기능 구현 전">초기화</button>
-					</div>
-					<div class="filter-row is-hidden" aria-label="추가 검색 조건">
-						<!-- 이 탭은 추가 검색 조건이 없습니다. -->
-					</div>
-				</article>
-
-				<article class="panel">
-					<div class="panel-title">
-						<div>
-							<h2>회원 레벨 목록</h2>
-							<p>
-								검색 결과 <b class="result-count">5</b>건 · 선택 <b
-									class="selected-count">0</b>건
-							</p>
-						</div>
-						<div>
-							<button type="button"
-								class="light-btn danger-btn delete-selected-button" disabled
-								title="백엔드 기능 구현 전">선택 삭제</button>
-							<button type="button" class="light-btn export-button" disabled
-								title="백엔드 기능 구현 전">CSV 저장</button>
-						</div>
-					</div>
-
-					<div class="table-wrap">
-						<table>
-							<thead>
-								<tr>
-									<th><input type="checkbox" class="check-all"
-										aria-label="현재 페이지 전체 선택" disabled></th>
-									<th>레벨코드</th>
-									<th>레벨명</th>
-									<th>적용대상</th>
-									<th>포인트적립률</th>
-									<th>주요혜택</th>
-									<th>회원수</th>
-									<th>수정일</th>
-									<th>관리</th>
-								</tr>
-							</thead>
-							<tbody class="data-body">
-								<!--
-                  ★ 연습 포인트
-                  아래 샘플 행을 보고 나중에 Controller에서 List를 받아
-                  직접 c:forEach / DTO 출력 코드로 바꿔보세요.
-                  현재 관리자용 DB 조회 기능이 아직 없어서 샘플 HTML을 그대로 둔 상태입니다.
-                -->
-								<tr class="data-row">
-									<td><input type="checkbox" class="row-check"
-										aria-label="항목 선택" disabled></td>
-									<td data-field-index="0">LV01</td>
-									<td data-field-index="1">회원</td>
-									<td data-field-index="2"><span class="badge green">일반회원</span></td>
-									<td data-field-index="3">1%</td>
-									<td data-field-index="4">기본 적립</td>
-									<td data-field-index="5">1,824명</td>
-									<td data-field-index="6">2026-08-01</td>
-									<td class="action-cell">
-										<button type="button" class="light-btn edit-row" disabled
-											title="백엔드 기능 구현 전">수정</button>
-										<button type="button" class="light-btn delete-row" disabled
-											title="백엔드 기능 구현 전">삭제</button>
-									</td>
-								</tr>
-
-								<tr class="data-row">
-									<td><input type="checkbox" class="row-check"
-										aria-label="항목 선택" disabled></td>
-									<td data-field-index="0">LV02</td>
-									<td data-field-index="1">우수회원</td>
-									<td data-field-index="2">누적구매 50만원</td>
-									<td data-field-index="3">2%</td>
-									<td data-field-index="4">배송비 쿠폰</td>
-									<td data-field-index="5">482명</td>
-									<td data-field-index="6">2026-08-01</td>
-									<td class="action-cell">
-										<button type="button" class="light-btn edit-row" disabled
-											title="백엔드 기능 구현 전">수정</button>
-										<button type="button" class="light-btn delete-row" disabled
-											title="백엔드 기능 구현 전">삭제</button>
-									</td>
-								</tr>
-
-								<tr class="data-row">
-									<td><input type="checkbox" class="row-check"
-										aria-label="항목 선택" disabled></td>
-									<td data-field-index="0">LV03</td>
-									<td data-field-index="1">VIP</td>
-									<td data-field-index="2">누적구매 200만원</td>
-									<td data-field-index="3">3%</td>
-									<td data-field-index="4">전용 쿠폰</td>
-									<td data-field-index="5">96명</td>
-									<td data-field-index="6">2026-08-02</td>
-									<td class="action-cell">
-										<button type="button" class="light-btn edit-row" disabled
-											title="백엔드 기능 구현 전">수정</button>
-										<button type="button" class="light-btn delete-row" disabled
-											title="백엔드 기능 구현 전">삭제</button>
-									</td>
-								</tr>
-
-								<tr class="data-row">
-									<td><input type="checkbox" class="row-check"
-										aria-label="항목 선택" disabled></td>
-									<td data-field-index="0">LV04</td>
-									<td data-field-index="1">판매자</td>
-									<td data-field-index="2">판매 승인 회원</td>
-									<td data-field-index="3">1%</td>
-									<td data-field-index="4">판매 등록 권한</td>
-									<td data-field-index="5">214명</td>
-									<td data-field-index="6">2026-08-03</td>
-									<td class="action-cell">
-										<button type="button" class="light-btn edit-row" disabled
-											title="백엔드 기능 구현 전">수정</button>
-										<button type="button" class="light-btn delete-row" disabled
-											title="백엔드 기능 구현 전">삭제</button>
-									</td>
-								</tr>
-
-								<tr class="data-row">
-									<td><input type="checkbox" class="row-check"
-										aria-label="항목 선택" disabled></td>
-									<td data-field-index="0">LV05</td>
-									<td data-field-index="1">관리자</td>
-									<td data-field-index="2">운영 담당자</td>
-									<td data-field-index="3">-</td>
-									<td data-field-index="4">관리자 권한</td>
-									<td data-field-index="5">7명</td>
-									<td data-field-index="6">2026-08-03</td>
-									<td class="action-cell">
-										<button type="button" class="light-btn edit-row" disabled
-											title="백엔드 기능 구현 전">수정</button>
-										<button type="button" class="light-btn delete-row" disabled
-											title="백엔드 기능 구현 전">삭제</button>
-									</td>
-								</tr>
-							</tbody>
-						</table>
-					</div>
-
-					<div class="empty-state">검색 결과가 없습니다.</div>
-					<div class="pagination" aria-label="목록 페이지 이동">
-						<button type="button" class="page-prev" aria-label="이전 페이지"
-							disabled title="백엔드 기능 구현 전">‹</button>
-						<span class="page-info">1 / 1</span>
-						<button type="button" class="page-next" aria-label="다음 페이지"
-							disabled title="백엔드 기능 구현 전">›</button>
-					</div>
-				</article>
-
-			</section>
-
 			<section class="admin-section-panel" data-admin-section="2"
 				data-section-name="회원 제재 목록" data-table-title="회원 제재 목록"
 				data-add-label="+ 제재 등록" data-can-add="true" hidden>
 				<article class="panel search-panel">
-					<div class="search-row">
-						<select class="js-search-type" aria-label="검색 항목" disabled>
-							<option value="all">전체</option>
-							<option value="0">제재번호</option>
-							<option value="1">회원아이디</option>
-							<option value="2">회원명</option>
-							<option value="3">제재사유</option>
-							<option value="4">시작일</option>
-							<option value="5">종료일</option>
-							<option value="6">상태</option>
-						</select> <input type="search" class="js-search-keyword"
-							placeholder="검색어를 입력하세요" disabled>
-						<button type="button" class="dark-btn js-search-button" disabled
-							title="백엔드 기능 구현 전">검색</button>
-						<button type="button" class="light-btn js-reset-button" disabled
-							title="백엔드 기능 구현 전">초기화</button>
-					</div>
-					<div class="filter-row" aria-label="추가 검색 조건">
-						<div class="filter-control" data-filter-type="select"
-							data-filter-column="6">
-							<label>제재상태</label> <select class="extra-filter"
-								id="filter-sanctionStatus" disabled>
-								<option value="">전체</option>
-								<option value="진행중">진행중</option>
-								<option value="해제">해제</option>
-								<option value="만료">만료</option>
-							</select>
-						</div>
-					</div>
-				</article>
 
+					<form class="search-row" method="get"
+						action="${pageContext.request.contextPath}/admin/member">
+
+						<!-- 검색 후 회원 제재 탭 다시 열기 -->
+						<input type="hidden" name="tab" value="2"> <label
+							for="sanctionStatus"> 제재상태 </label> <select name="sanctionStatus"
+							id="sanctionStatus" aria-label="제재상태">
+
+							<option value="" ${empty sanctionStatus ? 'selected' : ''}>
+								전체</option>
+
+							<option value="진행중" ${sanctionStatus eq '진행중' ? 'selected' : ''}>
+								진행중</option>
+
+							<option value="해제" ${sanctionStatus eq '해제' ? 'selected' : ''}>
+								해제</option>
+
+						</select>
+
+						<button type="submit" class="dark-btn">검색</button>
+
+						<a class="light-btn"
+							href="${pageContext.request.contextPath}/admin/member?tab=2">
+							초기화 </a>
+
+					</form>
+
+				</article>
 				<article class="panel">
 					<div class="panel-title">
 						<div>
 							<h2>회원 제재 목록</h2>
 							<p>
-								검색 결과 <b class="result-count">3</b>건 · 선택 <b
-									class="selected-count">0</b>건
+								검색 결과 <b class="result-count">${sanctionCount}</b>건 · 선택 <b
+									id="sanctionSelectedCount">0</b>건
 							</p>
 						</div>
 						<div>
-							<button type="button"
-								class="light-btn danger-btn delete-selected-button" disabled
-								title="백엔드 기능 구현 전">선택 삭제</button>
+							<button type="button" class="light-btn danger-btn"
+								id="deleteSelectedSanctions" disabled>선택 삭제</button>
 							<button type="button" class="light-btn export-button" disabled
 								title="백엔드 기능 구현 전">CSV 저장</button>
 						</div>
 					</div>
-
 					<div class="table-wrap">
 						<table>
 							<thead>
 								<tr>
-									<th><input type="checkbox" class="check-all"
-										aria-label="현재 페이지 전체 선택" disabled></th>
+									<th><input type="checkbox" id="sanctionCheckAll"
+										aria-label="현재 페이지 전체 선택"></th>
 									<th>제재번호</th>
 									<th>회원아이디</th>
 									<th>회원명</th>
@@ -585,71 +396,63 @@
 								</tr>
 							</thead>
 							<tbody class="data-body">
-								<!--
-                  ★ 연습 포인트
-                  아래 샘플 행을 보고 나중에 Controller에서 List를 받아
-                  직접 c:forEach / DTO 출력 코드로 바꿔보세요.
-                  현재 관리자용 DB 조회 기능이 아직 없어서 샘플 HTML을 그대로 둔 상태입니다.
-                -->
-								<tr class="data-row">
-									<td><input type="checkbox" class="row-check"
-										aria-label="항목 선택" disabled></td>
-									<td data-field-index="0">BAN-032</td>
-									<td data-field-index="1">doyoon7</td>
-									<td data-field-index="2">이도윤</td>
-									<td data-field-index="3"><span class="badge green">비정상
-											접속 반복</span></td>
-									<td data-field-index="4">2026-08-01</td>
-									<td data-field-index="5">2026-08-08</td>
-									<td data-field-index="6"><span class="badge orange">진행중</span></td>
-									<td class="action-cell">
-										<button type="button" class="light-btn edit-row" disabled
-											title="백엔드 기능 구현 전">수정</button>
-										<button type="button" class="light-btn delete-row" disabled
-											title="백엔드 기능 구현 전">삭제</button>
-									</td>
-								</tr>
-
-								<tr class="data-row">
-									<td><input type="checkbox" class="row-check"
-										aria-label="항목 선택" disabled></td>
-									<td data-field-index="0">BAN-031</td>
-									<td data-field-index="1">shoe_box</td>
-									<td data-field-index="2">정하늘</td>
-									<td data-field-index="3">상품정보 허위 등록</td>
-									<td data-field-index="4">2026-07-25</td>
-									<td data-field-index="5">2026-08-01</td>
-									<td data-field-index="6"><span class="badge green">해제</span></td>
-									<td class="action-cell">
-										<button type="button" class="light-btn edit-row" disabled
-											title="백엔드 기능 구현 전">수정</button>
-										<button type="button" class="light-btn delete-row" disabled
-											title="백엔드 기능 구현 전">삭제</button>
-									</td>
-								</tr>
-
-								<tr class="data-row">
-									<td><input type="checkbox" class="row-check"
-										aria-label="항목 선택" disabled></td>
-									<td data-field-index="0">BAN-030</td>
-									<td data-field-index="1">quickdeal</td>
-									<td data-field-index="2">오현우</td>
-									<td data-field-index="3">반복적인 주문 취소</td>
-									<td data-field-index="4">2026-07-10</td>
-									<td data-field-index="5">2026-07-24</td>
-									<td data-field-index="6"><span class="badge gray">만료</span></td>
-									<td class="action-cell">
-										<button type="button" class="light-btn edit-row" disabled
-											title="백엔드 기능 구현 전">수정</button>
-										<button type="button" class="light-btn delete-row" disabled
-											title="백엔드 기능 구현 전">삭제</button>
-									</td>
-								</tr>
+								<c:forEach var="dto" items="${sanctionList}">
+									<tr class="data-row">
+										<td><input type="checkbox" class="sanction-row-check"
+											data-sanction-id="${dto.sanctionId}" aria-label="제재 선택"></td>
+										<td><c:out value="${dto.sanctionId}" /></td>
+										<td><c:out value="${dto.userId}" /></td>
+										<td><c:out value="${dto.name}" /></td>
+										<td><c:out value="${dto.sanctionReason}" /></td>
+										<td><c:out value="${dto.sanctionStartDate}" /></td>
+										<td><c:choose>
+												<c:when test="${empty dto.sanctionEndDate}">
+													-
+												</c:when>
+												<c:otherwise>
+													<c:out value="${dto.sanctionEndDate}" />
+												</c:otherwise>
+											</c:choose></td>
+										<td><c:choose>
+												<c:when test="${dto.sanctionStatus eq '진행중'}">
+													<span class="badge orange">진행중</span>
+												</c:when>
+												<c:when test="${dto.sanctionStatus eq '해제'}">
+													<span class="badge green">해제</span>
+												</c:when>
+												<c:otherwise>
+													<span class="badge gray"><c:out
+															value="${dto.sanctionStatus}" /></span>
+												</c:otherwise>
+											</c:choose></td>
+										<td class="action-cell"><c:choose>
+												<c:when test="${dto.sanctionStatus eq '진행중'}">
+													<form method="post"
+														action="${pageContext.request.contextPath}/admin/member/releaseSanction"
+														onsubmit="return confirm('이 회원의 제재를 해제하시겠습니까?');">
+														<input type="hidden" name="memberId"
+															value="<c:out value='${dto.memberId}'/>">
+														<button type="submit" class="light-btn">제재 해제</button>
+													</form>
+												</c:when>
+												<c:when test="${dto.sanctionStatus eq '해제'}">
+													<button type="button" class="light-btn"
+														onclick="location.href='${pageContext.request.contextPath}/admin/member/sanction?memberId=${dto.memberId}'">
+														다시 제재</button>
+												</c:when>
+												<c:otherwise>-</c:otherwise>
+											</c:choose></td>
+									</tr>
+								</c:forEach>
 							</tbody>
 						</table>
 					</div>
-
-					<div class="empty-state">검색 결과가 없습니다.</div>
+					<form id="sanctionDeleteForm" method="post"
+						action="${pageContext.request.contextPath}/admin/member/deleteSanctions"
+						hidden></form>
+					<c:if test="${empty sanctionList}">
+						<div class="empty-state show">제재된 회원이 없습니다.</div>
+					</c:if>
 					<div class="pagination" aria-label="목록 페이지 이동">
 						<button type="button" class="page-prev" aria-label="이전 페이지"
 							disabled title="백엔드 기능 구현 전">‹</button>
@@ -658,59 +461,41 @@
 							disabled title="백엔드 기능 구현 전">›</button>
 					</div>
 				</article>
-
 			</section>
-
 			<section class="admin-section-panel" data-admin-section="3"
 				data-section-name="포인트 관리" data-table-title="회원별 포인트 목록"
-				data-add-label="+ 포인트 추가" data-can-add="true" hidden>
+				data-can-add="false" hidden>
 				<article class="panel search-panel">
-					<div class="search-row">
-						<select class="js-search-type" aria-label="검색 항목" disabled>
-							<option value="all">전체</option>
-							<option value="0">회원번호</option>
-							<option value="1">회원명</option>
-							<option value="2">아이디</option>
-							<option value="3">보유포인트</option>
-							<option value="4">누적적립</option>
-							<option value="5">누적사용</option>
-							<option value="6">최종변경일</option>
-						</select> <input type="search" class="js-search-keyword"
-							placeholder="검색어를 입력하세요" disabled>
-						<button type="button" class="dark-btn js-search-button" disabled
-							title="백엔드 기능 구현 전">검색</button>
-						<button type="button" class="light-btn js-reset-button" disabled
-							title="백엔드 기능 구현 전">초기화</button>
-					</div>
-					<div class="filter-row is-hidden" aria-label="추가 검색 조건">
-						<!-- 이 탭은 추가 검색 조건이 없습니다. -->
-					</div>
+					<form class="search-row" method="get"
+						action="${pageContext.request.contextPath}/admin/member">
+						<input type="hidden" name="tab" value="3"> <select
+							name="pointSchType" aria-label="검색 항목">
+							<option value="all" ${pointSchType eq 'all' ? 'selected' : ''}>전체</option>
+							<option value="memberId"
+								${pointSchType eq 'memberId' ? 'selected' : ''}>회원번호</option>
+							<option value="name" ${pointSchType eq 'name' ? 'selected' : ''}>회원명</option>
+							<option value="userId"
+								${pointSchType eq 'userId' ? 'selected' : ''}>아이디</option>
+						</select> <input type="search" name="pointKwd"
+							value="<c:out value='${pointKwd}'/>" placeholder="검색어를 입력하세요">
+						<button type="submit" class="dark-btn">검색</button>
+						<a class="light-btn"
+							href="${pageContext.request.contextPath}/admin/member?tab=3">초기화</a>
+					</form>
 				</article>
-
 				<article class="panel">
 					<div class="panel-title">
 						<div>
 							<h2>회원별 포인트 목록</h2>
 							<p>
-								검색 결과 <b class="result-count">3</b>건 · 선택 <b
-									class="selected-count">0</b>건
+								검색 결과 <b class="result-count">${pointCount}</b>건
 							</p>
 						</div>
-						<div>
-							<button type="button"
-								class="light-btn danger-btn delete-selected-button" disabled
-								title="백엔드 기능 구현 전">선택 삭제</button>
-							<button type="button" class="light-btn export-button" disabled
-								title="백엔드 기능 구현 전">CSV 저장</button>
-						</div>
 					</div>
-
 					<div class="table-wrap">
 						<table>
 							<thead>
 								<tr>
-									<th><input type="checkbox" class="check-all"
-										aria-label="현재 페이지 전체 선택" disabled></th>
 									<th>회원번호</th>
 									<th>회원명</th>
 									<th>아이디</th>
@@ -722,232 +507,474 @@
 								</tr>
 							</thead>
 							<tbody class="data-body">
-								<!--
-                  ★ 연습 포인트
-                  아래 샘플 행을 보고 나중에 Controller에서 List를 받아
-                  직접 c:forEach / DTO 출력 코드로 바꿔보세요.
-                  현재 관리자용 DB 조회 기능이 아직 없어서 샘플 HTML을 그대로 둔 상태입니다.
-                -->
-								<tr class="data-row">
-									<td><input type="checkbox" class="row-check"
-										aria-label="항목 선택" disabled></td>
-									<td data-field-index="0">10024</td>
-									<td data-field-index="1">김민준</td>
-									<td data-field-index="2">minjun24</td>
-									<td data-field-index="3">42,800P</td>
-									<td data-field-index="4">81,200P</td>
-									<td data-field-index="5">38,400P</td>
-									<td data-field-index="6">2026-08-05</td>
-									<td class="action-cell">
-										<button type="button" class="light-btn edit-row" disabled
-											title="백엔드 기능 구현 전">수정</button>
-										<button type="button" class="light-btn delete-row" disabled
-											title="백엔드 기능 구현 전">삭제</button>
-									</td>
-								</tr>
+								<c:forEach var="point" items="${pointList}">
+									<tr class="data-row">
+										<td><c:out value="${point.memberId}" /></td>
+										<td><c:out value="${point.name}" /></td>
+										<td><c:out value="${point.userId}" /></td>
+										<td><c:out value="${point.balance}" /></td>
+										<td><c:out value="${point.totalEarn}" /></td>
+										<td><c:out value="${point.totalUsed}" /></td>
+										<td><c:out value="${point.lastUpdatedAt}" /></td>
+										<td class="action-cell">
+											<button type="button" class="light-btn adjust-point"
+												data-member-id="<c:out value='${point.memberId}'/>"
+												data-member-name="<c:out value='${point.name}'/>"
+												data-balance="<c:out value='${point.balance}'/>">포인트
+												조정</button> <c:url var="pointHistoryUrl" value="/admin/member">
+												<c:param name="tab" value="3" />
+												<c:param name="pointHistoryMemberId"
+													value="${point.memberId}" />
+												<c:param name="pointSchType" value="${pointSchType}" />
+												<c:param name="pointKwd" value="${pointKwd}" />
+											</c:url>
 
-								<tr class="data-row">
-									<td><input type="checkbox" class="row-check"
-										aria-label="항목 선택" disabled></td>
-									<td data-field-index="0">10023</td>
-									<td data-field-index="1">박서연</td>
-									<td data-field-index="2">seoyeon</td>
-									<td data-field-index="3">18,500P</td>
-									<td data-field-index="4">42,000P</td>
-									<td data-field-index="5">23,500P</td>
-									<td data-field-index="6">2026-08-04</td>
-									<td class="action-cell">
-										<button type="button" class="light-btn edit-row" disabled
-											title="백엔드 기능 구현 전">수정</button>
-										<button type="button" class="light-btn delete-row" disabled
-											title="백엔드 기능 구현 전">삭제</button>
-									</td>
-								</tr>
-
-								<tr class="data-row">
-									<td><input type="checkbox" class="row-check"
-										aria-label="항목 선택" disabled></td>
-									<td data-field-index="0">10022</td>
-									<td data-field-index="1">이도윤</td>
-									<td data-field-index="2">doyoon7</td>
-									<td data-field-index="3">3,200P</td>
-									<td data-field-index="4">16,900P</td>
-									<td data-field-index="5">13,700P</td>
-									<td data-field-index="6">2026-08-01</td>
-									<td class="action-cell">
-										<button type="button" class="light-btn edit-row" disabled
-											title="백엔드 기능 구현 전">수정</button>
-										<button type="button" class="light-btn delete-row" disabled
-											title="백엔드 기능 구현 전">삭제</button>
-									</td>
-								</tr>
+											<button type="button" class="light-btn"
+												onclick="location.href='${pointHistoryUrl}'">히스토리</button>
+										</td>
+									</tr>
+								</c:forEach>
 							</tbody>
 						</table>
 					</div>
-
-					<div class="empty-state">검색 결과가 없습니다.</div>
-					<div class="pagination" aria-label="목록 페이지 이동">
-						<button type="button" class="page-prev" aria-label="이전 페이지"
-							disabled title="백엔드 기능 구현 전">‹</button>
-						<span class="page-info">1 / 1</span>
-						<button type="button" class="page-next" aria-label="다음 페이지"
-							disabled title="백엔드 기능 구현 전">›</button>
-					</div>
+					<c:if test="${empty pointList}">
+						<div class="empty-state show">포인트 검색 결과가 없습니다.</div>
+					</c:if>
 				</article>
 
-			</section>
-
-			<section class="admin-section-panel" data-admin-section="4"
-				data-section-name="쿠폰 관리" data-table-title="회원별 쿠폰 목록"
-				data-add-label="+ 쿠폰 발급" data-can-add="true" hidden>
-				<article class="panel search-panel">
-					<div class="search-row">
-						<select class="js-search-type" aria-label="검색 항목" disabled>
-							<option value="all">전체</option>
-							<option value="0">쿠폰번호</option>
-							<option value="1">쿠폰명</option>
-							<option value="2">대상회원</option>
-							<option value="3">할인혜택</option>
-							<option value="4">유효기간</option>
-							<option value="5">발급수</option>
-							<option value="6">상태</option>
-						</select> <input type="search" class="js-search-keyword"
-							placeholder="검색어를 입력하세요" disabled>
-						<button type="button" class="dark-btn js-search-button" disabled
-							title="백엔드 기능 구현 전">검색</button>
-						<button type="button" class="light-btn js-reset-button" disabled
-							title="백엔드 기능 구현 전">초기화</button>
-					</div>
-					<div class="filter-row" aria-label="추가 검색 조건">
-						<div class="filter-control" data-filter-type="select"
-							data-filter-column="6">
-							<label>쿠폰상태</label> <select class="extra-filter"
-								id="filter-couponStatus" disabled>
-								<option value="">전체</option>
-								<option value="발급중">발급중</option>
-								<option value="종료">종료</option>
-								<option value="만료">만료</option>
-							</select>
+				<div class="modal-backdrop" id="pointModal" aria-hidden="true"
+					hidden>
+					<section class="admin-modal" role="dialog" aria-modal="true"
+						aria-labelledby="pointModalTitle">
+						<div class="modal-head">
+							<div>
+								<p id="pointMemberInfo">회원 포인트를 적립하거나 차감합니다.</p>
+								<h2 id="pointModalTitle">포인트 조정</h2>
+							</div>
+							<button type="button" class="modal-close" id="pointModalClose"
+								aria-label="닫기">×</button>
 						</div>
-					</div>
-				</article>
+						<form method="post"
+							action="${pageContext.request.contextPath}/admin/member/pointAdjust">
+							<input type="hidden" name="memberId" id="pointMemberId">
+							<div class="form-grid">
+								<div class="form-field">
+									<label for="pointType">처리유형 *</label> <select name="type"
+										id="pointType" required>
+										<option value="적립">적립</option>
+										<option value="차감">차감</option>
+									</select>
+								</div>
+								<div class="form-field">
+									<label for="pointAmount">포인트 *</label> <input type="number"
+										name="amount" id="pointAmount" min="1" required>
+								</div>
+								<div class="form-field" style="grid-column: 1/-1;">
+									<label for="pointReason">사유 *</label> <input type="text"
+										name="reason" id="pointReason" maxlength="500"
+										placeholder="예: 이벤트 보상, 오지급 정정" required>
+								</div>
+							</div>
+							<div class="modal-actions">
+								<button type="button" class="light-btn" id="pointModalCancel">취소</button>
+								<button type="submit" class="primary-btn">저장</button>
+							</div>
+						</form>
+					</section>
+				</div>
 
+				<c:if test="${not empty pointHistoryMemberId}">
+					<div class="modal-backdrop" id="pointHistoryModal"
+						data-auto-open="true" aria-hidden="true" hidden>
+						<section class="admin-modal" role="dialog" aria-modal="true"
+							aria-labelledby="pointHistoryModalTitle"
+							style="width: min(1100px, 96vw); max-width: 1100px;">
+
+							<div class="modal-head">
+								<div>
+									<p>
+										회원번호 <b><c:out value="${pointHistoryMemberId}" /></b>
+										<c:if test="${not empty pointHistoryMemberName}">
+											/ <c:out value="${pointHistoryMemberName}" />
+										</c:if>
+										<c:if test="${not empty pointHistoryUserId}">
+											(<c:out value="${pointHistoryUserId}" />)
+										</c:if>
+									</p>
+									<h2 id="pointHistoryModalTitle">포인트 적립 · 차감 히스토리</h2>
+								</div>
+								<button type="button" class="modal-close"
+									id="pointHistoryModalClose" aria-label="닫기">×</button>
+							</div>
+
+							<div style="padding: 0 24px 10px;">
+								<p>
+									전체 <b><c:out value="${pointHistoryCount}" /></b>건
+								</p>
+							</div>
+
+							<div class="table-wrap"
+								style="margin: 0 24px; max-height: 520px; overflow: auto;">
+								<table>
+									<thead>
+										<tr>
+											<th>포인트번호</th>
+											<th>구분</th>
+											<th>변경포인트</th>
+											<th>처리 후 잔액</th>
+											<th>사유</th>
+											<th>주문번호</th>
+											<th>변경일</th>
+											<th>만료일</th>
+										</tr>
+									</thead>
+									<tbody>
+										<c:forEach var="history" items="${pointHistoryList}">
+											<tr>
+												<td><c:out value="${history.pointId}" /></td>
+												<td><c:choose>
+														<c:when test="${history.amount lt 0}">
+															<span class="badge gray"><c:out
+																	value="${history.type}" /></span>
+														</c:when>
+														<c:otherwise>
+															<span class="badge green"><c:out
+																	value="${history.type}" /></span>
+														</c:otherwise>
+													</c:choose></td>
+												<td><c:if test="${history.amount gt 0}">+</c:if> <c:out
+														value="${history.amount}" />P</td>
+												<td><c:out value="${history.balance}" />P</td>
+												<td><c:out value="${history.reason}" /></td>
+												<td><c:out value="${history.orderId}" /></td>
+												<td><c:out value="${history.updatedAt}" /></td>
+												<td><c:choose>
+														<c:when test="${empty history.expiredAt}">-</c:when>
+														<c:otherwise>
+															<c:out value="${history.expiredAt}" />
+														</c:otherwise>
+													</c:choose></td>
+											</tr>
+										</c:forEach>
+									</tbody>
+								</table>
+							</div>
+
+							<c:if test="${empty pointHistoryList}">
+								<div class="empty-state show" style="margin: 20px 24px;">
+									포인트 적립/차감 이력이 없습니다.</div>
+							</c:if>
+
+							<div class="modal-actions">
+								<button type="button" class="light-btn"
+									id="pointHistoryModalCancel">닫기</button>
+							</div>
+						</section>
+					</div>
+				</c:if>
+			</section>
+			<section class="admin-section-panel" data-admin-section="4"
+				data-section-name="쿠폰 관리" data-table-title="쿠폰 목록"
+				data-can-add="true" hidden>
+				<article class="panel search-panel">
+					<form class="search-row" method="get"
+						action="${pageContext.request.contextPath}/admin/member">
+						<input type="hidden" name="tab" value="4"> <select
+							name="couponSchType" aria-label="검색 항목">
+							<option value="all" ${couponSchType eq 'all' ? 'selected' : ''}>전체</option>
+							<option value="couponId"
+								${couponSchType eq 'couponId' ? 'selected' : ''}>쿠폰번호</option>
+							<option value="name" ${couponSchType eq 'name' ? 'selected' : ''}>쿠폰명</option>
+						</select> <input type="search" name="couponKwd"
+							value="<c:out value='${couponKwd}'/>" placeholder="검색어를 입력하세요">
+						<input type="search" name="couponStatus"
+							value="<c:out value='${couponStatus}'/>"
+							placeholder="상태(AVAILABILITY)">
+						<button type="submit" class="dark-btn">검색</button>
+						<a class="light-btn"
+							href="${pageContext.request.contextPath}/admin/member?tab=4">초기화</a>
+					</form>
+				</article>
 				<article class="panel">
 					<div class="panel-title">
 						<div>
-							<h2>회원별 쿠폰 목록</h2>
+							<h2>쿠폰 목록</h2>
 							<p>
-								검색 결과 <b class="result-count">3</b>건 · 선택 <b
-									class="selected-count">0</b>건
+								검색 결과 <b class="result-count">${couponCount}</b>건
 							</p>
 						</div>
 						<div>
-							<button type="button"
-								class="light-btn danger-btn delete-selected-button" disabled
-								title="백엔드 기능 구현 전">선택 삭제</button>
-							<button type="button" class="light-btn export-button" disabled
-								title="백엔드 기능 구현 전">CSV 저장</button>
+							<button type="button" class="primary-btn" id="addCouponButton">+
+								쿠폰 등록</button>
 						</div>
 					</div>
-
 					<div class="table-wrap">
 						<table>
 							<thead>
 								<tr>
-									<th><input type="checkbox" class="check-all"
-										aria-label="현재 페이지 전체 선택" disabled></th>
 									<th>쿠폰번호</th>
 									<th>쿠폰명</th>
-									<th>대상회원</th>
 									<th>할인혜택</th>
-									<th>유효기간</th>
+									<th>유효일</th>
+									<th>최소주문금액</th>
+									<th>최대할인금액</th>
 									<th>발급수</th>
 									<th>상태</th>
 									<th>관리</th>
 								</tr>
 							</thead>
 							<tbody class="data-body">
-								<!--
-                  ★ 연습 포인트
-                  아래 샘플 행을 보고 나중에 Controller에서 List를 받아
-                  직접 c:forEach / DTO 출력 코드로 바꿔보세요.
-                  현재 관리자용 DB 조회 기능이 아직 없어서 샘플 HTML을 그대로 둔 상태입니다.
-                -->
-								<tr class="data-row">
-									<td><input type="checkbox" class="row-check"
-										aria-label="항목 선택" disabled></td>
-									<td data-field-index="0">CP-2608-01</td>
-									<td data-field-index="1">8월 배송비 쿠폰</td>
-									<td data-field-index="2">우수회원</td>
-									<td data-field-index="3">배송비 3,000원</td>
-									<td data-field-index="4">2026-08-01~08-31</td>
-									<td data-field-index="5">482장</td>
-									<td data-field-index="6"><span class="badge green">발급중</span></td>
-									<td class="action-cell">
-										<button type="button" class="light-btn edit-row" disabled
-											title="백엔드 기능 구현 전">수정</button>
-										<button type="button" class="light-btn delete-row" disabled
-											title="백엔드 기능 구현 전">삭제</button>
-									</td>
-								</tr>
-
-								<tr class="data-row">
-									<td><input type="checkbox" class="row-check"
-										aria-label="항목 선택" disabled></td>
-									<td data-field-index="0">CP-2608-02</td>
-									<td data-field-index="1">VIP 감사 쿠폰</td>
-									<td data-field-index="2">VIP</td>
-									<td data-field-index="3">10% 할인</td>
-									<td data-field-index="4">2026-08-01~08-31</td>
-									<td data-field-index="5">96장</td>
-									<td data-field-index="6"><span class="badge green">발급중</span></td>
-									<td class="action-cell">
-										<button type="button" class="light-btn edit-row" disabled
-											title="백엔드 기능 구현 전">수정</button>
-										<button type="button" class="light-btn delete-row" disabled
-											title="백엔드 기능 구현 전">삭제</button>
-									</td>
-								</tr>
-
-								<tr class="data-row">
-									<td><input type="checkbox" class="row-check"
-										aria-label="항목 선택" disabled></td>
-									<td data-field-index="0">CP-2607-11</td>
-									<td data-field-index="1">신규가입 쿠폰</td>
-									<td data-field-index="2">신규회원</td>
-									<td data-field-index="3">5,000원 할인</td>
-									<td data-field-index="4">2026-07-01~07-31</td>
-									<td data-field-index="5">318장</td>
-									<td data-field-index="6"><span class="badge gray">종료</span></td>
-									<td class="action-cell">
-										<button type="button" class="light-btn edit-row" disabled
-											title="백엔드 기능 구현 전">수정</button>
-										<button type="button" class="light-btn delete-row" disabled
-											title="백엔드 기능 구현 전">삭제</button>
-									</td>
-								</tr>
+								<c:forEach var="coupon" items="${couponList}">
+									<tr class="data-row">
+										<td><c:out value="${coupon.couponId}" /></td>
+										<td><c:out value="${coupon.name}" /></td>
+										<td><c:out value="${coupon.discount}" /> <c:out
+												value="${coupon.discountType}" /></td>
+										<td><c:out value="${coupon.validDays}" /></td>
+										<td><c:out value="${coupon.minOrderAmount}" /></td>
+										<td><c:out value="${coupon.maxDiscountAmount}" /></td>
+										<td><c:out value="${coupon.issuedCount}" /></td>
+										<td><span class="badge gray"><c:out
+													value="${coupon.availability}" /></span></td>
+										<td class="action-cell">
+											<button type="button" class="light-btn issue-coupon"
+												data-coupon-id="<c:out value='${coupon.couponId}'/>"
+												data-coupon-name="<c:out value='${coupon.name}'/>">발급</button>
+											<button type="button" class="light-btn edit-coupon"
+												data-coupon-id="<c:out value='${coupon.couponId}'/>"
+												data-name="<c:out value='${coupon.name}'/>"
+												data-valid-days="<c:out value='${coupon.validDays}'/>"
+												data-discount="<c:out value='${coupon.discount}'/>"
+												data-discount-type="<c:out value='${coupon.discountType}'/>"
+												data-min-order-amount="<c:out value='${coupon.minOrderAmount}'/>"
+												data-max-discount-amount="<c:out value='${coupon.maxDiscountAmount}'/>"
+												data-availability="<c:out value='${coupon.availability}'/>">수정</button>
+											<button type="button"
+												class="light-btn danger-btn delete-coupon"
+												data-coupon-id="<c:out value='${coupon.couponId}'/>"
+												data-coupon-name="<c:out value='${coupon.name}'/>">삭제</button>
+										</td>
+									</tr>
+								</c:forEach>
 							</tbody>
 						</table>
 					</div>
-
-					<div class="empty-state">검색 결과가 없습니다.</div>
-					<div class="pagination" aria-label="목록 페이지 이동">
-						<button type="button" class="page-prev" aria-label="이전 페이지"
-							disabled title="백엔드 기능 구현 전">‹</button>
-						<span class="page-info">1 / 1</span>
-						<button type="button" class="page-next" aria-label="다음 페이지"
-							disabled title="백엔드 기능 구현 전">›</button>
-					</div>
+					<c:if test="${empty couponList}">
+						<div class="empty-state show">쿠폰 검색 결과가 없습니다.</div>
+					</c:if>
 				</article>
 
+				<div class="modal-backdrop" id="couponModal" aria-hidden="true"
+					hidden>
+					<section class="admin-modal" role="dialog" aria-modal="true"
+						aria-labelledby="couponModalTitle">
+						<div class="modal-head">
+							<div>
+								<p>쿠폰 기본정보를 등록하거나 수정합니다.</p>
+								<h2 id="couponModalTitle">쿠폰 등록</h2>
+							</div>
+							<button type="button" class="modal-close" id="couponModalClose"
+								aria-label="닫기">×</button>
+						</div>
+						<form id="couponForm" method="post"
+							action="${pageContext.request.contextPath}/admin/member/couponWrite">
+							<input type="hidden" name="couponId" id="couponId">
+							<div class="form-grid">
+								<div class="form-field">
+									<label for="couponName">쿠폰명 *</label><input type="text"
+										name="name" id="couponName" maxlength="100" required>
+								</div>
+								<div class="form-field">
+									<label for="couponValidDays">유효일 *</label><input type="date"
+										name="validDays" id="couponValidDays" required>
+								</div>
+								<div class="form-field">
+									<label for="couponDiscount">할인값 *</label><input type="number"
+										name="discount" id="couponDiscount" min="0" required>
+								</div>
+								<div class="form-field">
+									<label for="couponDiscountType">할인유형 *</label><input
+										type="text" name="discountType" id="couponDiscountType"
+										maxlength="30" placeholder="예: 정액, 정률" required>
+								</div>
+								<div class="form-field">
+									<label for="couponMinOrderAmount">최소주문금액</label><input
+										type="number" name="minOrderAmount" id="couponMinOrderAmount"
+										min="0">
+								</div>
+								<div class="form-field">
+									<label for="couponMaxDiscountAmount">최대할인금액</label><input
+										type="number" name="maxDiscountAmount"
+										id="couponMaxDiscountAmount" min="0">
+								</div>
+								<div class="form-field">
+									<label for="couponAvailability">상태 *</label><input type="text"
+										name="availability" id="couponAvailability" maxlength="30"
+										placeholder="DB에 사용하는 상태값" required>
+								</div>
+							</div>
+							<div class="modal-actions">
+								<button type="button" class="light-btn" id="couponModalCancel">취소</button>
+								<button type="submit" class="primary-btn">저장</button>
+							</div>
+						</form>
+					</section>
+				</div>
+
+				<div class="modal-backdrop" id="couponIssueModal" aria-hidden="true"
+					hidden>
+					<section class="admin-modal" role="dialog" aria-modal="true"
+						aria-labelledby="couponIssueTitle">
+						<div class="modal-head">
+							<div>
+								<p id="couponIssueInfo">회원번호를 입력해 쿠폰을 발급합니다.</p>
+								<h2 id="couponIssueTitle">쿠폰 발급</h2>
+							</div>
+							<button type="button" class="modal-close"
+								id="couponIssueModalClose" aria-label="닫기">×</button>
+						</div>
+						<form method="post"
+							action="${pageContext.request.contextPath}/admin/member/couponIssue">
+							<input type="hidden" name="couponId" id="issueCouponId">
+							<div class="form-grid">
+								<div class="form-field">
+									<label for="issueMemberId">회원번호 *</label><input type="number"
+										name="memberId" id="issueMemberId" min="1" required>
+								</div>
+							</div>
+							<div class="modal-actions">
+								<button type="button" class="light-btn"
+									id="couponIssueModalCancel">취소</button>
+								<button type="submit" class="primary-btn">발급</button>
+							</div>
+						</form>
+					</section>
+				</div>
+
+				<form id="couponDeleteForm" method="post"
+					action="${pageContext.request.contextPath}/admin/member/couponDelete"
+					hidden>
+					<input type="hidden" name="couponId" id="deleteCouponId">
+				</form>
+			</section>
+			<section class="admin-section-panel" data-admin-section="5"
+				data-section-name="FAQ 관리" data-table-title="FAQ 목록"
+				data-can-add="true" hidden>
+				<article class="panel search-panel">
+					<form class="search-row" method="get"
+						action="${pageContext.request.contextPath}/admin/member">
+						<input type="hidden" name="tab" value="5"> <select
+							name="faqSchType" aria-label="검색 항목">
+							<option value="all" ${faqSchType eq 'all' ? 'selected' : ''}>전체</option>
+							<option value="faqId" ${faqSchType eq 'faqId' ? 'selected' : ''}>FAQ번호</option>
+							<option value="title" ${faqSchType eq 'title' ? 'selected' : ''}>제목</option>
+							<option value="category"
+								${faqSchType eq 'category' ? 'selected' : ''}>카테고리</option>
+						</select> <input type="search" name="faqKwd"
+							value="<c:out value='${faqKwd}'/>" placeholder="검색어를 입력하세요">
+						<button type="submit" class="dark-btn">검색</button>
+						<a class="light-btn"
+							href="${pageContext.request.contextPath}/admin/member?tab=5">초기화</a>
+					</form>
+				</article>
+				<article class="panel">
+					<div class="panel-title">
+						<div>
+							<h2>FAQ 목록</h2>
+							<p>
+								검색 결과 <b class="result-count">${faqCount}</b>건
+							</p>
+						</div>
+						<div>
+							<button type="button" class="primary-btn" id="addFaqButton">+
+								FAQ 등록</button>
+						</div>
+					</div>
+					<div class="table-wrap">
+						<table>
+							<thead>
+								<tr>
+									<th>FAQ번호</th>
+									<th>카테고리</th>
+									<th>제목</th>
+									<th>작성회원</th>
+									<th>관리</th>
+								</tr>
+							</thead>
+							<tbody class="data-body">
+								<c:forEach var="faq" items="${faqList}">
+									<tr class="data-row">
+										<td><c:out value="${faq.faqId}" /></td>
+										<td><c:out value="${faq.category}" /></td>
+										<td><c:out value="${faq.title}" /></td>
+										<td><c:out value="${faq.memberId}" /></td>
+										<td class="action-cell">
+											<button type="button" class="light-btn edit-faq"
+												data-faq-id="<c:out value='${faq.faqId}'/>"
+												data-title="<c:out value='${faq.title}'/>"
+												data-category="<c:out value='${faq.category}'/>"
+												data-content="<c:out value='${faq.content}'/>">수정</button>
+											<button type="button" class="light-btn danger-btn delete-faq"
+												data-faq-id="<c:out value='${faq.faqId}'/>"
+												data-faq-title="<c:out value='${faq.title}'/>">삭제</button>
+										</td>
+									</tr>
+								</c:forEach>
+							</tbody>
+						</table>
+					</div>
+					<c:if test="${empty faqList}">
+						<div class="empty-state show">FAQ 검색 결과가 없습니다.</div>
+					</c:if>
+				</article>
+
+				<div class="modal-backdrop" id="faqModal" aria-hidden="true" hidden>
+					<section class="admin-modal" role="dialog" aria-modal="true"
+						aria-labelledby="faqModalTitle">
+						<div class="modal-head">
+							<div>
+								<p>고객센터 FAQ 내용을 등록하거나 수정합니다.</p>
+								<h2 id="faqModalTitle">FAQ 등록</h2>
+							</div>
+							<button type="button" class="modal-close" id="faqModalClose"
+								aria-label="닫기">×</button>
+						</div>
+						<form id="faqForm" method="post"
+							action="${pageContext.request.contextPath}/admin/member/faqWrite">
+							<input type="hidden" name="faqId" id="faqId">
+							<div class="form-grid">
+								<div class="form-field">
+									<label for="faqCategory">카테고리 *</label><input type="text"
+										name="category" id="faqCategory" maxlength="100" required>
+								</div>
+								<div class="form-field">
+									<label for="faqTitle">제목 *</label><input type="text"
+										name="title" id="faqTitle" maxlength="200" required>
+								</div>
+								<div class="form-field" style="grid-column: 1/-1;">
+									<label for="faqContent">내용 *</label>
+									<textarea name="content" id="faqContent" rows="8" required></textarea>
+								</div>
+							</div>
+							<div class="modal-actions">
+								<button type="button" class="light-btn" id="faqModalCancel">취소</button>
+								<button type="submit" class="primary-btn">저장</button>
+							</div>
+						</form>
+					</section>
+				</div>
+				<form id="faqDeleteForm" method="post"
+					action="${pageContext.request.contextPath}/admin/member/faqDelete"
+					hidden>
+					<input type="hidden" name="faqId" id="deleteFaqId">
+				</form>
 			</section>
 		</section>
 	</main>
-
 	<jsp:include page="/WEB-INF/views/admin/layout/footerResources.jsp" />
 	<script
 		src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 	<script
-    src="${pageContext.request.contextPath}/dist/js/admin/member.js?v=20260819-2"></script>
+		src="${pageContext.request.contextPath}/dist/js/admin/member.js?v=20260820-4"></script>
 </body>
 </html>

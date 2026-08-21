@@ -74,4 +74,62 @@
 		WHERE FAQID = #{faqId}
 	</delete>
 
+
+
+	<!-- 관리자 FAQ 검색 -->
+	<select id="listFaqAdmin" parameterType="map" resultType="com.yss.dto.FaqDTO">
+		SELECT FAQID, MEMBERID, TITLE, CONTENT, CATEGORY
+		FROM FAQ
+		WHERE 1 = 1
+		<if test="faqKwd != null and faqKwd != ''">
+			<choose>
+				<when test="faqSchType == 'faqId'">
+					AND TO_CHAR(FAQID) LIKE '%' || #{faqKwd} || '%'
+				</when>
+				<when test="faqSchType == 'title'">
+					AND INSTR(TITLE, #{faqKwd}) &gt; 0
+				</when>
+				<when test="faqSchType == 'category'">
+					AND INSTR(CATEGORY, #{faqKwd}) &gt; 0
+				</when>
+				<otherwise>
+					AND (
+						TO_CHAR(FAQID) LIKE '%' || #{faqKwd} || '%'
+						OR INSTR(TITLE, #{faqKwd}) &gt; 0
+						OR INSTR(CONTENT, #{faqKwd}) &gt; 0
+						OR INSTR(CATEGORY, #{faqKwd}) &gt; 0
+					)
+				</otherwise>
+			</choose>
+		</if>
+		ORDER BY FAQID DESC
+	</select>
+
+	<select id="dataCountFaqAdmin" parameterType="map" resultType="Integer">
+		SELECT COUNT(*)
+		FROM FAQ
+		WHERE 1 = 1
+		<if test="faqKwd != null and faqKwd != ''">
+			<choose>
+				<when test="faqSchType == 'faqId'">
+					AND TO_CHAR(FAQID) LIKE '%' || #{faqKwd} || '%'
+				</when>
+				<when test="faqSchType == 'title'">
+					AND INSTR(TITLE, #{faqKwd}) &gt; 0
+				</when>
+				<when test="faqSchType == 'category'">
+					AND INSTR(CATEGORY, #{faqKwd}) &gt; 0
+				</when>
+				<otherwise>
+					AND (
+						TO_CHAR(FAQID) LIKE '%' || #{faqKwd} || '%'
+						OR INSTR(TITLE, #{faqKwd}) &gt; 0
+						OR INSTR(CONTENT, #{faqKwd}) &gt; 0
+						OR INSTR(CATEGORY, #{faqKwd}) &gt; 0
+					)
+				</otherwise>
+			</choose>
+		</if>
+	</select>
+
 </mapper>
