@@ -7,4 +7,6 @@ import com.yss.dto.HomeDTO;
 
 public interface HomeMapper {
 	public List<HomeDTO> homeBestList() throws SQLException;
+	
+	public List<HomeDTO> homeNewList() throws SQLException;
 }

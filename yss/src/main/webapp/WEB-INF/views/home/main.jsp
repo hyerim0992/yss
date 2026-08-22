@@ -78,7 +78,7 @@
 						<div class="single-category mb-30">
 							<div class="category-img">
 								<a href="${ctx}/product/category?audience=man">
-								    <img src="${ctx}/dist/images/categori/cat1.jpg" alt="WOMEN">
+								    <img src="${ctx}/dist/images/categori/cat1.png" alt="WOMEN">
 								</a>
 							</div>
 						</div>
@@ -87,7 +87,7 @@
 						<div class="single-category mb-30">
 							<div class="category-img text-center">
 								<a href="${ctx}/product/category?audience=woman">
-								    <img src="${ctx}/dist/images/categori/cat2.jpg" alt="KIDS">
+								    <img src="${ctx}/dist/images/categori/cat2.png" alt="KIDS">
 								</a>
 							</div>
 						</div>
@@ -96,7 +96,7 @@
 						<div class="single-category mb-30">
 							<div class="category-img">
 								<a href="${ctx}/product/category?audience=kids">
-								    <img src="${ctx}/dist/images/categori/cat3.jpg" alt="MEN">
+								    <img src="${ctx}/dist/images/categori/cat3.png" alt="MEN">
 								</a>
 							</div>
 						</div>
@@ -123,16 +123,16 @@
 								<div class="nav nav-tabs" id="nav-tab" role="tablist">
 									<a class="nav-item nav-link active" id="nav-home-tab"
 										data-bs-toggle="tab" href="#nav-home" role="tab"
-										aria-controls="nav-home" aria-selected="true">All</a> <a
+										aria-controls="nav-home" aria-selected="true">NEW</a> <a
 										class="nav-item nav-link" id="nav-profile-tab"
 										data-bs-toggle="tab" href="#nav-profile" role="tab"
-										aria-controls="nav-profile" aria-selected="false">New</a> <a
+										aria-controls="nav-profile" aria-selected="false">MEN</a> <a
 										class="nav-item nav-link" id="nav-contact-tab"
 										data-bs-toggle="tab" href="#nav-contact" role="tab"
-										aria-controls="nav-contact" aria-selected="false">Featured</a>
+										aria-controls="nav-contact" aria-selected="false">WOMEN</a>
 									<a class="nav-item nav-link" id="nav-last-tab"
 										data-bs-toggle="tab" href="#nav-last" role="tab"
-										aria-controls="nav-contact" aria-selected="false">Offer</a>
+										aria-controls="nav-contact" aria-selected="false">KIDS</a>
 								</div>
 							</nav>
 							<!-- 화면 구성 설명 -->
@@ -145,153 +145,35 @@
 					<div class="tab-pane fade show active" id="nav-home"
 						role="tabpanel" aria-labelledby="nav-home-tab">
 						<div class="row">
-							<div class="col-xl-4 col-lg-4 col-md-6">
-								<div class="single-product mb-60">
-									<div class="product-img">
-										<img src="${ctx}/dist/images/categori/product1.png" alt="">
-										<div class="new-product">
-											<span>New</span>
+							<c:forEach var="dto" items="${newList}">
+								<div class="col-xl-4 col-lg-4 col-md-6">
+									<div class="single-product mb-60">
+										<div class="product-img">
+											<img src="${ctx}/uploads/product/${dto.thumbnail}" alt="${dto.prodName}">
+											<div class="new-product">
+												<span>New</span>
+											</div>
 										</div>
-									</div>
-									<div class="product-caption">
-										<div class="product-ratting">
-											<i class="far fa-star"></i> <i class="far fa-star"></i> <i
-												class="far fa-star"></i> <i class="far fa-star low-star"></i>
-											<i class="far fa-star low-star"></i>
-										</div>
-										<h4>
-											<a href="${ctx}/product/detail">Green Dress with details</a>
-										</h4>
-										<div class="price">
-											<ul>
-												<li>$40.00</li>
-												<li class="discount">$60.00</li>
-											</ul>
-										</div>
-									</div>
-								</div>
-							</div>
-							<div class="col-xl-4 col-lg-4 col-md-6">
-								<div class="single-product mb-60">
-									<div class="product-img">
-										<img src="${ctx}/dist/images/categori/product2.png" alt="">
-									</div>
-									<div class="product-caption">
-										<div class="product-ratting">
-											<i class="far fa-star"></i> <i class="far fa-star"></i> <i
-												class="far fa-star"></i> <i class="far fa-star low-star"></i>
-											<i class="far fa-star low-star"></i>
-										</div>
-										<h4>
-											<a href="${ctx}/product/detail">Green Dress with details</a>
-										</h4>
-										<div class="price">
-											<ul>
-												<li>$40.00</li>
-												<li class="discount">$60.00</li>
-											</ul>
+										<div class="product-caption">
+											<div class="product-ratting">
+												<i class="far fa-star"></i> <i class="far fa-star"></i> <i
+													class="far fa-star"></i> <i class="far fa-star low-star"></i>
+												<i class="far fa-star low-star"></i>
+											</div>
+											<h4>
+												<a href="${ctx}/product/detail?productId=${dto.productId}">${dto.prodName}</a>
+											</h4>
+											<div class="price">
+												<ul>
+													<li>${dto.price}</li>
+													<li class="discount">$60.00</li>
+												</ul>
+											</div>
 										</div>
 									</div>
 								</div>
-							</div>
-							<div class="col-xl-4 col-lg-4 col-md-6">
-								<div class="single-product mb-60">
-									<div class="product-img">
-										<img src="${ctx}/dist/images/categori/product3.png" alt="">
-										<div class="new-product">
-											<span>New</span>
-										</div>
-									</div>
-									<div class="product-caption">
-										<div class="product-ratting">
-											<i class="far fa-star"></i> <i class="far fa-star"></i> <i
-												class="far fa-star"></i> <i class="far fa-star low-star"></i>
-											<i class="far fa-star low-star"></i>
-										</div>
-										<h4>
-											<a href="${ctx}/product/detail">Green Dress with details</a>
-										</h4>
-										<div class="price">
-											<ul>
-												<li>$40.00</li>
-												<li class="discount">$60.00</li>
-											</ul>
-										</div>
-									</div>
-								</div>
-							</div>
-							<div class="col-xl-4 col-lg-4 col-md-6">
-								<div class="single-product mb-60">
-									<div class="product-img">
-										<img src="${ctx}/dist/images/categori/product4.png" alt="">
-									</div>
-									<div class="product-caption">
-										<div class="product-ratting">
-											<i class="far fa-star"></i> <i class="far fa-star"></i> <i
-												class="far fa-star"></i> <i class="far fa-star low-star"></i>
-											<i class="far fa-star low-star"></i>
-										</div>
-										<h4>
-											<a href="${ctx}/product/detail">Green Dress with details</a>
-										</h4>
-										<div class="price">
-											<ul>
-												<li>$40.00</li>
-												<li class="discount">$60.00</li>
-											</ul>
-										</div>
-									</div>
-								</div>
-							</div>
-							<div class="col-xl-4 col-lg-4 col-md-6">
-								<div class="single-product mb-60">
-									<div class="product-img">
-										<img src="${ctx}/dist/images/categori/product5.png" alt="">
-									</div>
-									<div class="product-caption">
-										<div class="product-ratting">
-											<i class="far fa-star"></i> <i class="far fa-star"></i> <i
-												class="far fa-star"></i> <i class="far fa-star low-star"></i>
-											<i class="far fa-star low-star"></i>
-										</div>
-										<h4>
-											<a href="${ctx}/product/detail">Green Dress with details</a>
-										</h4>
-										<div class="price">
-											<ul>
-												<li>$40.00</li>
-												<li class="discount">$60.00</li>
-											</ul>
-										</div>
-									</div>
-								</div>
-							</div>
-							<div class="col-xl-4 col-lg-4 col-md-6">
-								<div class="single-product mb-60">
-									<div class="product-img">
-										<img src="${ctx}/dist/images/categori/product6.png" alt="">
-										<div class="new-product">
-											<span>New</span>
-										</div>
-									</div>
-									<div class="product-caption">
-										<div class="product-ratting">
-											<i class="far fa-star"></i> <i class="far fa-star"></i> <i
-												class="far fa-star"></i> <i class="far fa-star low-star"></i>
-											<i class="far fa-star low-star"></i>
-										</div>
-										<h4>
-											<a href="${ctx}/product/detail">Green Dress with details</a>
-										</h4>
-										<div class="price">
-											<ul>
-												<li>$40.00</li>
-												<li class="discount">$60.00</li>
-											</ul>
-										</div>
-									</div>
-								</div>
-							</div>
+							</c:forEach>
+								
 						</div>
 					</div>
 					<!-- 화면 구성 설명 -->
